@@ -7,87 +7,53 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import de.hdm.spe.lander.collision.AABB;
-import de.hdm.spe.lander.collision.Point;
-import de.hdm.spe.lander.graphics.Camera;
-import de.hdm.spe.lander.graphics.Material;
-import de.hdm.spe.lander.graphics.Mesh;
 import de.hdm.spe.lander.graphics.SpriteFont;
 import de.hdm.spe.lander.graphics.TextBuffer;
-import de.hdm.spe.lander.graphics.Texture;
 import de.hdm.spe.lander.input.InputEvent;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.math.Vector3;
-
-import java.io.IOException;
-import java.io.InputStream;
+import de.hdm.spe.lander.models.GameState;
+import de.hdm.spe.lander.states.LevelA;
 
 
 public class LanderGame extends Game {
 
-    private Camera       hudCamera, sceneCamera, gameCamera;
-    private Mesh         lander, meshRoad;
-    private Texture      texLander;
-    private Material     matLander;
-    private Matrix4x4    worldLander;
-    private Matrix4x4[]  worldTrees;
+    private SpriteFont      fontTitle, fontMenu;
+    private TextBuffer      textTitle;
+    private Matrix4x4       matTitle;
+    private TextBuffer[]    textMenu;
+    private Matrix4x4[]     matMenu;
+    private AABB[]          aabbMenu;
+    private boolean         showMenu = true;
 
-    private SpriteFont   fontTitle, fontMenu;
-    private TextBuffer   textTitle;
-    private Matrix4x4    matTitle;
-    private TextBuffer[] textMenu;
-    private Matrix4x4[]  matMenu;
-    private AABB[]       aabbMenu;
-    private boolean      showMenu = true;
-
-    private MediaPlayer  mediaPlayer;
-    private SoundPool    soundPool;
-    private int          clickSound;
+    private MediaPlayer     mediaPlayer;
+    private SoundPool       soundPool;
+    private int             clickSound;
+    private final GameState mCurrentState;
 
     public LanderGame(View view) {
         super(view);
+        this.mCurrentState = new LevelA();
     }
 
     @Override
     public void initialize() {
-        this.gameCamera = new Camera();
-        this.worldLander = new Matrix4x4();
-
-        Matrix4x4 projection = new Matrix4x4();
-        Matrix4x4 view = new Matrix4x4();
-
-        projection.setOrthogonalProjection(-100f, 100f, -100f, 100f, 0f, 10f);
-        this.gameCamera.setProjection(projection);
-
-        view.translate(0, 0, -90);
-        this.gameCamera.setView(view);
 
     }
 
     @Override
     public void loadContent() {
-        try {
-            InputStream stream;
-
-            stream = this.context.getAssets().open("landerv1.obj");
-            this.lander = Mesh.loadFromOBJ(stream);
-            this.matLander = new Material();
-            stream = this.context.getAssets().open("space.png");
-            this.texLander = this.graphicsDevice.createTexture(stream);
-            this.matLander.setTexture(this.texLander);
-
-            //            stream = this.context.getAssets().open("tree.png");
-            //            this.texTree = this.graphicsDevice.createTexture(stream);
-            //            this.matTree.setTexture(this.texTree);
-            //
-            //            stream = this.context.getAssets().open("road.obj");
-            //            this.meshRoad = Mesh.loadFromOBJ(stream);
-            //
-            //            stream = this.context.getAssets().open("road.png");
-            //            this.texRoad = this.graphicsDevice.createTexture(stream);
-            //            this.matRoad.setTexture(this.texRoad);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.mCurrentState.prepare(this.context, this.graphicsDevice);
+        //            stream = this.context.getAssets().open("tree.png");
+        //            this.texTree = this.graphicsDevice.createTexture(stream);
+        //            this.matTree.setTexture(this.texTree);
+        //
+        //            stream = this.context.getAssets().open("road.obj");
+        //            this.meshRoad = Mesh.loadFromOBJ(stream);
+        //
+        //            stream = this.context.getAssets().open("road.png");
+        //            this.texRoad = this.graphicsDevice.createTexture(stream);
+        //            this.matRoad.setTexture(this.texRoad);
 
         //        this.fontTitle = this.graphicsDevice.createSpriteFont(null, 64);
         //        this.fontMenu = this.graphicsDevice.createSpriteFont(null, 20);
@@ -132,7 +98,7 @@ public class LanderGame extends Game {
 
     @Override
     public void update(float deltaSeconds) {
-        this.worldLander.translate(0, -deltaSeconds, 0);
+        this.mCurrentState.update(deltaSeconds);
         InputEvent inputEvent = this.inputSystem.peekEvent();
         while (inputEvent != null && false) {
 
@@ -157,21 +123,21 @@ public class LanderGame extends Game {
                                     -(inputEvent.getValues()[1] / (this.screenHeight / 2) - 1),
                                     0);
 
-                            Vector3 worldTouchPosition = this.hudCamera.unproject(screenTouchPosition, 1);
+                            //                            Vector3 worldTouchPosition = this.hudCamera.unproject(screenTouchPosition, 1);
 
-                            Point touchPoint = new Point(
-                                    worldTouchPosition.getX(),
-                                    worldTouchPosition.getY());
+                            //                            Point touchPoint = new Point(
+                            //                                    worldTouchPosition.getX(),
+                            //                                    worldTouchPosition.getY());
 
-                            for (int i = 0; i < this.aabbMenu.length; ++i) {
-                                AABB aabb = this.aabbMenu[i];
-                                if (touchPoint.intersects(aabb)) {
-                                    this.textMenu[i].setText("");
-
-                                    if (this.soundPool != null)
-                                        this.soundPool.play(this.clickSound, 1, 1, 0, 0, 1);
-                                }
-                            }
+                            //                            for (int i = 0; i < this.aabbMenu.length; ++i) {
+                            //                                AABB aabb = this.aabbMenu[i];
+                            //                                if (touchPoint.intersects(aabb)) {
+                            //                                    this.textMenu[i].setText("");
+                            //
+                            //                                    if (this.soundPool != null)
+                            //                                        this.soundPool.play(this.clickSound, 1, 1, 0, 0, 1);
+                            //                                }
+                            //                            }
                     }
                     break;
             }
@@ -184,10 +150,8 @@ public class LanderGame extends Game {
     @Override
     public void draw(float deltaSeconds) {
         this.graphicsDevice.clear(0.0f, 0.5f, 1.0f, 1.0f, 1.0f);
-
-        this.graphicsDevice.setCamera(this.gameCamera);
-        this.renderer.drawMesh(this.lander, this.matLander, this.worldLander);
-
+        this.mCurrentState.draw(deltaSeconds, this.renderer);
+        this.graphicsDevice.setCamera(this.mCurrentState.getCamera());
     }
 
     @Override
@@ -197,7 +161,7 @@ public class LanderGame extends Game {
 
         projection = new Matrix4x4();
         projection.setOrthogonalProjection(-width / 2, width / 2, -height / 2, height / 2, 0.0f, 100.0f);
-        this.gameCamera.setProjection(projection);
+        this.mCurrentState.getCamera().setProjection(projection);
 
         //        projection = new Matrix4x4();
         //        projection.setPerspectiveProjection(-0.1f * aspect, 0.1f * aspect, -0.1f, 0.1f, 0.1f, 100.0f);

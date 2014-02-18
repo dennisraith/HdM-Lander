@@ -2,6 +2,7 @@
 package de.hdm.spe.lander.graphics;
 
 import de.hdm.spe.lander.math.Matrix4x4;
+import de.hdm.spe.lander.models.DrawableObject;
 
 
 public class Renderer {
@@ -25,6 +26,10 @@ public class Renderer {
 
     public void drawText(TextBuffer textBuffer, Matrix4x4 world) {
         this.drawMesh(textBuffer.getMesh(), textBuffer.getSpriteFont().getMaterial(), world);
+    }
+
+    public void draw(DrawableObject object) {
+        this.drawMesh(object.getMesh(), object.getMaterial(), object.getWorld());
     }
 
     public GraphicsDevice getGraphicsDevice() {
