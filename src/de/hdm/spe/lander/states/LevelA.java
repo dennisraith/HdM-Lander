@@ -47,8 +47,7 @@ public class LevelA implements GameState {
 
     @Override
     public void update(float deltaSeconds) {
-        // TODO Auto-generated method stub
-
+        this.mLander.getWorld().translate(0, -deltaSeconds, 0);
     }
 
     @Override
