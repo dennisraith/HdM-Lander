@@ -21,8 +21,13 @@ public class GraphicsDevice {
     private GL10 gl;
 
     public void bindTexture(Texture texture) {
-        this.gl.glBindTexture(GL10.GL_TEXTURE_2D, texture.getHandle());
-        this.gl.glEnable(GL10.GL_TEXTURE_2D);
+        if (texture != null) {
+            this.gl.glBindTexture(GL10.GL_TEXTURE_2D, texture.getHandle());
+            this.gl.glEnable(GL10.GL_TEXTURE_2D);
+        }
+        else {
+            this.unbindTexture();
+        }
     }
 
     public void unbindTexture() {

@@ -14,17 +14,16 @@ import java.io.InputStream;
 
 public class Lander implements DrawableObject {
 
-    private final static String resName = "landerv1.obj";
-    private final static String texName = "space.png";
+    private final static String resName     = "landerv1.obj";
+    public final static String  textureName = "space.png";
 
     private Mesh                mesh;
     private final Material      material;
     private Texture             texture;
-    private final Matrix4x4     world   = new Matrix4x4();
+    private final Matrix4x4     world       = new Matrix4x4();
 
     public Lander() {
         this.material = new Material();
-
     }
 
     @Override
@@ -52,7 +51,6 @@ public class Lander implements DrawableObject {
         InputStream stream;
         stream = context.getAssets().open(Lander.resName);
         this.mesh = Mesh.loadFromOBJ(stream);
-        this.world.scale(60);
+        this.world.scale(.3f);
     }
-
 }

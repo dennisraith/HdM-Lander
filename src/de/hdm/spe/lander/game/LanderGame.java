@@ -1,8 +1,10 @@
 
 package de.hdm.spe.lander.game;
 
+import android.util.Log;
 import android.view.View;
 
+import de.hdm.spe.lander.graphics.Camera;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.GameState;
 import de.hdm.spe.lander.states.LevelA;
@@ -11,10 +13,16 @@ import de.hdm.spe.lander.states.LevelA;
 public class LanderGame extends Game {
 
     private final GameState mCurrentState;
+    private final Camera    mCamera;
+    private final Matrix4x4 mProjection;
 
     public LanderGame(View view) {
         super(view);
         this.mCurrentState = new LevelA();
+        this.mCamera = new Camera();
+        this.mProjection = new Matrix4x4();
+        this.mProjection.setOrthogonalProjection(-100f, 100f, -100f, 100f, 0, 100f);
+        this.mCamera.setProjection(this.mProjection);
     }
 
     @Override
@@ -42,18 +50,28 @@ public class LanderGame extends Game {
     @Override
     public void draw(float deltaSeconds) {
         this.graphicsDevice.clear(0.0f, 0.5f, 1.0f, 1.0f, 1.0f);
+        this.graphicsDevice.setCamera(this.mCamera);
         this.mCurrentState.draw(deltaSeconds, this.renderer);
-        this.graphicsDevice.setCamera(this.mCurrentState.getCamera());
     }
 
     @Override
     public void resize(int width, int height) {
+        Log.d(this.getClass().getName(), "Width: " + width + " Height: " + height);
         float aspect = (float) width / (float) height;
-        Matrix4x4 projection;
 
-        projection = new Matrix4x4();
-        projection.setOrthogonalProjection(-width / 2, width / 2, -height / 2, height / 2, 0.0f, 100.0f);
-        this.mCurrentState.getCamera().setProjection(projection);
+        if (aspect > 1) {
+            //        projection.setOrthogonalProjection(-width / 2, width / 2, -height / 2, height / 2, 10f, 100.0f);            
+            this.mProjection.setOrthogonalProjection(-100, 100, -100 * aspect, 100 * aspect, 0, 100.0f);
+
+        }
+
+        else {
+            this.mProjection.setOrthogonalProjection(-100 * aspect, 100 * aspect, -100, 100, 0, 100.0f);
+            this.mProjection.scale(2);
+
+        }
+
+        this.mCamera.setProjection(this.mProjection);
 
     }
 
