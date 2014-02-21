@@ -3,7 +3,6 @@ package de.hdm.spe.lander.models;
 
 import android.content.Context;
 
-import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.graphics.Material;
 import de.hdm.spe.lander.graphics.Mesh;
 import de.hdm.spe.lander.graphics.VertexBuffer;
@@ -19,42 +18,36 @@ import java.util.Vector;
 import javax.microedition.khronos.opengles.GL10;
 
 
-public class Square implements DrawableObject {
+@Deprecated
+public class Square3 implements DrawableObject {
 
-    Vector<Point>     coords     = new Vector<Point>();
+    Vector<float[]>   coords     = new Vector<float[]>();
     int[]             drawOrder  = {0, 1, 2, 0, 2, 3};
     VertexElement[]   elemnts    = new VertexElement[1];
     int               vertexSize = 0;
 
-    Point             A          = new Point(-1f, -1f);
-    Point             B          = new Point(1f, -1f);
-    Point             C          = new Point(1f, 1f);
-    Point             D          = new Point(-1f, 1f);
-
-    private float     Z          = 0;
+    float[]           A          = new float[] {-1f, -1f, 0f};
+    float[]           B          = new float[] {1f, -1f, 0f};
+    float[]           C          = new float[] {1f, 1f, 0f};
+    float[]           D          = new float[] {-1f, 1f, 0f};
 
     VertexElement     pos;
     private Mesh      squareMesh;
     private Matrix4x4 mWorld;
     private Material  material;
 
-    public Square() {
+    public Square3() {
 
     }
 
-    public Square(Point A, Point B, Point C, Point D) {
+    public Square3(float[] A, float[] B, float[] C, float[] D) {
         this.A = A;
         this.B = B;
         this.C = C;
         this.D = D;
     }
 
-    public Square(float x, float y, float width, float height) {
-
-        this.A = new Point(x - width / 2, y - height / 2);
-        this.B = new Point(x + width / 2, y - height / 2);
-        this.C = new Point(x + width / 2, y + height / 2);
-        this.D = new Point(x - width / 2, y + height / 2);
+    public Square3(float x, float y, float width, float height) {
 
     }
 
@@ -65,7 +58,7 @@ public class Square implements DrawableObject {
         this.coords.add(this.C); //TR
         this.coords.add(this.D); //TL
 
-        this.vertexSize = 4 * 3; //3 coords (x,y,Z) ‡ 4 float bytes
+        this.vertexSize = 4 * 3; //3 coords ‡ 4 float bytes
         this.pos = new VertexElement(0, this.vertexSize, GL10.GL_FLOAT, 3, VertexSemantic.VERTEX_ELEMENT_POSITION);
         this.mWorld = new Matrix4x4();
         this.material = new Material();
@@ -76,10 +69,9 @@ public class Square implements DrawableObject {
         buffer.position(0);
         for (int i = 0; i < this.drawOrder.length; i++) {
 
-            Point p = this.coords.get(this.drawOrder[i]);
-            buffer.putFloat(p.getPosition().getX());
-            buffer.putFloat(p.getPosition().getY());
-            buffer.putFloat(this.Z);
+            for (float f : this.coords.get(this.drawOrder[i])) {
+                buffer.putFloat(f);
+            }
         }
 
         VertexBuffer vBuffer = new VertexBuffer();
@@ -90,16 +82,14 @@ public class Square implements DrawableObject {
 
     }
 
-    public void setZaxis(float z) {
-        this.Z = z;
-    }
+    public static Square3 getBackgroundSquare() {
 
-    public static Square getBackgroundSquare() {
-        Point A = new Point(-100f, -100f);
-        Point B = new Point(100f, -100f);
-        Point C = new Point(100f, 100f);
-        Point D = new Point(-100f, 100f);
-        return new Square(A, B, C, D);
+        float[] A = new float[] {-100f, -100f, -5f};
+        float[] B = new float[] {100f, -100f, -5f};
+        float[] C = new float[] {100f, 100f, -5f};
+        float[] D = new float[] {-100f, 100f, -5f};
+
+        return new Square3(A, B, C, D);
     }
 
     @Override

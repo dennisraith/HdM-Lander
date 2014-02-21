@@ -109,20 +109,17 @@ public class GraphicsDevice {
         this.gl.glGenTextures(1, handles, 0);
 
         // Texture binden
-        int handle = handles[0];
-        this.gl.glBindTexture(GL10.GL_TEXTURE_2D, handle);
+        this.gl.glBindTexture(GL10.GL_TEXTURE_2D, handles[0]);
 
-        Texture texture = new Texture(handle, width, height);
+        Texture texture = new Texture(handles[0], width, height);
 
         // Bitmap an der Y-Achse spiegeln 
         Matrix matrix = new Matrix();
         matrix.setScale(1, -1);
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
-
         // MipMaps erzeugen und laden
         while (width >= 1 && height >= 1) {
             GLUtils.texImage2D(GL10.GL_TEXTURE_2D, level, bitmap, 0);
-
             if (height == 1 || width == 1)
                 break;
 

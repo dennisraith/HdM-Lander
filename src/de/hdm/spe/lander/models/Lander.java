@@ -51,6 +51,5 @@ public class Lander implements DrawableObject {
         InputStream stream;
         stream = context.getAssets().open(Lander.resName);
         this.mesh = Mesh.loadFromOBJ(stream);
-        this.world.scale(.3f);
     }
 }

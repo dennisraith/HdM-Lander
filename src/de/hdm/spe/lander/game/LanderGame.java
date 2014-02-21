@@ -21,7 +21,7 @@ public class LanderGame extends Game {
         this.mCurrentState = new LevelA();
         this.mCamera = new Camera();
         this.mProjection = new Matrix4x4();
-        this.mProjection.setOrthogonalProjection(-100f, 100f, -100f, 100f, 0, 100f);
+        this.mProjection.setOrthogonalProjection(-100f, 100f, -100f, 100f, -100f, 100f);
         this.mCamera.setProjection(this.mProjection);
     }
 
@@ -62,17 +62,12 @@ public class LanderGame extends Game {
         if (aspect > 1) {
             //        projection.setOrthogonalProjection(-width / 2, width / 2, -height / 2, height / 2, 10f, 100.0f);            
             this.mProjection.setOrthogonalProjection(-100, 100, -100 * aspect, 100 * aspect, 0, 100.0f);
-
         }
-
         else {
-            this.mProjection.setOrthogonalProjection(-100 * aspect, 100 * aspect, -100, 100, 0, 100.0f);
-            this.mProjection.scale(2);
-
+            this.mProjection.setOrthogonalProjection(-100 * aspect, 100 * aspect, -100, 100, -100f, 100.0f);
+            //            this.mProjection.scale(2);
         }
-
         this.mCamera.setProjection(this.mProjection);
-
     }
 
     @Override

@@ -1,6 +1,7 @@
 
 package de.hdm.spe.lander.graphics;
 
+import android.graphics.Rect;
 import android.util.Log;
 
 import de.hdm.spe.lander.graphics.VertexElement.VertexSemantic;
@@ -22,6 +23,7 @@ public class Mesh {
     int             mode;
     VertexBuffer    vertexBuffer;
     Vector<float[]> positions = null;
+    Rect            bounds    = new Rect();
 
     public Mesh() {
     }
@@ -39,10 +41,17 @@ public class Mesh {
         return this.vertexBuffer;
     }
 
-    public float getHeight() {
+    private void measure() {
         if (this.positions == null || this.positions.size() == 0) {
-            return -1;
+            return;
         }
+        this.measureHeight();
+        this.measureWidth();
+
+    }
+
+    private void measureHeight() {
+
         float minY = 0;
         float maxY = 0;
         for (float[] vertex : this.positions) {
@@ -54,14 +63,11 @@ public class Mesh {
                 maxY = y;
             }
         }
-
-        return maxY - minY;
+        this.bounds.bottom = (int) minY;
+        this.bounds.top = (int) maxY;
     }
 
-    public float getWidth() {
-        if (this.positions == null || this.positions.size() == 0) {
-            return -1;
-        }
+    private void measureWidth() {
         float minX = 0;
         float maxX = 0;
         for (float[] vertex : this.positions) {
@@ -73,8 +79,12 @@ public class Mesh {
                 maxX = x;
             }
         }
+        this.bounds.left = (int) minX;
+        this.bounds.right = (int) maxX;
+    }
 
-        return maxX - minX;
+    public Rect getBounds() {
+        return this.bounds;
     }
 
     public static Mesh loadFromOBJ(InputStream stream) throws IOException {
@@ -214,8 +224,9 @@ public class Mesh {
         mesh.vertexBuffer = vertexBuffer;
         mesh.mode = GL10.GL_TRIANGLES;
         mesh.positions = positions;
-        Log.d(Mesh.class.getName(), "Parsed mesh with height " + mesh.getHeight());
-        Log.d(Mesh.class.getName(), "Parsed mesh with width " + mesh.getWidth());
+        mesh.measure();
+        Log.d(Mesh.class.getName(), "Parsed mesh with height " + mesh.bounds.height());
+        Log.d(Mesh.class.getName(), "Parsed mesh with width " + mesh.bounds.width());
         return mesh;
     }
 }
