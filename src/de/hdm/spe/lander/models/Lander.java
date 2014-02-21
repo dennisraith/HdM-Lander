@@ -2,12 +2,12 @@
 package de.hdm.spe.lander.models;
 
 import android.content.Context;
+import android.util.Log;
 
 import de.hdm.spe.lander.graphics.Material;
 import de.hdm.spe.lander.graphics.Mesh;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.math.Vector2;
-import de.hdm.spe.lander.math.Vector4;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,8 +38,10 @@ public class Lander extends Square implements DrawableObject {
 
     public void translate(float length) {
         this.world = this.world.translate(0, length, 0);
-        Vector4 v = Matrix4x4.multiply(this.world, new Vector4(this.getPosition(), 0, 0));
-        this.setPosition(new Vector2(v.getX(), v.getY()));
+
+        this.setPosition(Vector2.add(this.getPosition(), new Vector2(0, length)));
+        Log.d(this.getClass().getName(), "Lander Position ");
+        this.getPosition().log();
     }
 
     @Override

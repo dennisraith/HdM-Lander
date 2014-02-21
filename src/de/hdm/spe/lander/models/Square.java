@@ -40,12 +40,18 @@ public class Square extends AABB implements DrawableObject, Shape2D {
 
     private Vector2               mPosition;
     private RectF                 mBounds;
+    private final float           width        = 0;
+    private final float           height       = 0;
 
     public Square() {
     };
 
     public Square(RectF bounds) {
         this.setBounds(bounds);
+    }
+
+    public Square(Vector2 position, float width, float height) {
+
     }
 
     public Square(float x, float y, float width, float height) {
@@ -105,13 +111,28 @@ public class Square extends AABB implements DrawableObject, Shape2D {
         return this.mBounds;
     }
 
+    private void onPositionChanged() {
+        float width = this.mBounds.width();
+        float height = this.mBounds.height();
+        float x = this.getPosition().getX();
+        float y = this.getPosition().getY();
+        this.mBounds = new RectF(new RectF(x - width / 2, y + height / 2, x + width / 2, y - height / 2));
+
+    }
+
+    public void updateBounds() {
+
+        this.BOTTOM_LEFT = new Vector2(this.mBounds.left, this.mBounds.bottom);
+        this.TOP_RIGHT = new Vector2(this.mBounds.right, this.mBounds.top);
+        this.BOTTOM_RIGHT = new Vector2(this.mBounds.right, this.mBounds.bottom);
+        this.TOP_LEFT = new Vector2(this.mBounds.left, this.mBounds.top);
+        this.mPosition = new Vector2(this.mBounds.centerX(), this.mBounds.centerY());
+
+    }
+
     public void setBounds(RectF bounds) {
         this.mBounds = bounds;
-        this.BOTTOM_LEFT = new Vector2(bounds.left, bounds.bottom);
-        this.TOP_RIGHT = new Vector2(bounds.right, bounds.top);
-        this.BOTTOM_RIGHT = new Vector2(bounds.right, bounds.bottom);
-        this.TOP_LEFT = new Vector2(bounds.left, bounds.top);
-        this.mPosition = new Vector2(bounds.centerX(), bounds.centerY());
+        this.updateBounds();
     }
 
     @Override
@@ -137,6 +158,7 @@ public class Square extends AABB implements DrawableObject, Shape2D {
     @Override
     public void setPosition(Vector2 position) {
         this.mPosition = position;
+        this.onPositionChanged();
     }
 
 }

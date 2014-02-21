@@ -60,7 +60,7 @@ public class LevelA implements GameState {
     public void update(float deltaSeconds) {
         this.mLander.translate(-deltaSeconds * 3);
         if (this.mLander.intersects(this.mSquare)) {
-            //            Log.d(this.getClass().getName(), "INTERSECTION!!!!!!!!");
+            Log.d(this.getClass().getName(), "INTERSECTION!!!!!!!!");
         }
     }
 
