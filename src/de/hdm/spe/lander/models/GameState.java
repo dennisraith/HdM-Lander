@@ -20,5 +20,12 @@ public interface GameState {
     public void pause();
 
     public void resume();
+    
+    public void shutdown();
+
+	public void initialize();
+
+	public void loadContent();
+
 
 }

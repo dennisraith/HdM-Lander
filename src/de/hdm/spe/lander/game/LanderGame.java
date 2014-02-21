@@ -8,6 +8,7 @@ import de.hdm.spe.lander.graphics.Camera;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.GameState;
 import de.hdm.spe.lander.states.LevelA;
+import de.hdm.spe.lander.states.Menu;
 
 
 public class LanderGame extends Game {
@@ -17,8 +18,9 @@ public class LanderGame extends Game {
     private final Matrix4x4 mProjection;
 
     public LanderGame(View view) {
+    	
         super(view);
-        this.mCurrentState = new LevelA();
+        this.mCurrentState = new Menu();
         this.mCamera = new Camera();
         this.mProjection = new Matrix4x4();
         this.mProjection.setOrthogonalProjection(-100f, 100f, -100f, 100f, -100f, 100f);

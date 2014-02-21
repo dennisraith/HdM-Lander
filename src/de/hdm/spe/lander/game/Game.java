@@ -21,6 +21,7 @@ public abstract class Game implements Renderer {
     protected Context                             context;
     protected InputSystem                         inputSystem;
     protected GraphicsDevice                      graphicsDevice;
+    protected GameStateManager					  gameStateManager;
     protected de.hdm.spe.lander.graphics.Renderer renderer;
 
     protected int                                 screenWidth;
@@ -31,8 +32,13 @@ public abstract class Game implements Renderer {
         this.context = view.getContext();
 
         this.inputSystem = new InputSystem(view);
+        this.gameStateManager = new GameStateManager(this);
     }
-
+    
+    public GameStateManager getGameStateManager() {
+    	return gameStateManager;
+    }
+    
     @Override
     public void onDrawFrame(GL10 gl) {
         long currTime = System.currentTimeMillis();
@@ -73,6 +79,8 @@ public abstract class Game implements Renderer {
             this.loadContent();
         }
     }
+    
+
 
     public abstract void initialize();
 
@@ -87,4 +95,33 @@ public abstract class Game implements Renderer {
     public abstract void pause();
 
     public abstract void resume();
+
+	public boolean isInitialized() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public Context getContext(){
+		return context;
+	}
+
+	public GraphicsDevice getGraphicsDevice() {
+		return graphicsDevice;
+	}
+	
+	public InputSystem getInputSystem() {
+		return inputSystem;
+	}
+	
+	public int getScreenHeight() {
+		return screenHeight;
+	}
+	
+	public int getScreenWidth() {
+		return screenWidth;
+	}
+	
+	public de.hdm.spe.lander.graphics.Renderer getRenderer() {
+		return renderer;
+	}
 }

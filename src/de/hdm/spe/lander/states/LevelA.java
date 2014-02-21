@@ -16,7 +16,7 @@ import java.io.InputStream;
 public class LevelA implements GameState {
 
     private Lander  mLander;
-    private Square mSquare;
+    private Square 	mSquare;
 
     @Override
     public void draw(float deltaSeconds, Renderer renderer) {
@@ -66,5 +66,20 @@ public class LevelA implements GameState {
     @Override
     public void resume() {
     }
+    
+    @Override
+    public void shutdown(){
+    	
+    }
+    
+    @Override
+	public void initialize(){
+		
+	}
+    
+    @Override
+	public void loadContent(){
+		
+	}
 
 }
