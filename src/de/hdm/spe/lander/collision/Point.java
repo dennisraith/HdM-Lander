@@ -51,6 +51,7 @@ public class Point implements Shape2D {
         return this.position;
     }
 
+    @Override
     public void setPosition(Vector2 position) {
         this.position.v[0] = position.v[0];
         this.position.v[1] = position.v[1];

@@ -5,22 +5,22 @@ import android.content.Context;
 
 import de.hdm.spe.lander.graphics.Material;
 import de.hdm.spe.lander.graphics.Mesh;
-import de.hdm.spe.lander.graphics.Texture;
 import de.hdm.spe.lander.math.Matrix4x4;
+import de.hdm.spe.lander.math.Vector2;
+import de.hdm.spe.lander.math.Vector4;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 
-public class Lander implements DrawableObject {
+public class Lander extends Square implements DrawableObject {
 
     private final static String resName     = "landerv1.obj";
     public final static String  textureName = "space.png";
 
     private Mesh                mesh;
     private final Material      material;
-    private Texture             texture;
-    private final Matrix4x4     world       = new Matrix4x4();
+    private Matrix4x4           world       = new Matrix4x4();
 
     public Lander() {
         this.material = new Material();
@@ -31,14 +31,15 @@ public class Lander implements DrawableObject {
         return this.mesh;
     }
 
-    public void setTexture(Texture t) {
-        this.texture = t;
-        this.material.setTexture(this.texture);
-    }
-
     @Override
     public Material getMaterial() {
         return this.material;
+    }
+
+    public void translate(float length) {
+        this.world = this.world.translate(0, length, 0);
+        Vector4 v = Matrix4x4.multiply(this.world, new Vector4(this.getPosition(), 0, 0));
+        this.setPosition(new Vector2(v.getX(), v.getY()));
     }
 
     @Override
@@ -51,5 +52,6 @@ public class Lander implements DrawableObject {
         InputStream stream;
         stream = context.getAssets().open(Lander.resName);
         this.mesh = Mesh.loadFromOBJ(stream);
+        this.setBounds(this.mesh.getBounds());
     }
 }
