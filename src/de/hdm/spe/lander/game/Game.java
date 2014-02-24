@@ -8,12 +8,13 @@ import android.view.View;
 
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.input.InputSystem;
+import de.hdm.spe.lander.models.GameStateChangedListener;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 
-public abstract class Game implements Renderer {
+public abstract class Game implements Renderer, GameStateChangedListener {
 
     private boolean                               initialized;
     private long                                  lastTime;
@@ -90,8 +91,7 @@ public abstract class Game implements Renderer {
     public abstract void resume();
 
     public boolean isInitialized() {
-        // TODO Auto-generated method stub
-        return false;
+        return this.initialized;
     }
 
     public Context getContext() {
@@ -127,4 +127,5 @@ public abstract class Game implements Renderer {
             }
         });
     }
+
 }

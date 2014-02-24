@@ -18,6 +18,7 @@ import de.hdm.spe.lander.graphics.Texture;
 import de.hdm.spe.lander.input.InputEvent;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.math.Vector3;
+import de.hdm.spe.lander.models.GameState;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -251,6 +252,12 @@ public class MGDExerciseGame extends Game {
     @Override
     public void resume() {
         // TODO Auto-generated method stub		
+    }
+
+    @Override
+    public void onGameStateChanged(GameState newState) {
+        // TODO Auto-generated method stub
+
     }
 
 }

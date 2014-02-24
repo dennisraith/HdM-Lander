@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class LanderGame extends Game {
 
-    private final GameState mCurrentState;
+    private GameState       mCurrentState;
     private Camera          mCamera;
     private final Matrix4x4 mProjection;
 
@@ -98,6 +98,12 @@ public class LanderGame extends Game {
 
     @Override
     public void resume() {
+    }
+
+    @Override
+    public void onGameStateChanged(GameState newState) {
+        this.mCurrentState = newState;
+        this.loadContent();
     }
 
 }

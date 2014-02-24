@@ -13,10 +13,14 @@ import java.io.IOException;
 
 public abstract class GameState {
 
-    protected Game mGame;
+    private final Game mGame;
 
     public GameState(Game game) {
         this.mGame = game;
+    }
+
+    public Game getGame() {
+        return this.mGame;
     }
 
     public abstract void prepare(Context context, GraphicsDevice device) throws IOException;
@@ -34,5 +38,9 @@ public abstract class GameState {
     public abstract void resume();
 
     public abstract Camera getCamera();
+
+    public void changeGameState(GameState state) {
+        this.mGame.onGameStateChanged(state);
+    }
 
 }
