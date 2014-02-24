@@ -1,13 +1,19 @@
 
 package de.hdm.spe.lander.states;
 
+import java.io.IOException;
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.util.Log;
+
+import de.hdm.spe.lander.graphics.Camera;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.models.GameState;
+import de.hdm.spe.lander.models.Square;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.graphics.Camera;
 import de.hdm.spe.lander.math.Matrix4x4;
@@ -31,7 +37,7 @@ public class Menu implements GameState {
 	private SpriteFont fontMenu;
 	private TextBuffer[] textMenu;
 	private Matrix4x4[] matMenu;
-	private AABB[] aabbMenu;
+	private Square[] aabbMenu;
 	
 	private MediaPlayer mediaPlayer;
 	private SoundPool soundPool;
@@ -39,19 +45,7 @@ public class Menu implements GameState {
 
 
 	public void initialize(Game game) {
-		float width = game.getScreenWidth();
-		float height = game.getScreenHeight();
-		
-		Matrix4x4 projection = new Matrix4x4();
-		projection.setOrthogonalProjection(-width / 2, width / 2, -height / 2, height / 2, 0.0f, 100.0f);
-				
-		Matrix4x4 view = new Matrix4x4();
 
-		hudCamera = new Camera();
-		hudCamera.setProjection(projection);
-		hudCamera.setView(view);
-
-		matTitle = Matrix4x4.createTranslation(-width / 2, height / 2 - 64, 0);
 	}
 	
 	public void loadContent(Game game) {
@@ -82,6 +76,7 @@ public class Menu implements GameState {
 					
 					for (int i = 0; i < aabbMenu.length; ++i) { 
 						AABB aabb = aabbMenu[i];
+						Log.d("for drin", "bla argagasd");
 						if (touchPoint.intersects(aabb)) {
 							if (soundPool != null)
 								soundPool.play(clickSound, 1, 1, 0, 0, 1);
@@ -98,40 +93,28 @@ public class Menu implements GameState {
 		}
 	}
 
-    private void onMenuItemClicked(Game game, int i) {
-		// TODO Auto-generated method stub
-		
-	}
+  
 
-//	public void draw(Game game, float deltaSeconds) {
-//		GraphicsDevice graphicsDevice = game.getGraphicsDevice();
-//		Renderer renderer = game.getRenderer();
-//		
-//		graphicsDevice.clear(0.0f, 0.5f, 1.0f, 1.0f, 1.0f);
-//		
-//		graphicsDevice.setCamera(hudCamera);
-//		renderer.drawText(textTitle, matTitle);
-//		for (int i = 0; i < textMenu.length; ++i)
-//			renderer.drawText(textMenu[i], matMenu[i]);
-//	}
-
-//	public void resize(Game game, int width, int height) {
-//		Matrix4x4 projection = new Matrix4x4();
-//		projection.setOrthogonalProjection(-width / 2, width / 2, -height / 2, height / 2, 0.0f, 100.0f);
-//		hudCamera.setProjection(projection);
-//		
-//		matTitle.setIdentity();
-//		matTitle.translate(-width / 2, height / 2 - 64, 0);
-//	}
 	
     @Override
     public void prepare(Context context, GraphicsDevice device) {
+    	
 		
-		fontTitle = device.createSpriteFont(null, 16);
+    	Matrix4x4 projection = new Matrix4x4();
+		Matrix4x4 view = new Matrix4x4();
+
+		hudCamera = new Camera();
+		hudCamera.setProjection(projection);
+		
+		hudCamera.setView(view);
+    	
+		
+		fontTitle = device.createSpriteFont(null, 96);
 		textTitle = device.createTextBuffer(fontTitle, 16);
+		Log.d(getClass().getName(), "TextBounds: "+textTitle.getMesh().getBounds().width()+" : "+textTitle.getMesh().getBounds().height());
 		textTitle.setText("Moon Landing");
 				
-		fontMenu = device.createSpriteFont(null, 16);
+		fontMenu = device.createSpriteFont(null, 70);
 		textMenu = new TextBuffer[] {
 				device.createTextBuffer(fontMenu, 16),
 				device.createTextBuffer(fontMenu, 16),
@@ -143,20 +126,32 @@ public class Menu implements GameState {
 		textMenu[2].setText("Credits");
 		textMenu[3].setText("Quit");
 		
-		matTitle = new Matrix4x4();
+		matTitle = new Matrix4x4().createTranslation(-300, 400, 0);
 		matMenu = new Matrix4x4[] {
-				Matrix4x4.createTranslation(0, 0, 0),
-				Matrix4x4.createTranslation(0, 0, 0),
-				Matrix4x4.createTranslation(0, 0, 0),
-				Matrix4x4.createTranslation(0, 0, 0)
+				Matrix4x4.createTranslation(-150, 160, -1),
+				Matrix4x4.createTranslation(-150, 40, -1),
+				Matrix4x4.createTranslation(-150, -80, -1),
+				Matrix4x4.createTranslation(-150, -200, -1)
 		};
 		
-		aabbMenu = new AABB[] {
-				new AABB(-150, 150, 210, 70),
-				new AABB(-150, 50, 180, 70),
-				new AABB(-150, -50, 180, 70),
-				new AABB(-150, -150, 140, 70)
+		aabbMenu = new Square[] {
+				new Square(20, 180, 380, 80),
+				new Square(-30, 60, 280, 80),
+				new Square(-45, -60, 250, 80),
+				new Square(-85, -180, 160, 80)
 		};
+		
+		for (Square sq : aabbMenu){
+			try {
+				sq.prepare(context);
+				sq.getWorld().translate(0, 0, -10);
+				sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		
 		/*
 		while (mediaPlayer == null) {
@@ -165,15 +160,16 @@ public class Menu implements GameState {
 		mediaPlayer.start();
 		*/
 		
-		soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+		soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);	
 //		clickSound = soundPool.load(context, R.raw.click, 1);
     }
 
 
     @Override
     public void resize(int width, int height) {
-        // TODO Auto-generated method stub
-
+    	Matrix4x4 projection = new Matrix4x4();
+    	projection.setOrthogonalProjection(-width / 2, width / 2, -height / 2, height / 2, 0.0f, 100.0f);
+    	hudCamera.setProjection(projection);
     }
 
     @Override
@@ -212,7 +208,11 @@ public class Menu implements GameState {
 	}
 	@Override
 	public void draw(float deltaSeconds, Renderer renderer) {
-			renderer.drawText(textTitle, matTitle);
+		for (Square sq : aabbMenu){
+			renderer.draw(sq);
+		}
+		
+		renderer.drawText(textTitle, matTitle);
 		for (int i = 0; i < matMenu.length; i++) {	
 			renderer.drawText(textMenu[i], matMenu[i]);
 		}
@@ -221,4 +221,25 @@ public class Menu implements GameState {
 	}
     
 
+    @Override
+    public Camera getCamera() {
+        return hudCamera;
+    }
+
+	private void onMenuItemClicked(Game game, int i) {
+		switch (i) {
+		case 0:
+			Log.d("touch: 1", "Start");
+			break;
+		case 1:
+			Log.d("touch: 2", "Options");
+			break;
+		case 2:
+			Log.d("touch: 3", "Credits");
+			break;
+		case 3:
+			game.finish();
+			break;
+		}
+	}
 }

@@ -64,6 +64,7 @@ public class Circle implements Shape2D {
         return this.center;
     }
 
+    @Override
     public void setPosition(Vector2 position) {
         this.center.v[0] = position.v[0];
         this.center.v[1] = position.v[1];

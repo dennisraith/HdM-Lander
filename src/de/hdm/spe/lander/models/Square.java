@@ -2,14 +2,17 @@
 package de.hdm.spe.lander.models;
 
 import android.content.Context;
+import android.graphics.RectF;
 
-import de.hdm.spe.lander.collision.Point;
+import de.hdm.spe.lander.collision.AABB;
+import de.hdm.spe.lander.collision.Shape2D;
 import de.hdm.spe.lander.graphics.Material;
 import de.hdm.spe.lander.graphics.Mesh;
 import de.hdm.spe.lander.graphics.VertexBuffer;
 import de.hdm.spe.lander.graphics.VertexElement;
 import de.hdm.spe.lander.graphics.VertexElement.VertexSemantic;
 import de.hdm.spe.lander.math.Matrix4x4;
+import de.hdm.spe.lander.math.Vector2;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -19,66 +22,63 @@ import java.util.Vector;
 import javax.microedition.khronos.opengles.GL10;
 
 
-public class Square implements DrawableObject {
+public class Square extends AABB implements DrawableObject, Shape2D {
 
-    Vector<Point>     coords     = new Vector<Point>();
-    int[]             drawOrder  = {0, 1, 2, 0, 2, 3};
-    VertexElement[]   elemnts    = new VertexElement[1];
-    int               vertexSize = 0;
+    private int                   vertexSize   = 0;
+    private final int[]           drawOrder    = {0, 1, 2, 0, 2, 3};
+    private VertexElement         vElementPos;
+    private Material              material;
+    private Mesh                  squareMesh;
+    private final VertexElement[] elemnts      = new VertexElement[1];
+    private Matrix4x4             mWorld;
 
-    Point             A          = new Point(-1f, -1f);
-    Point             B          = new Point(1f, -1f);
-    Point             C          = new Point(1f, 1f);
-    Point             D          = new Point(-1f, 1f);
+    Vector<Vector2>               coords       = new Vector<Vector2>();
+    Vector2                       BOTTOM_RIGHT = new Vector2(1f, -1f);
+    Vector2                       TOP_LEFT     = new Vector2(-1f, 1f);
 
-    private float     Z          = 0;
+    private float                 Z            = 0;
 
-    VertexElement     pos;
-    private Mesh      squareMesh;
-    private Matrix4x4 mWorld;
-    private Material  material;
+    private Vector2               mPosition;
+    private RectF                 mBounds;
+    private final float           width        = 0;
+    private final float           height       = 0;
 
     public Square() {
+    };
 
+    public Square(RectF bounds) {
+        this.setBounds(bounds);
     }
 
-    public Square(Point A, Point B, Point C, Point D) {
-        this.A = A;
-        this.B = B;
-        this.C = C;
-        this.D = D;
+    public Square(Vector2 position, float width, float height) {
+
     }
 
     public Square(float x, float y, float width, float height) {
-
-        this.A = new Point(x - width / 2, y - height / 2);
-        this.B = new Point(x + width / 2, y - height / 2);
-        this.C = new Point(x + width / 2, y + height / 2);
-        this.D = new Point(x - width / 2, y + height / 2);
+        this(new RectF(x - width / 2, y + height / 2, x + width / 2, y - height / 2));
 
     }
 
-    @Override
-    public void prepare(Context context) throws IOException {
-        this.coords.add(this.A); //BL
-        this.coords.add(this.B); //BR
-        this.coords.add(this.C); //TR
-        this.coords.add(this.D); //TL
+    private void generateMesh() {
+        this.coords.add(this.BOTTOM_LEFT); //BL
+        this.coords.add(this.BOTTOM_RIGHT); //BR
+        this.coords.add(this.TOP_RIGHT); //TR
+        this.coords.add(this.TOP_LEFT); //TL
 
         this.vertexSize = 4 * 3; //3 coords (x,y,Z) ‡ 4 float bytes
-        this.pos = new VertexElement(0, this.vertexSize, GL10.GL_FLOAT, 3, VertexSemantic.VERTEX_ELEMENT_POSITION);
+        this.vElementPos = new VertexElement(0, this.vertexSize, GL10.GL_FLOAT, 3, VertexSemantic.VERTEX_ELEMENT_POSITION);
         this.mWorld = new Matrix4x4();
         this.material = new Material();
 
-        this.elemnts[0] = this.pos;
+        this.elemnts[0] = this.vElementPos;
         ByteBuffer buffer = ByteBuffer.allocateDirect(this.vertexSize * this.drawOrder.length);
         buffer.order(ByteOrder.nativeOrder());
         buffer.position(0);
         for (int i = 0; i < this.drawOrder.length; i++) {
 
-            Point p = this.coords.get(this.drawOrder[i]);
-            buffer.putFloat(p.getPosition().getX());
-            buffer.putFloat(p.getPosition().getY());
+            Vector2 p = this.coords.get(this.drawOrder[i]);
+            buffer.putFloat(p.getX());
+            buffer.putFloat(p.getY());
             buffer.putFloat(this.Z);
         }
 
@@ -87,6 +87,11 @@ public class Square implements DrawableObject {
         vBuffer.setBuffer(buffer);
         vBuffer.setNumVertices(this.drawOrder.length);
         this.squareMesh = new Mesh(vBuffer, GL10.GL_TRIANGLES);
+    }
+
+    @Override
+    public void prepare(Context context) throws IOException {
+        this.generateMesh();
 
     }
 
@@ -95,11 +100,39 @@ public class Square implements DrawableObject {
     }
 
     public static Square getBackgroundSquare() {
-        Point A = new Point(-100f, -100f);
-        Point B = new Point(100f, -100f);
-        Point C = new Point(100f, 100f);
-        Point D = new Point(-100f, 100f);
-        return new Square(A, B, C, D);
+        //        Point A = new Point(-100f, -100f);
+        //        Point B = new Point(100f, -100f);
+        //        Point C = new Point(100f, 100f);
+        //        Point D = new Point(-100f, 100f);
+        return new Square(0, 0, 0, 0);
+    }
+
+    public RectF getBounds() {
+        return this.mBounds;
+    }
+
+    private void onPositionChanged() {
+        float width = this.mBounds.width();
+        float height = this.mBounds.height();
+        float x = this.getPosition().getX();
+        float y = this.getPosition().getY();
+        this.mBounds = new RectF(new RectF(x - width / 2, y + height / 2, x + width / 2, y - height / 2));
+
+    }
+
+    public void updateBounds() {
+
+        this.BOTTOM_LEFT = new Vector2(this.mBounds.left, this.mBounds.bottom);
+        this.TOP_RIGHT = new Vector2(this.mBounds.right, this.mBounds.top);
+        this.BOTTOM_RIGHT = new Vector2(this.mBounds.right, this.mBounds.bottom);
+        this.TOP_LEFT = new Vector2(this.mBounds.left, this.mBounds.top);
+        this.mPosition = new Vector2(this.mBounds.centerX(), this.mBounds.centerY());
+
+    }
+
+    public void setBounds(RectF bounds) {
+        this.mBounds = bounds;
+        this.updateBounds();
     }
 
     @Override
@@ -115,6 +148,17 @@ public class Square implements DrawableObject {
     @Override
     public Matrix4x4 getWorld() {
         return this.mWorld;
+    }
+
+    @Override
+    public Vector2 getPosition() {
+        return this.mPosition;
+    }
+
+    @Override
+    public void setPosition(Vector2 position) {
+        this.mPosition = position;
+        this.onPositionChanged();
     }
 
 }

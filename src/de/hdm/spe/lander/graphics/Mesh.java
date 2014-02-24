@@ -1,7 +1,7 @@
 
 package de.hdm.spe.lander.graphics;
 
-import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 
 import de.hdm.spe.lander.graphics.VertexElement.VertexSemantic;
@@ -23,7 +23,7 @@ public class Mesh {
     int             mode;
     VertexBuffer    vertexBuffer;
     Vector<float[]> positions = null;
-    Rect            bounds    = new Rect();
+    RectF           bounds    = new RectF();
 
     public Mesh() {
     }
@@ -63,8 +63,8 @@ public class Mesh {
                 maxY = y;
             }
         }
-        this.bounds.bottom = (int) minY;
-        this.bounds.top = (int) maxY;
+        this.bounds.bottom = minY;
+        this.bounds.top = maxY;
     }
 
     private void measureWidth() {
@@ -79,11 +79,14 @@ public class Mesh {
                 maxX = x;
             }
         }
-        this.bounds.left = (int) minX;
-        this.bounds.right = (int) maxX;
+        this.bounds.left = minX;
+        this.bounds.right = maxX;
     }
 
-    public Rect getBounds() {
+    public RectF getBounds() {
+    	if(bounds==null || bounds.isEmpty()){
+    		measure();
+    	}
         return this.bounds;
     }
 

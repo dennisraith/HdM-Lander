@@ -1,6 +1,7 @@
 
 package de.hdm.spe.lander.game;
 
+import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 import android.view.View;
@@ -123,5 +124,12 @@ public abstract class Game implements Renderer {
 	
 	public de.hdm.spe.lander.graphics.Renderer getRenderer() {
 		return renderer;
+	}
+	public void finish() {
+		view.post(new Runnable() {
+			public void run() {
+				((Activity)context).finish();
+			}
+		});
 	}
 }
