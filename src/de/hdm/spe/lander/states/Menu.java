@@ -55,44 +55,7 @@ public class Menu extends GameState {
     }
 
     public void update(Game game, float deltaSeconds) {
-        InputSystem inputSystem = game.getInputSystem();
-        int screenWidth = game.getScreenWidth();
-        int screenHeight = game.getScreenHeight();
-
-        InputEvent inputEvent = inputSystem.peekEvent();
-        while (inputEvent != null) {
-            switch (inputEvent.getDevice()) {
-                case TOUCHSCREEN:
-                    switch (inputEvent.getAction()) {
-                        case DOWN:
-                            Vector3 screenTouchPosition = new Vector3(
-                                    (inputEvent.getValues()[0] / (screenWidth / 2) - 1),
-                                    -(inputEvent.getValues()[1] / (screenHeight / 2) - 1),
-                                    0);
-
-                            Vector3 worldTouchPosition = this.hudCamera.unproject(screenTouchPosition, 1);
-
-                            Point touchPoint = new Point(
-                                    worldTouchPosition.getX(),
-                                    worldTouchPosition.getY());
-
-                            for (int i = 0; i < this.aabbMenu.length; ++i) {
-                                AABB aabb = this.aabbMenu[i];
-                                Log.d("for drin", "bla argagasd");
-                                if (touchPoint.intersects(aabb)) {
-                                    if (this.soundPool != null)
-                                        this.soundPool.play(this.clickSound, 1, 1, 0, 0, 1);
-
-                                    this.onMenuItemClicked(game, i);
-                                }
-                            }
-                    }
-                    break;
-            }
-
-            inputSystem.popEvent();
-            inputEvent = inputSystem.peekEvent();
-        }
+       
     }
 
     @Override
@@ -184,8 +147,44 @@ public class Menu extends GameState {
 
     @Override
     public void update(float deltaSeconds) {
-        // TODO Auto-generated method stub
+    	 InputSystem inputSystem = getGame().getInputSystem();
+         int screenWidth = getGame().getScreenWidth();
+         int screenHeight = getGame().getScreenHeight();
 
+         InputEvent inputEvent = inputSystem.peekEvent();
+         while (inputEvent != null) {
+             switch (inputEvent.getDevice()) {
+                 case TOUCHSCREEN:
+                     switch (inputEvent.getAction()) {
+                         case DOWN:
+                             Vector3 screenTouchPosition = new Vector3(
+                                     (inputEvent.getValues()[0] / (screenWidth / 2) - 1),
+                                     -(inputEvent.getValues()[1] / (screenHeight / 2) - 1),
+                                     0);
+
+                             Vector3 worldTouchPosition = this.hudCamera.unproject(screenTouchPosition, 1);
+
+                             Point touchPoint = new Point(
+                                     worldTouchPosition.getX(),
+                                     worldTouchPosition.getY());
+
+                             for (int i = 0; i < this.aabbMenu.length; ++i) {
+                                 AABB aabb = this.aabbMenu[i];
+                                 Log.d("for drin", "bla argagasd");
+                                 if (touchPoint.intersects(aabb)) {
+                                     if (this.soundPool != null)
+                                         this.soundPool.play(this.clickSound, 1, 1, 0, 0, 1);
+
+                                     this.onMenuItemClicked(getGame(), i);
+                                 }
+                             }
+                     }
+                     break;
+             }
+
+             inputSystem.popEvent();
+             inputEvent = inputSystem.peekEvent();
+         }
     }
 
     @Override
@@ -210,6 +209,7 @@ public class Menu extends GameState {
         switch (i) {
             case 0:
                 Log.d("touch: 1", "Start");
+                this.changeGameState(new LevelA(getGame()));
                 break;
             case 1:
                 Log.d("touch: 2", "Options");

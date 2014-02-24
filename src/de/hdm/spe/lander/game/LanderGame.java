@@ -7,6 +7,7 @@ import de.hdm.spe.lander.graphics.Camera;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.GameState;
 import de.hdm.spe.lander.states.LevelA;
+import de.hdm.spe.lander.states.Menu;
 
 import java.io.IOException;
 
@@ -19,7 +20,7 @@ public class LanderGame extends Game {
 
     public LanderGame(View view) {
         super(view);
-        this.mCurrentState = new LevelA(this);
+        this.mCurrentState = new Menu(this);
 
         this.mCamera = new Camera();
         this.mProjection = new Matrix4x4();
@@ -48,35 +49,6 @@ public class LanderGame extends Game {
     public void update(float deltaSeconds) {
         this.mCurrentState.update(deltaSeconds);
 
-        //		InputEvent inputEvent = this.inputSystem.peekEvent();
-        //		while (inputEvent != null) {
-        //			switch (inputEvent.getDevice()) {
-        //			case KEYBOARD:
-        //				switch (inputEvent.getAction()) {
-        //				case DOWN:
-        //					switch (inputEvent.getKeycode()) {
-        //					case KeyEvent.KEYCODE_MENU:
-        //						this.mCurrentState = new Menu();
-        //						break;
-        //					}
-        //					break;
-        //				}
-        //				break;
-        //			case TOUCHSCREEN:
-        //				switch (inputEvent.getAction()) {
-        //				case DOWN:
-        //					Log.d("touch", "bla bla key event");
-        //					Vector3 screenTouchPosition = new Vector3(
-        //							(inputEvent.getValues()[0] / (this.screenWidth / 2) - 1),
-        //							-(inputEvent.getValues()[1]
-        //									/ (this.screenHeight / 2) - 1), 0);
-        //					
-        //				}
-        //				break;
-        //			}
-        //			this.inputSystem.popEvent();
-        //			inputEvent = this.inputSystem.peekEvent();
-        //		}
 
     }
 
