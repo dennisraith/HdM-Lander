@@ -96,6 +96,11 @@ public class LevelA extends GameState {
     }
 
     @Override
+    public void shutdown() {
+
+    }
+
+    @Override
     public Camera getCamera() {
         return this.mCamera;
     }

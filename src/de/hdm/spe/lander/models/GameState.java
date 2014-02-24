@@ -27,6 +27,8 @@ public abstract class GameState {
 
     public abstract void resize(int width, int height);
 
+    public abstract void shutdown();
+
     public abstract void pause();
 
     public abstract void resume();

@@ -1,6 +1,7 @@
 
 package de.hdm.spe.lander.game;
 
+import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 import android.view.View;
@@ -87,4 +88,43 @@ public abstract class Game implements Renderer {
     public abstract void pause();
 
     public abstract void resume();
+
+    public boolean isInitialized() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public Context getContext() {
+        return this.context;
+    }
+
+    public GraphicsDevice getGraphicsDevice() {
+        return this.graphicsDevice;
+    }
+
+    public InputSystem getInputSystem() {
+        return this.inputSystem;
+    }
+
+    public int getScreenHeight() {
+        return this.screenHeight;
+    }
+
+    public int getScreenWidth() {
+        return this.screenWidth;
+    }
+
+    public de.hdm.spe.lander.graphics.Renderer getRenderer() {
+        return this.renderer;
+    }
+
+    public void finish() {
+        this.view.post(new Runnable() {
+
+            @Override
+            public void run() {
+                ((Activity) Game.this.context).finish();
+            }
+        });
+    }
 }

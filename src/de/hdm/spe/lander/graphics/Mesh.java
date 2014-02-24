@@ -84,6 +84,9 @@ public class Mesh {
     }
 
     public RectF getBounds() {
+    	if(bounds==null || bounds.isEmpty()){
+    		measure();
+    	}
         return this.bounds;
     }
 
