@@ -143,7 +143,7 @@ public class Menu implements GameState {
 		
 		for (Square sq : aabbMenu){
 			try {
-				sq.prepare(context);
+				sq.prepare(context,device);
 				sq.getWorld().translate(0, 0, -10);
 				sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
 			} catch (IOException e) {
