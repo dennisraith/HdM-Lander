@@ -6,6 +6,7 @@ import android.graphics.RectF;
 
 import de.hdm.spe.lander.collision.AABB;
 import de.hdm.spe.lander.collision.Shape2D;
+import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Material;
 import de.hdm.spe.lander.graphics.Mesh;
 import de.hdm.spe.lander.graphics.VertexBuffer;
@@ -15,6 +16,7 @@ import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.math.Vector2;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Vector;
@@ -40,23 +42,13 @@ public class Square extends AABB implements DrawableObject, Shape2D {
 
     private Vector2               mPosition;
     private RectF                 mBounds;
-    private final float           width        = 0;
-    private final float           height       = 0;
 
     public Square() {
+        this.mBounds = new RectF();
     };
 
-    public Square(RectF bounds) {
-        this.setBounds(bounds);
-    }
-
-    public Square(Vector2 position, float width, float height) {
-
-    }
-
     public Square(float x, float y, float width, float height) {
-        this(new RectF(x - width / 2, y + height / 2, x + width / 2, y - height / 2));
-
+        this.setBounds(new RectF(x - width / 2, y + height / 2, x + width / 2, y - height / 2));
     }
 
     private void generateMesh() {
@@ -90,8 +82,10 @@ public class Square extends AABB implements DrawableObject, Shape2D {
     }
 
     @Override
-    public void prepare(Context context) throws IOException {
+    public void prepare(Context context, GraphicsDevice device) throws IOException {
         this.generateMesh();
+        InputStream stream = context.getAssets().open("space.png");
+        this.material.setTexture(device.createTexture(stream));
 
     }
 
@@ -120,19 +114,13 @@ public class Square extends AABB implements DrawableObject, Shape2D {
 
     }
 
-    public void updateBounds() {
-
+    public void setBounds(RectF bounds) {
+        this.mBounds = bounds;
         this.BOTTOM_LEFT = new Vector2(this.mBounds.left, this.mBounds.bottom);
         this.TOP_RIGHT = new Vector2(this.mBounds.right, this.mBounds.top);
         this.BOTTOM_RIGHT = new Vector2(this.mBounds.right, this.mBounds.bottom);
         this.TOP_LEFT = new Vector2(this.mBounds.left, this.mBounds.top);
         this.mPosition = new Vector2(this.mBounds.centerX(), this.mBounds.centerY());
-
-    }
-
-    public void setBounds(RectF bounds) {
-        this.mBounds = bounds;
-        this.updateBounds();
     }
 
     @Override
