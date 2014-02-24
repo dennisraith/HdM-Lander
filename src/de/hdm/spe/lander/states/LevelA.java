@@ -2,7 +2,6 @@
 package de.hdm.spe.lander.states;
 
 import android.content.Context;
-import android.util.Log;
 
 import de.hdm.spe.lander.Static;
 import de.hdm.spe.lander.game.Game;
@@ -32,11 +31,12 @@ public class LevelA extends GameState {
     public LevelA(Game game) {
         super(game);
         this.mCamera = new Camera();
-
+        this.setProjection(this.getGame().getAspect());
         this.mTextWorld = new Matrix4x4();
         this.mBG = new Background();
         this.mLander = new Lander();
         this.mTextWorld.translate(0, 90, 0).scale(.25f);
+        this.mBG.getWorld().translate(0, 0, -20).scale(14, 14, 0);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class LevelA extends GameState {
         this.mText.setText("TEXTBUFFER");
 
         this.mBG.prepare(context, device);
-        this.mBG.getWorld().translate(0, 0, -20).scale(14, 14, 0);
+
         this.mLander.prepare(context, device);
 
     }
@@ -68,9 +68,8 @@ public class LevelA extends GameState {
     @Override
     public void resize(int width, int height) {
 
-        float aspect = (float) width / (float) height;
-        Log.d(this.getClass().getName(), "Width: " + width + " Height: " + height + " Aspect: " + aspect);
-        this.setProjection(aspect);
+        //        Log.d(this.getClass().getName(), "Width: " + width + " Height: " + height + " Aspect: " + aspect);
+        this.setProjection(this.getGame().getAspect());
 
     }
 

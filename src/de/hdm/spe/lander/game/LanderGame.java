@@ -6,7 +6,6 @@ import android.view.View;
 import de.hdm.spe.lander.graphics.Camera;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.GameState;
-import de.hdm.spe.lander.states.LevelA;
 import de.hdm.spe.lander.states.Menu;
 
 import java.io.IOException;
@@ -48,8 +47,6 @@ public class LanderGame extends Game {
     @Override
     public void update(float deltaSeconds) {
         this.mCurrentState.update(deltaSeconds);
-
-
     }
 
     @Override

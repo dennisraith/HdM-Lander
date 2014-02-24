@@ -76,6 +76,10 @@ public abstract class Game implements Renderer, GameStateChangedListener {
         }
     }
 
+    public float getAspect() {
+        return (float) this.getScreenWidth() / (float) this.getScreenHeight();
+    }
+
     public abstract void initialize();
 
     public abstract void loadContent();
