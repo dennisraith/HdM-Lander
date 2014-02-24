@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import de.hdm.spe.lander.Static;
+import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.graphics.Background;
 import de.hdm.spe.lander.graphics.Camera;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
@@ -20,7 +21,7 @@ import de.hdm.spe.lander.models.Lander;
 import java.io.IOException;
 
 
-public class LevelA implements GameState {
+public class LevelA extends GameState {
 
     private final Lander     mLander;
     private final Camera     mCamera;
@@ -28,7 +29,8 @@ public class LevelA implements GameState {
     private final Matrix4x4  mTextWorld;
     private final Background mBG;
 
-    public LevelA() {
+    public LevelA(Game game) {
+        super(game);
         this.mCamera = new Camera();
 
         this.mTextWorld = new Matrix4x4();

@@ -17,7 +17,7 @@ public class LanderGame extends Game {
 
     public LanderGame(View view) {
         super(view);
-        this.mCurrentState = new LevelA();
+        this.mCurrentState = new LevelA(this);
 
     }
 

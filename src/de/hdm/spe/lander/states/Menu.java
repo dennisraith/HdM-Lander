@@ -3,13 +3,18 @@ package de.hdm.spe.lander.states;
 
 import android.content.Context;
 
+import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.graphics.Camera;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.models.GameState;
 
 
-public class Menu implements GameState {
+public class Menu extends GameState {
+
+    public Menu(Game game) {
+        super(game);
+    }
 
     @Override
     public void draw(float deltaSeconds, Renderer renderer) {

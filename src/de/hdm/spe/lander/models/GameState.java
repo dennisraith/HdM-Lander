@@ -3,6 +3,7 @@ package de.hdm.spe.lander.models;
 
 import android.content.Context;
 
+import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.graphics.Camera;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
@@ -10,20 +11,26 @@ import de.hdm.spe.lander.graphics.Renderer;
 import java.io.IOException;
 
 
-public interface GameState {
+public abstract class GameState {
 
-    public void prepare(Context context, GraphicsDevice device) throws IOException;
+    protected Game mGame;
 
-    public void update(float deltaSeconds);
+    public GameState(Game game) {
+        this.mGame = game;
+    }
 
-    public void draw(float deltaSeconds, Renderer renderer);
+    public abstract void prepare(Context context, GraphicsDevice device) throws IOException;
 
-    public void resize(int width, int height);
+    public abstract void update(float deltaSeconds);
 
-    public void pause();
+    public abstract void draw(float deltaSeconds, Renderer renderer);
 
-    public void resume();
+    public abstract void resize(int width, int height);
 
-    public Camera getCamera();
+    public abstract void pause();
+
+    public abstract void resume();
+
+    public abstract Camera getCamera();
 
 }
