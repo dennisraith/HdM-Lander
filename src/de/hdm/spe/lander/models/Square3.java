@@ -3,6 +3,7 @@ package de.hdm.spe.lander.models;
 
 import android.content.Context;
 
+import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Material;
 import de.hdm.spe.lander.graphics.Mesh;
 import de.hdm.spe.lander.graphics.VertexBuffer;
@@ -52,7 +53,7 @@ public class Square3 implements DrawableObject {
     }
 
     @Override
-    public void prepare(Context context) throws IOException {
+    public void prepare(Context context, GraphicsDevice device) throws IOException {
         this.coords.add(this.A); //BL
         this.coords.add(this.B); //BR
         this.coords.add(this.C); //TR
