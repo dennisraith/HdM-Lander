@@ -2,7 +2,6 @@
 package de.hdm.spe.lander.graphics;
 
 import android.graphics.RectF;
-import android.util.Log;
 
 import de.hdm.spe.lander.graphics.SpriteFont.CharacterInfo;
 import de.hdm.spe.lander.graphics.VertexElement.VertexSemantic;
@@ -98,7 +97,7 @@ public class TextBuffer {
             x += info.width;
             if (index == text.length() - 1) {
                 this.mesh.bounds = new RectF(posLeft, posTop, posRight, posBottom);
-                Log.d(this.getClass().getName(), "Text size: height: " + this.mesh.bounds.height() + " width: " + this.mesh.bounds.width());
+                //                Log.d(this.getClass().getName(), "Text size: height: " + this.mesh.bounds.height() + " width: " + this.mesh.bounds.width());
 
             }
 

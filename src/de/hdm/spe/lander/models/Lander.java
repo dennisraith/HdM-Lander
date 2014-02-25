@@ -2,6 +2,7 @@
 package de.hdm.spe.lander.models;
 
 import android.content.Context;
+import android.util.Log;
 
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Material;
@@ -16,15 +17,30 @@ import java.io.InputStream;
 
 public class Lander extends Square implements DrawableObject {
 
-    private final static String resName     = "landerv1.obj";
-    public final static String  textureName = "space.png";
+    enum LanderState {
+        ACCELERATING(new Vector2(0, .5f)),
+        GRAVITY(new Vector2());
+
+        Vector2 mSpeed;
+
+        LanderState(Vector2 speed) {
+            this.mSpeed = speed;
+        }
+
+    }
+
+    private final static String resName      = "landerv1.obj";
+    public final static String  textureName  = "space.png";
 
     private Mesh                mesh;
     private final Material      material;
-    private final Matrix4x4     world       = new Matrix4x4();
+    private final Matrix4x4     world        = new Matrix4x4();
+    private final Gravity       mGravity;
+    private LanderState         mLanderState = LanderState.GRAVITY;
 
-    public Lander() {
+    public Lander(Gravity gravity) {
         this.material = new Material();
+        this.mGravity = gravity;
     }
 
     @Override
@@ -37,17 +53,21 @@ public class Lander extends Square implements DrawableObject {
         return this.material;
     }
 
-    public void applyGravity() {
-
+    public void setAccelerating(boolean accelerating) {
+        if (accelerating) {
+            this.mLanderState = LanderState.ACCELERATING;
+        }
+        else {
+            this.mLanderState = LanderState.GRAVITY;
+        }
     }
 
-    public void translate(Vector2 direction) {
-        this.world.translate(direction.getX(), direction.getY(), 0);
-        Vector4 v4 = this.world.multiply(new Vector4(direction, 0, 1));
+    public void updatePosition() {
+        Vector2 speed = this.mGravity.getAbsoluteSpeed(this.mLanderState.mSpeed);
+        this.world.translate(speed.getX(), speed.getY(), 0);
+        Log.d(this.getClass().getName(), "Speed: X: " + speed.getX() + " Y: " + speed.getY());
+        Vector4 v4 = this.world.multiply(new Vector4(speed, 0, 1));
         this.setPosition(new Vector2(v4.getX(), v4.getY()));
-
-        //        Log.d(this.getClass().getName(), "Lander Position ");
-        //        this.getPosition().log();
     }
 
     @Override

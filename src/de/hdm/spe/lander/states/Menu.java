@@ -10,16 +10,12 @@ import android.util.Log;
 import de.hdm.spe.lander.collision.AABB;
 import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.game.Game;
-import de.hdm.spe.lander.graphics.Camera;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.graphics.SpriteFont;
 import de.hdm.spe.lander.graphics.TextBuffer;
-import de.hdm.spe.lander.input.InputEvent;
-import de.hdm.spe.lander.input.InputSystem;
+import de.hdm.spe.lander.input.InputEvent.InputAction;
 import de.hdm.spe.lander.math.Matrix4x4;
-import de.hdm.spe.lander.math.Vector3;
-import de.hdm.spe.lander.models.GameState;
 import de.hdm.spe.lander.models.Square;
 
 import java.io.IOException;
@@ -30,8 +26,6 @@ public class Menu extends GameState {
     public Menu(Game game) {
         super(game);
     }
-
-    private Camera       hudCamera;
 
     private SpriteFont   fontTitle;
     private TextBuffer   textTitle;
@@ -46,32 +40,19 @@ public class Menu extends GameState {
     private SoundPool    soundPool;
     private int          clickSound;
 
-    public void initialize(Game game) {
+    @Override
+    public void prepareCamera(int width, int height) {
 
-    }
-
-    public void loadContent(Game game) {
-
-    }
-
-    public void update(Game game, float deltaSeconds) {
-       
+        Matrix4x4 projection = new Matrix4x4();
+        projection.setOrthogonalProjection(-width / 2, width / 2, -height / 2, height / 2, 0.0f, 100.0f);
+        this.getCamera().setProjection(projection);
     }
 
     @Override
     public void prepare(Context context, GraphicsDevice device) {
 
-        Matrix4x4 projection = new Matrix4x4();
-        Matrix4x4 view = new Matrix4x4();
-
-        this.hudCamera = new Camera();
-        this.hudCamera.setProjection(projection);
-
-        this.hudCamera.setView(view);
-
         this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);
-        Log.d(this.getClass().getName(), "TextBounds: " + this.textTitle.getMesh().getBounds().width() + " : " + this.textTitle.getMesh().getBounds().height());
         this.textTitle.setText("Moon Landing");
 
         this.fontMenu = device.createSpriteFont(null, 70);
@@ -107,8 +88,8 @@ public class Menu extends GameState {
                 sq.prepare(context, device);
                 sq.getWorld().translate(0, 0, -10);
                 sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
+
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -121,70 +102,23 @@ public class Menu extends GameState {
         //		clickSound = soundPool.load(context, R.raw.click, 1);
     }
 
-    @Override
-    public void resize(int width, int height) {
-        Matrix4x4 projection = new Matrix4x4();
-        projection.setOrthogonalProjection(-width / 2, width / 2, -height / 2, height / 2, 0.0f, 100.0f);
-        this.hudCamera.setProjection(projection);
-    }
+    //    @Override
+    //    public void resize(int width, int height) {
+    //        Matrix4x4 projection = new Matrix4x4();
+    //        projection.setOrthogonalProjection(-width / 2, width / 2, -height / 2, height / 2, 0.0f, 100.0f);
+    //        this.mCamera.setProjection(projection);
+    //    }
 
     @Override
-    public void pause() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void resume() {
+    public void update(float deltaSeconds) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
     public void shutdown() {
+        // TODO Auto-generated method stub
 
-    }
-
-    @Override
-    public void update(float deltaSeconds) {
-    	 InputSystem inputSystem = getGame().getInputSystem();
-         int screenWidth = getGame().getScreenWidth();
-         int screenHeight = getGame().getScreenHeight();
-
-         InputEvent inputEvent = inputSystem.peekEvent();
-         while (inputEvent != null) {
-             switch (inputEvent.getDevice()) {
-                 case TOUCHSCREEN:
-                     switch (inputEvent.getAction()) {
-                         case DOWN:
-                             Vector3 screenTouchPosition = new Vector3(
-                                     (inputEvent.getValues()[0] / (screenWidth / 2) - 1),
-                                     -(inputEvent.getValues()[1] / (screenHeight / 2) - 1),
-                                     0);
-
-                             Vector3 worldTouchPosition = this.hudCamera.unproject(screenTouchPosition, 1);
-
-                             Point touchPoint = new Point(
-                                     worldTouchPosition.getX(),
-                                     worldTouchPosition.getY());
-
-                             for (int i = 0; i < this.aabbMenu.length; ++i) {
-                                 AABB aabb = this.aabbMenu[i];
-                                 Log.d("for drin", "bla argagasd");
-                                 if (touchPoint.intersects(aabb)) {
-                                     if (this.soundPool != null)
-                                         this.soundPool.play(this.clickSound, 1, 1, 0, 0, 1);
-
-                                     this.onMenuItemClicked(getGame(), i);
-                                 }
-                             }
-                     }
-                     break;
-             }
-
-             inputSystem.popEvent();
-             inputEvent = inputSystem.peekEvent();
-         }
     }
 
     @Override
@@ -200,16 +134,11 @@ public class Menu extends GameState {
 
     }
 
-    @Override
-    public Camera getCamera() {
-        return this.hudCamera;
-    }
-
-    private void onMenuItemClicked(Game game, int i) {
+    private void onMenuItemClicked(int i) {
         switch (i) {
             case 0:
                 Log.d("touch: 1", "Start");
-                this.changeGameState(new LevelA(getGame()));
+                this.changeGameState(new LevelA(this.getGame()));
                 break;
             case 1:
                 Log.d("touch: 2", "Options");
@@ -218,8 +147,30 @@ public class Menu extends GameState {
                 Log.d("touch: 3", "Credits");
                 break;
             case 3:
-                game.finish();
+                this.getGame().finish();
                 break;
         }
     }
+
+    @Override
+    public void onScreenTouched(Point point, InputAction action) {
+
+        for (int i = 0; i < this.aabbMenu.length; ++i) {
+            AABB aabb = this.aabbMenu[i];
+            Log.d("for drin", "bla argagasd");
+            if (point.intersects(aabb)) {
+                if (this.soundPool != null)
+                    this.soundPool.play(this.clickSound, 1, 1, 0, 0, 1);
+
+                this.onMenuItemClicked(i);
+            }
+        }
+    }
+
+    @Override
+    public void onKeyboardKeyPressed(int event) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

@@ -5,10 +5,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 import android.view.View;
+import android.widget.Toast;
 
 import de.hdm.spe.lander.graphics.GraphicsDevice;
-import de.hdm.spe.lander.input.InputSystem;
 import de.hdm.spe.lander.models.GameStateChangedListener;
+import de.hdm.spe.lander.models.InputEventManager;
+import de.hdm.spe.lander.states.GameState;
+
+import java.io.IOException;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -21,18 +25,22 @@ public abstract class Game implements Renderer, GameStateChangedListener {
 
     protected View                                view;
     protected Context                             context;
-    protected InputSystem                         inputSystem;
+    protected InputEventManager                   mInputManager;
     protected GraphicsDevice                      graphicsDevice;
     protected de.hdm.spe.lander.graphics.Renderer renderer;
 
     protected int                                 screenWidth;
     protected int                                 screenHeight;
+    protected GameState                           mCurrentState;
+    private boolean                               isPaused = false;
+
+    public abstract void initialize();
 
     public Game(View view) {
         this.view = view;
         this.context = view.getContext();
 
-        this.inputSystem = new InputSystem(view);
+        this.mInputManager = new InputEventManager(this, view);
     }
 
     @Override
@@ -76,26 +84,52 @@ public abstract class Game implements Renderer, GameStateChangedListener {
         }
     }
 
-    public float getAspect() {
-        return (float) this.getScreenWidth() / (float) this.getScreenHeight();
+    public void loadContent() {
+        try {
+            this.mCurrentState.prepare(this.context, this.graphicsDevice);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public abstract void initialize();
+    public void update(float deltaSeconds) {
+        this.mInputManager.check();
+        if (!this.isPaused) {
+            this.mCurrentState.update(deltaSeconds);
+        }
+    }
 
-    public abstract void loadContent();
+    public void draw(float deltaSeconds) {
+        this.graphicsDevice.clear(0.0f, 0.5f, 1.0f, 1.0f, 1.0f);
+        this.graphicsDevice.setCamera(this.mCurrentState.getCamera());
+        this.mCurrentState.draw(deltaSeconds, this.renderer);
+    }
 
-    public abstract void update(float deltaSeconds);
+    public void resize(int width, int height) {
+        this.mCurrentState.prepareCamera(width, height);
+    };
 
-    public abstract void draw(float deltaSeconds);
+    public void pause() {
+        this.isPaused = true;
+    };
 
-    public abstract void resize(int width, int height);
+    public void resume() {
+        this.isPaused = false;
+    }
 
-    public abstract void pause();
-
-    public abstract void resume();
+    @Override
+    public void onGameStateChanged(GameState newState) {
+        this.mCurrentState = newState;
+        this.mCurrentState.prepareCamera(this.getScreenWidth(), this.getScreenHeight());
+        this.loadContent();
+    }
 
     public boolean isInitialized() {
         return this.initialized;
+    }
+
+    public float getAspect() {
+        return (float) this.screenWidth / (float) this.screenHeight;
     }
 
     public Context getContext() {
@@ -106,8 +140,8 @@ public abstract class Game implements Renderer, GameStateChangedListener {
         return this.graphicsDevice;
     }
 
-    public InputSystem getInputSystem() {
-        return this.inputSystem;
+    public InputEventManager getInputSystem() {
+        return this.mInputManager;
     }
 
     public int getScreenHeight() {
@@ -122,7 +156,22 @@ public abstract class Game implements Renderer, GameStateChangedListener {
         return this.renderer;
     }
 
+    public GameState getCurrentGameState() {
+        return this.mCurrentState;
+    }
+
+    public void postToast(final String msg) {
+        this.view.post(new Runnable() {
+
+            @Override
+            public void run() {
+                Toast.makeText(Game.this.context, msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     public void finish() {
+        this.mCurrentState.shutdown();
         this.view.post(new Runnable() {
 
             @Override

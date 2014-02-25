@@ -27,6 +27,13 @@ public class Vector2 {
         return v1;
     }
 
+    public Vector2 add(Vector2 v2) {
+        Vector2 v1 = new Vector2();
+        v1.set(0, this.getX() + v2.getX());
+        v1.set(1, this.getY() + v2.getY());
+        return v1;
+    }
+
     public static Vector2 divide(Vector2 v1, float s) {
         v1.set(0, v1.getX() / s);
         v1.set(1, v1.getY() / s);

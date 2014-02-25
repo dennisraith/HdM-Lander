@@ -3,11 +3,9 @@ package de.hdm.spe.lander.game;
 
 import android.media.MediaPlayer;
 import android.media.SoundPool;
-import android.view.KeyEvent;
 import android.view.View;
 
 import de.hdm.spe.lander.collision.AABB;
-import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.graphics.Camera;
 import de.hdm.spe.lander.graphics.CompareFunction;
 import de.hdm.spe.lander.graphics.Material;
@@ -15,10 +13,8 @@ import de.hdm.spe.lander.graphics.Mesh;
 import de.hdm.spe.lander.graphics.SpriteFont;
 import de.hdm.spe.lander.graphics.TextBuffer;
 import de.hdm.spe.lander.graphics.Texture;
-import de.hdm.spe.lander.input.InputEvent;
 import de.hdm.spe.lander.math.Matrix4x4;
-import de.hdm.spe.lander.math.Vector3;
-import de.hdm.spe.lander.models.GameState;
+import de.hdm.spe.lander.states.GameState;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,24 +22,24 @@ import java.io.InputStream;
 
 public class MGDExerciseGame extends Game {
 
-    private Camera       hudCamera, sceneCamera;
-    private Mesh         meshTree, meshRoad;
-    private Texture      texTree, texRoad;
-    private Material     matTree, matRoad;
-    private Matrix4x4    worldRoad;
-    private Matrix4x4[]  worldTrees;
+    private Camera        hudCamera, sceneCamera;
+    private Mesh          meshTree, meshRoad;
+    private Texture       texTree, texRoad;
+    private Material      matTree, matRoad;
+    private Matrix4x4     worldRoad;
+    private Matrix4x4[]   worldTrees;
 
-    private SpriteFont   fontTitle, fontMenu;
-    private TextBuffer   textTitle;
-    private Matrix4x4    matTitle;
-    private TextBuffer[] textMenu;
-    private Matrix4x4[]  matMenu;
-    private AABB[]       aabbMenu;
-    private boolean      showMenu = true;
+    private SpriteFont    fontTitle, fontMenu;
+    private TextBuffer    textTitle;
+    private Matrix4x4     matTitle;
+    private TextBuffer[]  textMenu;
+    private Matrix4x4[]   matMenu;
+    private AABB[]        aabbMenu;
+    private final boolean showMenu = true;
 
-    private MediaPlayer  mediaPlayer;
-    private SoundPool    soundPool;
-    private int          clickSound;
+    private MediaPlayer   mediaPlayer;
+    private SoundPool     soundPool;
+    private int           clickSound;
 
     public MGDExerciseGame(View view) {
         super(view);
@@ -156,52 +152,52 @@ public class MGDExerciseGame extends Game {
 
     @Override
     public void update(float deltaSeconds) {
-        InputEvent inputEvent = this.inputSystem.peekEvent();
-        while (inputEvent != null) {
-
-            switch (inputEvent.getDevice()) {
-                case KEYBOARD:
-                    switch (inputEvent.getAction()) {
-                        case DOWN:
-                            switch (inputEvent.getKeycode()) {
-                                case KeyEvent.KEYCODE_MENU:
-                                    this.showMenu = !this.showMenu;
-                                    break;
-                            }
-                            break;
-                    }
-                    break;
-
-                case TOUCHSCREEN:
-                    switch (inputEvent.getAction()) {
-                        case DOWN:
-                            Vector3 screenTouchPosition = new Vector3(
-                                    (inputEvent.getValues()[0] / (this.screenWidth / 2) - 1),
-                                    -(inputEvent.getValues()[1] / (this.screenHeight / 2) - 1),
-                                    0);
-
-                            Vector3 worldTouchPosition = this.hudCamera.unproject(screenTouchPosition, 1);
-
-                            Point touchPoint = new Point(
-                                    worldTouchPosition.getX(),
-                                    worldTouchPosition.getY());
-
-                            for (int i = 0; i < this.aabbMenu.length; ++i) {
-                                AABB aabb = this.aabbMenu[i];
-                                if (touchPoint.intersects(aabb)) {
-                                    this.textMenu[i].setText("");
-
-                                    if (this.soundPool != null)
-                                        this.soundPool.play(this.clickSound, 1, 1, 0, 0, 1);
-                                }
-                            }
-                    }
-                    break;
-            }
-
-            this.inputSystem.popEvent();
-            inputEvent = this.inputSystem.peekEvent();
-        }
+        //        InputEvent inputEvent = this.mInputManager.peekEvent();
+        //        while (inputEvent != null) {
+        //
+        //            switch (inputEvent.getDevice()) {
+        //                case KEYBOARD:
+        //                    switch (inputEvent.getAction()) {
+        //                        case DOWN:
+        //                            switch (inputEvent.getKeycode()) {
+        //                                case KeyEvent.KEYCODE_MENU:
+        //                                    this.showMenu = !this.showMenu;
+        //                                    break;
+        //                            }
+        //                            break;
+        //                    }
+        //                    break;
+        //
+        //                case TOUCHSCREEN:
+        //                    switch (inputEvent.getAction()) {
+        //                        case DOWN:
+        //                            Vector3 screenTouchPosition = new Vector3(
+        //                                    (inputEvent.getValues()[0] / (this.screenWidth / 2) - 1),
+        //                                    -(inputEvent.getValues()[1] / (this.screenHeight / 2) - 1),
+        //                                    0);
+        //
+        //                            Vector3 worldTouchPosition = this.hudCamera.unproject(screenTouchPosition, 1);
+        //
+        //                            Point touchPoint = new Point(
+        //                                    worldTouchPosition.getX(),
+        //                                    worldTouchPosition.getY());
+        //
+        //                            for (int i = 0; i < this.aabbMenu.length; ++i) {
+        //                                AABB aabb = this.aabbMenu[i];
+        //                                if (touchPoint.intersects(aabb)) {
+        //                                    this.textMenu[i].setText("");
+        //
+        //                                    if (this.soundPool != null)
+        //                                        this.soundPool.play(this.clickSound, 1, 1, 0, 0, 1);
+        //                                }
+        //                            }
+        //                    }
+        //                    break;
+        //            }
+        //
+        //            this.mInputManager.popEvent();
+        //            inputEvent = this.mInputManager.peekEvent();
+        //        }
     }
 
     @Override
