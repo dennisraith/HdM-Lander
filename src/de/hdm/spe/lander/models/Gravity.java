@@ -1,40 +1,46 @@
 
 package de.hdm.spe.lander.models;
 
-import android.util.Log;
-
 import de.hdm.spe.lander.math.Vector2;
 
 
 public class Gravity {
 
     public enum Difficulty {
-        EASY(0, .15f),
-        MEDIUM(0, .2f),
-        HARD(.1f, .3f);
+        EASY(0, .4f),
+        MEDIUM(0, .7f),
+        HARD(.1f, .7f);
 
         float verticalSpeed;
         float horizontalSpeed;
 
-        Difficulty(float vertSpeed, float horSpeed) {
+        Difficulty(float horSpeed, float vertSpeed) {
             this.verticalSpeed = vertSpeed;
             this.horizontalSpeed = horSpeed;
         }
     }
 
-    private final Vector2 mGravity;
+    private final float   verticalGravity;
+    private final Vector2 mCurrentGravity;
 
     public Gravity(Difficulty diff) {
-        this.mGravity = new Vector2(-diff.verticalSpeed, -diff.horizontalSpeed);
+        this.mCurrentGravity = new Vector2(-diff.horizontalSpeed, -diff.verticalSpeed);
+        this.verticalGravity = -diff.verticalSpeed;
     }
 
-    public Vector2 getGravity() {
-        return this.mGravity;
+    private float calculateGravity(float elapsedTime) {
+        float speed = this.verticalGravity;
+        float ratio = elapsedTime - 1;
+        if (ratio < 1 && ratio > 0) {
+            speed = this.verticalGravity * ratio;
+        }
+
+        return speed;
     }
 
-    public Vector2 getAbsoluteSpeed(Vector2 shipSpeed) {
-        Log.d(this.getClass().getName(), "##ShipSpeed: X: " + shipSpeed.getX() + " Y: " + shipSpeed.getY());
-        return shipSpeed.add(this.mGravity);
+    public Vector2 getAbsoluteSpeed(Vector2 shipSpeed, float deltatime) {
+        this.mCurrentGravity.v[1] = this.calculateGravity(deltatime);
+        return shipSpeed.add(this.mCurrentGravity);
 
     }
 }

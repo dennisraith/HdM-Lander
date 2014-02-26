@@ -3,7 +3,7 @@ package de.hdm.spe.lander.game;
 
 import android.view.View;
 
-import de.hdm.spe.lander.states.Menu;
+import de.hdm.spe.lander.states.LevelA;
 
 
 public class LanderGame extends Game {
@@ -15,7 +15,7 @@ public class LanderGame extends Game {
 
     @Override
     public void initialize() {
-        this.mCurrentState = new Menu(this);
+        this.mCurrentState = new LevelA(this);
     }
 
 }

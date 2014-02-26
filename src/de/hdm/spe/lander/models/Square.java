@@ -51,7 +51,7 @@ public class Square extends AABB implements DrawableObject, Shape2D {
         this.setBounds(new RectF(x - width / 2, y + height / 2, x + width / 2, y - height / 2));
     }
 
-    private void generateMesh() {
+    protected void generateMesh() {
         this.coords.add(this.BOTTOM_LEFT); //BL
         this.coords.add(this.BOTTOM_RIGHT); //BR
         this.coords.add(this.TOP_RIGHT); //TR
@@ -93,14 +93,6 @@ public class Square extends AABB implements DrawableObject, Shape2D {
         this.Z = z;
     }
 
-    public static Square getBackgroundSquare() {
-        //        Point A = new Point(-100f, -100f);
-        //        Point B = new Point(100f, -100f);
-        //        Point C = new Point(100f, 100f);
-        //        Point D = new Point(-100f, 100f);
-        return new Square(0, 0, 0, 0);
-    }
-
     public RectF getBounds() {
         return this.mBounds;
     }
@@ -111,7 +103,7 @@ public class Square extends AABB implements DrawableObject, Shape2D {
         float x = this.getPosition().getX();
         float y = this.getPosition().getY();
         this.mBounds = new RectF(new RectF(x - width / 2, y + height / 2, x + width / 2, y - height / 2));
-
+        this.setBounds(this.mBounds);
     }
 
     public void setBounds(RectF bounds) {

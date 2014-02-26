@@ -173,4 +173,10 @@ public class Menu extends GameState {
 
     }
 
+    @Override
+    public void onAccelerometerEvent(float[] values) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

@@ -53,7 +53,13 @@ public class InputEventManager {
                             worldTouchPosition.getY());
 
                     this.mGame.getCurrentGameState().onScreenTouched(touchPoint, inputEvent.getAction());
+                    break;
 
+                case ACCELEROMETER:
+                    break;
+
+                case ROTATION:
+                    this.mGame.getCurrentGameState().onAccelerometerEvent(inputEvent.getValues());
                     break;
             }
 
@@ -67,6 +73,8 @@ public class InputEventManager {
         public void onScreenTouched(Point point, InputAction action);
 
         public void onKeyboardKeyPressed(int keyEvent);
+
+        public void onAccelerometerEvent(float[] values);
 
     }
 
