@@ -136,7 +136,7 @@ public class Menu extends GameState {
         switch (i) {
             case 0:
                 Log.d("touch: 1", "Start");
-                this.changeGameState(new LevelA(this.getGame()));
+                this.changeGameState(new Level1(this.getGame()));
                 break;
             case 1:
                 Log.d("touch: 2", "Options");
@@ -167,6 +167,12 @@ public class Menu extends GameState {
 
     @Override
     public void onKeyboardKeyPressed(int event) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onAccelerometerEvent(float[] values) {
         // TODO Auto-generated method stub
 
     }

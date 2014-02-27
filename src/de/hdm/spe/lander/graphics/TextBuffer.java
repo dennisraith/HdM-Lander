@@ -16,15 +16,21 @@ import javax.microedition.khronos.opengles.GL10;
 public class TextBuffer {
 
     private final SpriteFont spriteFont;
-    private final Mesh       mesh;
+    private Mesh             mesh;
+    private int              bufferSize = 0;
 
     TextBuffer(GraphicsDevice graphicsDevice, SpriteFont spriteFont, int capacity) {
+        this.init(capacity);
+        this.spriteFont = spriteFont;
+    }
+
+    private void init(int capacity) {
         VertexElement[] elements = new VertexElement[] {
                 new VertexElement(0, 16, GL10.GL_FLOAT, 2, VertexSemantic.VERTEX_ELEMENT_POSITION),
                 new VertexElement(8, 16, GL10.GL_FLOAT, 2, VertexSemantic.VERTEX_ELEMENT_TEXCOORD)
         };
-
-        ByteBuffer data = ByteBuffer.allocateDirect(6 * 16 * capacity);
+        this.bufferSize = 6 * 16 * capacity;
+        ByteBuffer data = ByteBuffer.allocateDirect(this.bufferSize);
         data.order(ByteOrder.nativeOrder());
 
         VertexBuffer vertexBuffer = new VertexBuffer();
@@ -32,7 +38,6 @@ public class TextBuffer {
         vertexBuffer.setBuffer(data);
         vertexBuffer.setNumVertices(0);
 
-        this.spriteFont = spriteFont;
         this.mesh = new Mesh(vertexBuffer, GL10.GL_TRIANGLES);
     }
 
@@ -44,7 +49,15 @@ public class TextBuffer {
         return this.mesh;
     }
 
+    private boolean checkSize(String text) {
+        return text.getBytes().length < this.bufferSize;
+
+    }
+
     public void setText(String text) {
+        if (!this.checkSize(text)) {
+            this.init(this.bufferSize * 2);
+        }
         Map<Character, SpriteFont.CharacterInfo> characterInfos = this.spriteFont.getCharacterInfos();
         Texture texture = this.spriteFont.getMaterial().getTexture();
         ByteBuffer data = this.mesh.getVertexBuffer().getBuffer();
@@ -105,5 +118,4 @@ public class TextBuffer {
         data.position(0);
         this.mesh.getVertexBuffer().setNumVertices(6 * text.length());
     }
-
 }

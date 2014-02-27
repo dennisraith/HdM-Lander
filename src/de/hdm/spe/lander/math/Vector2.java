@@ -34,9 +34,10 @@ public class Vector2 {
         return v1;
     }
 
-    public static Vector2 divide(Vector2 v1, float s) {
-        v1.set(0, v1.getX() / s);
-        v1.set(1, v1.getY() / s);
+    public static Vector2 divide(Vector2 v, float s) {
+        Vector2 v1 = new Vector2();
+        v1.set(0, v.getX() / s);
+        v1.set(1, v.getY() / s);
         return v1;
     }
 
@@ -56,6 +57,13 @@ public class Vector2 {
     public static Vector2 subtract(Vector2 v1, Vector2 v2) {
         v1.set(0, v1.getX() - v2.getX());
         v1.set(1, v1.getY() - v2.getY());
+        return v1;
+    }
+
+    public Vector2 subtract(Vector2 v2) {
+        Vector2 v1 = new Vector2();
+        v1.set(0, this.getX() - v2.getX());
+        v1.set(1, this.getY() - v2.getY());
         return v1;
     }
 
@@ -92,6 +100,12 @@ public class Vector2 {
 
         return Vector2.multiply(norm, v);
 
+    }
+
+    @Override
+    public String toString() {
+        String string = "X: " + this.getX() + " Y: " + this.getY();
+        return string;
     }
 
     public void set(int index, float value) {
