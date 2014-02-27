@@ -10,6 +10,7 @@ import android.widget.Toast;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.models.GameStateChangedListener;
 import de.hdm.spe.lander.models.InputEventManager;
+import de.hdm.spe.lander.models.MediaManager;
 import de.hdm.spe.lander.states.GameState;
 
 import java.io.IOException;
@@ -33,6 +34,7 @@ public abstract class Game implements Renderer, GameStateChangedListener {
     protected int                                 screenHeight;
     protected GameState                           mCurrentState;
     private boolean                               isPaused = false;
+    private MediaManager mediaManager;
 
     public abstract void initialize();
 
@@ -41,6 +43,7 @@ public abstract class Game implements Renderer, GameStateChangedListener {
         this.context = view.getContext();
 
         this.mInputManager = new InputEventManager(this, view);
+        this.mediaManager = MediaManager.initialize(context);
     }
 
     @Override
