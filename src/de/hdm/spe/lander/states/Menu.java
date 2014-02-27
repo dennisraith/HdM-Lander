@@ -138,7 +138,7 @@ public class Menu extends GameState {
         switch (i) {
             case 0:
                 Log.d("touch: 1", "Start");
-                this.changeGameState(new LevelA(this.getGame()));
+                this.changeGameState(new Level1(this.getGame()));
                 break;
             case 1:
                 Log.d("touch: 2", "Options");
