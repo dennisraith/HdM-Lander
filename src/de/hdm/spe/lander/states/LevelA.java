@@ -4,7 +4,6 @@ package de.hdm.spe.lander.states;
 import android.content.Context;
 
 import de.hdm.spe.lander.Logger;
-import de.hdm.spe.lander.Static;
 import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
@@ -20,6 +19,7 @@ import de.hdm.spe.lander.models.Gravity.Difficulty;
 import de.hdm.spe.lander.models.Lander;
 import de.hdm.spe.lander.models.Obstacle;
 import de.hdm.spe.lander.models.Platform;
+import de.hdm.spe.lander.statics.Static;
 
 import java.io.IOException;
 import java.text.NumberFormat;

@@ -4,13 +4,13 @@ package de.hdm.spe.lander.models;
 import android.content.Context;
 import android.graphics.RectF;
 
-import de.hdm.spe.lander.Static;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Material;
 import de.hdm.spe.lander.graphics.Mesh;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.math.Vector2;
 import de.hdm.spe.lander.math.Vector4;
+import de.hdm.spe.lander.statics.Static;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +19,7 @@ import java.io.InputStream;
 public class Lander extends Square implements DrawableObject {
 
     enum LanderState {
-        ACCELERATING(new Vector2(0, .3f)),
+        ACCELERATING(new Vector2(0, .8f)),
         GRAVITY(new Vector2());
 
         Vector2 mSpeed;
@@ -32,13 +32,16 @@ public class Lander extends Square implements DrawableObject {
 
     private Mesh            mesh;
     private final Material  material;
-    private final Matrix4x4 world              = new Matrix4x4();
+    private final Matrix4x4 world            = new Matrix4x4();
     private final Gravity   mGravity;
-    private LanderState     mLanderState       = LanderState.GRAVITY;
-    private float           acc_X              = 0;
-    private float           gravityTimeElapsed = 0;
+    private LanderState     mLanderState     = LanderState.GRAVITY;
+    private float           acc_X            = 0;
+    private float           accelerationTime = 0;
+    private float           gravityAccTime   = 0;
+    private final Vector2   gravity          = new Vector2(0, .4f);
+
     private boolean         isAccelerating;
-    private Vector2         mCurrentSpeed      = new Vector2();
+    private Vector2         mCurrentSpeed    = new Vector2();
 
     public Lander(Gravity gravity) {
         this.material = new Material();
@@ -63,11 +66,12 @@ public class Lander extends Square implements DrawableObject {
     private void onAccelerationChanged() {
         if (this.isAccelerating) {
             this.mLanderState = LanderState.ACCELERATING;
+            this.accelerationTime = 0;
         }
         else {
             this.mLanderState = LanderState.GRAVITY;
+            this.gravityAccTime = 0;
         }
-        this.gravityTimeElapsed = 0;
     }
 
     public void setAccelerating(boolean accelerating) {
@@ -77,21 +81,36 @@ public class Lander extends Square implements DrawableObject {
         }
     }
 
-    public void updatePosition(float deltaTime) {
-        if (!this.isAccelerating) {
-            this.gravityTimeElapsed += deltaTime;
-        }
-        else {
+    private Vector2 calculateSpeed(Vector2 shipSpeed, Vector2 gravity) {
+        return shipSpeed.subtract(gravity);
+    }
 
-        }
-        Vector2 speed;
-        speed = this.mGravity.getAbsoluteSpeed(this.mLanderState.mSpeed, this.gravityTimeElapsed);
-        speed = Vector2.add(speed, new Vector2(this.acc_X, 0));
-        this.world.translate(speed.getX(), speed.getY(), 0);
-        Vector4 v4 = this.world.multiply(new Vector4(speed, 0, 1));
-        this.setPosition(new Vector2(v4.getX(), v4.getY()));
+    public void updatePosition(float deltaTime) {
+        this.accelerationTime += deltaTime;
+        this.gravityAccTime += deltaTime;
+
+        Vector2 shipspeed = this.accelerate(this.mLanderState.mSpeed, this.accelerationTime);
+        Vector2 gravity = this.accelerate(this.gravity, this.gravityAccTime);
+        Vector2 velocity = Vector2.add(this.calculateSpeed(shipspeed, gravity), new Vector2(this.acc_X, 0));
+        this.moveShip(velocity);
         this.acc_X = 0;
-        this.mCurrentSpeed = speed;
+        this.mCurrentSpeed = velocity;
+    }
+
+    private void moveShip(Vector2 velocity) {
+        //        Vector2 translation = Vector2.add(velocity, this.mCurrentSpeed);
+
+        this.world.translate(velocity.getX(), velocity.getY(), 0);
+        Vector4 v4 = this.world.multiply(new Vector4(velocity, 0, 1));
+        this.setPosition(new Vector2(v4.getX(), v4.getY()));
+    }
+
+    private Vector2 accelerate(Vector2 speed, float time) {
+        float factor = time;
+        if (factor > 1) {
+            factor = 1;
+        }
+        return new Vector2(speed.getX(), speed.getY() * factor);
     }
 
     @Override

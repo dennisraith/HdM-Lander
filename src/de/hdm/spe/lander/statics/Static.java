@@ -1,5 +1,5 @@
 
-package de.hdm.spe.lander;
+package de.hdm.spe.lander.statics;
 
 public class Static {
 

@@ -20,27 +20,50 @@ public class Gravity {
         }
     }
 
-    private final float   verticalGravity;
+    private final float   Yvelocity;
     private final Vector2 mCurrentGravity;
+    private final float   accelerationTime = 1;
 
     public Gravity(Difficulty diff) {
-        this.mCurrentGravity = new Vector2(-diff.horizontalSpeed, -diff.verticalSpeed);
-        this.verticalGravity = -diff.verticalSpeed;
+        this.mCurrentGravity = new Vector2(diff.horizontalSpeed, diff.verticalSpeed);
+        this.Yvelocity = diff.verticalSpeed;
     }
 
     private float calculateGravity(float elapsedTime) {
-        float speed = this.verticalGravity;
-        float ratio = elapsedTime - 1;
-        if (ratio < 1 && ratio > 0) {
-            speed = this.verticalGravity * ratio;
+        float speed = this.Yvelocity;
+        float ratio = 1 / (1 - elapsedTime);
+        if (ratio > 0 && ratio < 1) {
+            speed = this.Yvelocity * ratio;
         }
 
         return speed;
     }
 
+    public Vector2 getGravity(float timeElapsed) {
+        float y = this.mCurrentGravity.getY();
+        float factor = timeElapsed;
+        //        float factor = 1 - this.accelerationTime / timeElapsed;
+        //        if (factor > 1) {
+        //            factor = 1;
+        //        }
+        //        if(elapsedTime>1 || elapsedTime<-1){
+        //           factor = 1 - Acceleration.Tmax / elapsedTime;
+        //            
+        //        }
+        //        if (factor < 0 || factor > 1) {
+        //            factor = 1;
+        //        }
+        if (factor > 1) {
+            factor = 1;
+        }
+
+        //        return new Vector2(0, y * factor);
+        return new Vector2(0, y);
+    }
+
     public Vector2 getAbsoluteSpeed(Vector2 shipSpeed, float deltatime) {
-        this.mCurrentGravity.v[1] = this.calculateGravity(deltatime);
-        return shipSpeed.add(this.mCurrentGravity);
+        //        this.mCurrentGravity.v[1] = Acceleration.gravY(deltatime);
+        return shipSpeed.subtract(this.mCurrentGravity);
 
     }
 }
