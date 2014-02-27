@@ -17,6 +17,7 @@ import de.hdm.spe.lander.math.Vector3;
 import de.hdm.spe.lander.models.Gravity;
 import de.hdm.spe.lander.models.Gravity.Difficulty;
 import de.hdm.spe.lander.models.Lander;
+import de.hdm.spe.lander.models.MediaManager;
 
 import java.io.IOException;
 
@@ -68,6 +69,8 @@ public class LevelA extends GameState {
         this.mBG.prepare(context, device);
 
         this.mLander.prepare(context, device);
+        
+        MediaManager.getInstance().loadTrack("deep-space.mp3");
     }
 
     @Override
