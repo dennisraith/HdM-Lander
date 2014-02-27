@@ -6,6 +6,7 @@ import android.content.Context;
 import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.game.Game;
+import de.hdm.spe.lander.game.LanderGame;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.graphics.SpriteFont;
@@ -13,6 +14,9 @@ import de.hdm.spe.lander.graphics.TextBuffer;
 import de.hdm.spe.lander.input.InputEvent.InputAction;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.Background;
+import de.hdm.spe.lander.models.GameTimer;
+import de.hdm.spe.lander.models.Highscore;
+import de.hdm.spe.lander.models.HighscoreManager;
 import de.hdm.spe.lander.models.Lander;
 import de.hdm.spe.lander.models.Obstacles;
 import de.hdm.spe.lander.models.Platform;
@@ -31,9 +35,11 @@ public abstract class Level extends GameState {
     protected final Platform   mPlatform;
     private Obstacles          mObstacles;
     private boolean            activeObstacles;
+    private final GameTimer    mTimer;
 
     public Level(Game game) {
         super(game);
+        this.mTimer = new GameTimer();
         this.mTextWorld = new Matrix4x4();
         this.mBG = new Background();
         this.mPlatform = new Platform();
@@ -94,6 +100,7 @@ public abstract class Level extends GameState {
 
     @Override
     public void update(float deltaSeconds) {
+        this.mTimer.update(deltaSeconds);
         this.mLander.updatePosition(deltaSeconds);
         //        Vector3 v3 = this.getCamera().project(new Vector3(this.mLander.getPosition(), 0), 1);
 
@@ -124,9 +131,6 @@ public abstract class Level extends GameState {
         }
     }
 
-    public void checkLoosingConditions() {
-    }
-
     protected void onLoose() {
         this.pause();
         this.getGame().postToast("Crash!");
@@ -135,7 +139,24 @@ public abstract class Level extends GameState {
     protected void onWin() {
         this.pause();
         this.getGame().postToast("Landed!");
+        float score = Highscore.calculateHighscore(this.mTimer.getTime(), this.mLander.getCurrentSpeed());
+        if (HighscoreManager.getInstance().checkHighscore(score)) {
+            Logger.log("HighscoreCheck", "Highscore! " + score);
+            ((LanderGame) this.getGame()).onHighscoreDialogRequested(score);
+        }
     };
+
+    @Override
+    public void pause() {
+        this.mTimer.pause();
+        super.pause();
+    }
+
+    @Override
+    public void resume() {
+        this.mTimer.resume();
+        super.resume();
+    }
 
     @Override
     public void shutdown() {

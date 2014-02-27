@@ -16,4 +16,8 @@ public class Logger {
         Log.d("###float###", name + " : " + f);
     }
 
+    public static void log(String name, String msg) {
+        Log.d("###String###", name + " : " + msg);
+    }
+
 }

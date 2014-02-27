@@ -16,6 +16,7 @@ public class LanderView extends GLSurfaceView {
         this.setRenderer(this.game);
 
         this.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+
     }
 
     @Override
