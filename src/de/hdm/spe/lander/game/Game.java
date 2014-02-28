@@ -14,6 +14,7 @@ import de.hdm.spe.lander.states.GameState;
 import de.hdm.spe.lander.states.GameState.StateType;
 import de.hdm.spe.lander.states.Level1;
 import de.hdm.spe.lander.states.Menu;
+import de.hdm.spe.lander.states.Options;
 
 import java.io.IOException;
 
@@ -100,7 +101,7 @@ public abstract class Game implements Renderer {
             case MENU:
                 return new Menu(this);
             case OPTIONS:
-                return new Menu(this);
+                return new Options(this);
             default:
                 return null;
         }

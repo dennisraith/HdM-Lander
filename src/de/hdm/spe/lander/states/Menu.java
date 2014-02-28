@@ -11,6 +11,7 @@ import de.hdm.spe.lander.R;
 import de.hdm.spe.lander.collision.AABB;
 import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.game.Game;
+import de.hdm.spe.lander.game.LanderGame;
 import de.hdm.spe.lander.gameobjects.Square;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
@@ -38,10 +39,6 @@ public class Menu extends GameState {
     private Matrix4x4[]  matMenu;
     private Square[]     aabbMenu;
 
-    private MediaPlayer  mediaPlayer;
-    private SoundPool    soundPool;
-    private int          clickSound;
-
     @Override
     public void prepareCamera(float width, float height) {
         if (width == 0 || height == 0) {
@@ -56,7 +53,6 @@ public class Menu extends GameState {
     @Override
     public void prepare(Context context, GraphicsDevice device) {
 
-        //    	MediaManager.getInstance().loadSounds();
 
         this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);
@@ -67,12 +63,14 @@ public class Menu extends GameState {
                 device.createTextBuffer(this.fontMenu, 16),
                 device.createTextBuffer(this.fontMenu, 16),
                 device.createTextBuffer(this.fontMenu, 16),
+                device.createTextBuffer(this.fontMenu, 16),
                 device.createTextBuffer(this.fontMenu, 16)
         };
         this.textMenu[0].setText("Start Game");
-        this.textMenu[1].setText("Options");
-        this.textMenu[2].setText("Credits");
-        this.textMenu[3].setText("Quit");
+        this.textMenu[1].setText("High Score");
+        this.textMenu[2].setText("Options");
+        this.textMenu[3].setText("Credits");
+        this.textMenu[4].setText("Quit");
 
         new Matrix4x4();
         this.matTitle = Matrix4x4.createTranslation(-300, 400, 0);
@@ -80,14 +78,16 @@ public class Menu extends GameState {
                 Matrix4x4.createTranslation(-150, 160, -1),
                 Matrix4x4.createTranslation(-150, 40, -1),
                 Matrix4x4.createTranslation(-150, -80, -1),
-                Matrix4x4.createTranslation(-150, -200, -1)
+                Matrix4x4.createTranslation(-150, -200, -1),
+                Matrix4x4.createTranslation(-150, -320, -1)
         };
 
         this.aabbMenu = new Square[] {
-                new Square(20, 180, 380, 80),
-                new Square(-30, 60, 280, 80),
-                new Square(-45, -60, 250, 80),
-                new Square(-85, -180, 160, 80)
+                new Square(25, 180, 380, 80),
+                new Square(20, 60, 370, 80),
+                new Square(-30, -60, 270, 80),
+                new Square(-40, -180, 250, 80),
+                new Square(-85, -300, 160, 80)
         };
 
         for (Square sq : this.aabbMenu) {
@@ -102,10 +102,8 @@ public class Menu extends GameState {
         }
 
         MediaManager.getInstance().loadTrack("space-menu.mp3");
+        MediaManager.getInstance().loadSounds();
 
-        this.soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
-        this.clickSound = this.soundPool.load(context, R.raw.click, 1);
-        //        MediaManager.getInstance().playSound();
     }
 
     @Override
@@ -136,18 +134,20 @@ public class Menu extends GameState {
 
         switch (i) {
             case 0:
-                Log.d("touch: 1", "Start");
                 this.setGameState(StateType.LEVEL1);
                 break;
             case 1:
-                Log.d("touch: 2", "Options");
-                break;
+            	((LanderGame)getGame()).onHighscoreListRequested();
+            	break;
             case 2:
-                Log.d("touch: 3", "Credits");
-                break;
+            	this.setGameState(StateType.OPTIONS);
+            	break;
             case 3:
-                this.getGame().finish();
+                
                 break;
+            case 4:
+            	this.getGame().finish();
+            	break;
         }
     }
 
@@ -158,8 +158,8 @@ public class Menu extends GameState {
             AABB aabb = this.aabbMenu[i];
             Log.d("for drin", "bla argagasd");
             if (point.intersects(aabb)) {
-                if (this.soundPool != null && action == InputAction.DOWN)
-                    this.soundPool.play(this.clickSound, 1, 1, 0, 0, 1);
+                if (action == InputAction.DOWN)
+                	MediaManager.getInstance().playSound();
 
                 this.onMenuItemClicked(i);
             }
