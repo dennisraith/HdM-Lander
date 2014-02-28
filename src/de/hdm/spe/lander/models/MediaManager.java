@@ -17,6 +17,7 @@ public class MediaManager {
 	
 	private static MediaManager sInstance=null;
 	private Context mContext;
+	private int clickSound;
 	
 	private MediaManager(Context context){
 		this.mContext = context;
@@ -34,9 +35,9 @@ public class MediaManager {
 		soundPool.load(mContext, R.raw.click, 1);
 	}
 	
-//	public void playSound(){
-//		soundPool.play(R.raw.click, 1, 1, 1, 0, 1);
-//	}
+	public void playSound(){
+		clickSound = soundPool.play(R.raw.click, 1, 1, 1, 0, 1);
+	}
 
 	
 	public void loadTrack(String fName){
