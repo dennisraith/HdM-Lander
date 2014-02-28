@@ -11,8 +11,7 @@ import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.R;
 import de.hdm.spe.lander.models.Highscore;
 import de.hdm.spe.lander.models.HighscoreManager;
-import de.hdm.spe.lander.states.Level1;
-import de.hdm.spe.lander.states.Menu;
+import de.hdm.spe.lander.states.GameState.StateType;
 import de.hdm.spe.lander.statics.Static;
 
 
@@ -28,8 +27,7 @@ public class LanderGame extends Game {
     @Override
     public void initialize() {
         HighscoreManager.initialize(this.getContext());
-        this.mCurrentState = new Menu(this);
-
+        this.setGameState(StateType.MENU);
     }
 
     public void onHighscoreListRequested() {
@@ -72,6 +70,7 @@ public class LanderGame extends Game {
                             case DialogInterface.BUTTON_NEGATIVE:
                                 break;
                         }
+                        LanderGame.this.setGameState(StateType.MENU);
                     }
 
                 });

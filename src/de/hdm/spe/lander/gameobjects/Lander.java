@@ -1,5 +1,5 @@
 
-package de.hdm.spe.lander.models;
+package de.hdm.spe.lander.gameobjects;
 
 import android.content.Context;
 import android.graphics.RectF;
@@ -10,6 +10,7 @@ import de.hdm.spe.lander.graphics.Mesh;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.math.Vector2;
 import de.hdm.spe.lander.math.Vector4;
+import de.hdm.spe.lander.models.DrawableObject;
 import de.hdm.spe.lander.statics.Difficulty;
 import de.hdm.spe.lander.statics.Static;
 
