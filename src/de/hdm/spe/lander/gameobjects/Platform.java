@@ -1,5 +1,5 @@
 
-package de.hdm.spe.lander.models;
+package de.hdm.spe.lander.gameobjects;
 
 import android.content.Context;
 

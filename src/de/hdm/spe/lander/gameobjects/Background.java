@@ -1,5 +1,5 @@
 
-package de.hdm.spe.lander.models;
+package de.hdm.spe.lander.gameobjects;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,6 +8,7 @@ import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Material;
 import de.hdm.spe.lander.graphics.Mesh;
 import de.hdm.spe.lander.math.Matrix4x4;
+import de.hdm.spe.lander.models.DrawableObject;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -8,10 +8,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import de.hdm.spe.lander.graphics.GraphicsDevice;
-import de.hdm.spe.lander.models.GameStateChangedListener;
 import de.hdm.spe.lander.models.InputEventManager;
 import de.hdm.spe.lander.models.MediaManager;
 import de.hdm.spe.lander.states.GameState;
+import de.hdm.spe.lander.states.GameState.StateType;
+import de.hdm.spe.lander.states.Level1;
+import de.hdm.spe.lander.states.Menu;
 
 import java.io.IOException;
 
@@ -19,7 +21,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 
-public abstract class Game implements Renderer, GameStateChangedListener {
+public abstract class Game implements Renderer {
 
     private boolean                               initialized;
     private long                                  lastTime;
@@ -30,11 +32,12 @@ public abstract class Game implements Renderer, GameStateChangedListener {
     protected GraphicsDevice                      graphicsDevice;
     protected de.hdm.spe.lander.graphics.Renderer renderer;
 
-    protected int                                 screenWidth;
-    protected int                                 screenHeight;
+    protected int                                 screenWidth  = 1;
+    protected int                                 screenHeight = 1;
+    private boolean                               isPaused     = false;
+    private final MediaManager                    mediaManager;
+    private final Menu                            mMenu        = new Menu(this);
     protected GameState                           mCurrentState;
-    private boolean                               isPaused = false;
-    private MediaManager mediaManager;
 
     public abstract void initialize();
 
@@ -43,7 +46,8 @@ public abstract class Game implements Renderer, GameStateChangedListener {
         this.context = view.getContext();
 
         this.mInputManager = new InputEventManager(this, view);
-        this.mediaManager = MediaManager.initialize(context);
+        this.mediaManager = MediaManager.initialize(this.context);
+        this.mCurrentState = new Level1(this);
     }
 
     @Override
@@ -80,16 +84,31 @@ public abstract class Game implements Renderer, GameStateChangedListener {
             this.initialize();
             this.initialized = true;
 
-            this.loadContent();
+            this.loadContent(this.mCurrentState);
         } else {
             this.graphicsDevice.onSurfaceCreated(gl);
-            this.loadContent();
+            this.loadContent(this.mCurrentState);
         }
     }
 
-    public void loadContent() {
+    private GameState getStateInstance(StateType type) {
+        switch (type) {
+            case LEVEL1:
+                return new Level1(this);
+            case LEVEL2:
+                return new Level1(this);
+            case MENU:
+                return new Menu(this);
+            case OPTIONS:
+                return new Menu(this);
+            default:
+                return null;
+        }
+    }
+
+    public void loadContent(GameState state) {
         try {
-            this.mCurrentState.prepare(this.context, this.graphicsDevice);
+            state.prepare(this.context, this.graphicsDevice);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -120,11 +139,24 @@ public abstract class Game implements Renderer, GameStateChangedListener {
         this.isPaused = false;
     }
 
-    @Override
-    public void onGameStateChanged(GameState newState) {
+    public void setGameState(GameState.StateType type) {
+        if (type == StateType.MENU) {
+            this.onGameStateChanged(this.mMenu);
+        }
+        else if (this.mCurrentState.getStateType() != type) {
+            GameState state = this.getStateInstance(type);
+            this.onGameStateChanged(state);
+        }
+    }
+
+    protected void onGameStateChanged(GameState newState) {
+        newState.prepareCamera(this.screenWidth, this.screenHeight);
+        this.loadContent(newState);
         this.mCurrentState = newState;
-        this.mCurrentState.prepareCamera(this.getScreenWidth(), this.getScreenHeight());
-        this.loadContent();
+        if (this.isPaused) {
+            this.resume();
+        }
+
     }
 
     public boolean isInitialized() {

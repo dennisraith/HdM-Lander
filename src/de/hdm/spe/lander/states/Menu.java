@@ -2,7 +2,6 @@
 package de.hdm.spe.lander.states;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
@@ -12,6 +11,7 @@ import de.hdm.spe.lander.R;
 import de.hdm.spe.lander.collision.AABB;
 import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.game.Game;
+import de.hdm.spe.lander.gameobjects.Square;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.graphics.SpriteFont;
@@ -19,7 +19,6 @@ import de.hdm.spe.lander.graphics.TextBuffer;
 import de.hdm.spe.lander.input.InputEvent.InputAction;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.MediaManager;
-import de.hdm.spe.lander.models.Square;
 
 import java.io.IOException;
 
@@ -44,8 +43,11 @@ public class Menu extends GameState {
     private int          clickSound;
 
     @Override
-    public void prepareCamera(int width, int height) {
-
+    public void prepareCamera(float width, float height) {
+        if (width == 0 || height == 0) {
+            width = 1000;
+            height = 1000;
+        }
         Matrix4x4 projection = new Matrix4x4();
         projection.setOrthogonalProjection(-width / 2, width / 2, -height / 2, height / 2, 0.0f, 100.0f);
         this.getCamera().setProjection(projection);
@@ -53,8 +55,8 @@ public class Menu extends GameState {
 
     @Override
     public void prepare(Context context, GraphicsDevice device) {
-    	
-//    	MediaManager.getInstance().loadSounds();
+
+        //    	MediaManager.getInstance().loadSounds();
 
         this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);
@@ -98,13 +100,12 @@ public class Menu extends GameState {
                 e.printStackTrace();
             }
         }
-         
+
         MediaManager.getInstance().loadTrack("space-menu.mp3");
-        
-        
+
         this.soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
-        		clickSound = soundPool.load(context, R.raw.click, 1);
-//        MediaManager.getInstance().playSound();
+        this.clickSound = this.soundPool.load(context, R.raw.click, 1);
+        //        MediaManager.getInstance().playSound();
     }
 
     @Override
@@ -115,7 +116,7 @@ public class Menu extends GameState {
 
     @Override
     public void shutdown() {
-    	MediaManager.getInstance().reset();
+        MediaManager.getInstance().reset();
     }
 
     @Override
@@ -132,11 +133,11 @@ public class Menu extends GameState {
     }
 
     private void onMenuItemClicked(int i) {
-    	
+
         switch (i) {
             case 0:
                 Log.d("touch: 1", "Start");
-                this.changeGameState(new Level1(this.getGame()));
+                this.setGameState(StateType.LEVEL1);
                 break;
             case 1:
                 Log.d("touch: 2", "Options");
@@ -175,6 +176,11 @@ public class Menu extends GameState {
     public void onAccelerometerEvent(float[] values) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public StateType getStateType() {
+        return StateType.MENU;
     }
 
 }

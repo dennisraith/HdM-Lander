@@ -87,7 +87,7 @@ public class MGDExerciseGame extends Game {
     }
 
     @Override
-    public void loadContent() {
+    public void loadContent(GameState state) {
         try {
             InputStream stream;
 
@@ -248,12 +248,6 @@ public class MGDExerciseGame extends Game {
     @Override
     public void resume() {
         // TODO Auto-generated method stub		
-    }
-
-    @Override
-    public void onGameStateChanged(GameState newState) {
-        // TODO Auto-generated method stub
-
     }
 
 }
