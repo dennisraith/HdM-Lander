@@ -113,14 +113,19 @@ public class Lander extends Square implements DrawableObject {
         this.horizontalSpeed = values[0];
     }
 
+    public boolean isAccelerating() {
+        return this.isAccelerating;
+    }
+
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
         InputStream stream;
         stream = context.getAssets().open(Static.sLanderMesh);
         this.mesh = Mesh.loadFromOBJ(stream);
         RectF b = this.mesh.getBounds();
-        RectF bounds = new RectF(b.left, b.top, b.right, b.bottom - 7);
+        RectF bounds = new RectF(b.left, b.top, b.right, b.bottom - 12);
         this.setBounds(bounds);
+        this.getWorld().translate(0, 0, -2).scale(1.4f);
         stream = context.getAssets().open(Static.sLanderTex);
         this.material.setTexture(device.createTexture(stream));
     }

@@ -48,7 +48,6 @@ public abstract class Game implements Renderer {
 
         this.mInputManager = new InputEventManager(this, view);
         this.mediaManager = MediaManager.initialize(this.context);
-        this.mCurrentState = new Level1(this);
     }
 
     @Override
@@ -141,10 +140,13 @@ public abstract class Game implements Renderer {
     }
 
     public void setGameState(GameState.StateType type) {
-        if (type == StateType.MENU) {
-            this.onGameStateChanged(this.mMenu);
+        if (this.mCurrentState != null) {
+            this.mCurrentState.shutdown();
         }
-        else if (this.mCurrentState.getStateType() != type) {
+        if (type == StateType.MENU) {
+            this.mCurrentState = this.mMenu;
+        }
+        else if (this.mCurrentState == null || this.mCurrentState.getStateType() != type) {
             GameState state = this.getStateInstance(type);
             this.onGameStateChanged(state);
         }
@@ -153,6 +155,7 @@ public abstract class Game implements Renderer {
     protected void onGameStateChanged(GameState newState) {
         newState.prepareCamera(this.screenWidth, this.screenHeight);
         this.loadContent(newState);
+
         this.mCurrentState = newState;
         if (this.isPaused) {
             this.resume();
