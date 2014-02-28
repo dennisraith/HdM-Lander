@@ -25,10 +25,6 @@ import java.io.IOException;
 
 public class Menu extends GameState {
 
-    public Menu(Game game) {
-        super(game);
-    }
-
     private SpriteFont   fontTitle;
     private TextBuffer   textTitle;
     private Matrix4x4    matTitle;
@@ -42,6 +38,11 @@ public class Menu extends GameState {
     private SoundPool    soundPool;
     private int          clickSound;
 
+    public Menu(Game game) {
+        super(game);
+
+    }
+
     @Override
     public void prepareCamera(float width, float height) {
         if (width == 0 || height == 0) {
@@ -49,7 +50,7 @@ public class Menu extends GameState {
             height = 1000;
         }
         Matrix4x4 projection = new Matrix4x4();
-        projection.setOrthogonalProjection(-width / 2, width / 2, -height / 2, height / 2, 0.0f, 100.0f);
+        projection.setOrthogonalProjection(-width / 2, width / 2, -height / 2, height / 2, 0.0f, 5.0f);
         this.getCamera().setProjection(projection);
     }
 
@@ -77,10 +78,10 @@ public class Menu extends GameState {
         new Matrix4x4();
         this.matTitle = Matrix4x4.createTranslation(-300, 400, 0);
         this.matMenu = new Matrix4x4[] {
-                Matrix4x4.createTranslation(-150, 160, -1),
-                Matrix4x4.createTranslation(-150, 40, -1),
-                Matrix4x4.createTranslation(-150, -80, -1),
-                Matrix4x4.createTranslation(-150, -200, -1)
+                Matrix4x4.createTranslation(-150, 160, 0),
+                Matrix4x4.createTranslation(-150, 40, 0),
+                Matrix4x4.createTranslation(-150, -80, 0),
+                Matrix4x4.createTranslation(-150, -200, 0)
         };
 
         this.aabbMenu = new Square[] {
@@ -93,7 +94,7 @@ public class Menu extends GameState {
         for (Square sq : this.aabbMenu) {
             try {
                 sq.prepare(context, device);
-                sq.getWorld().translate(0, 0, -10);
+                sq.getWorld().translate(0, 0, -2);
                 sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
 
             } catch (IOException e) {

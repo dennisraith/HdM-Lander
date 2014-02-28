@@ -27,7 +27,8 @@ public class LanderGame extends Game {
     @Override
     public void initialize() {
         HighscoreManager.initialize(this.getContext());
-        this.setGameState(StateType.MENU);
+        this.setGameState(StateType.LEVEL1);
+
     }
 
     public void onHighscoreListRequested() {
