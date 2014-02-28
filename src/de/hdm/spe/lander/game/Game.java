@@ -139,6 +139,9 @@ public abstract class Game implements Renderer {
     }
 
     public void setGameState(GameState.StateType type) {
+        if (this.mCurrentState != null) {
+            this.mCurrentState.shutdown();
+        }
         if (type == StateType.MENU) {
             this.mCurrentState = this.mMenu;
         }
@@ -151,6 +154,7 @@ public abstract class Game implements Renderer {
     protected void onGameStateChanged(GameState newState) {
         newState.prepareCamera(this.screenWidth, this.screenHeight);
         this.loadContent(newState);
+
         this.mCurrentState = newState;
         if (this.isPaused) {
             this.resume();
