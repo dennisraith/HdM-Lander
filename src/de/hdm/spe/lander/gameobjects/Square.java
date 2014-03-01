@@ -27,6 +27,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class Square extends AABB implements DrawableObject, Shape2D {
 
+    private static Square         sMenuSquare  = null;
+
     private int                   vertexSize   = 0;
     private final int[]           drawOrder    = {0, 1, 2, 0, 2, 3};
     private VertexElement         vElementPos;
@@ -85,7 +87,7 @@ public class Square extends AABB implements DrawableObject, Shape2D {
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
         this.generateMesh();
-        InputStream stream = context.getAssets().open("space.png");
+        InputStream stream = context.getAssets().open("road.png");
         this.material.setTexture(device.createTexture(stream));
 
     }

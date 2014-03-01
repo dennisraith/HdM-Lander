@@ -18,7 +18,7 @@ public class HighscoreManager {
 
     private static HighscoreManager     sInstance  = null;
     private final Context               mContext;
-    private final ArrayList<Highscore>  mScores    = new ArrayList<Highscore>();
+    private ArrayList<Highscore>        mScores    = new ArrayList<Highscore>();
     private final Comparator<Highscore> comparator = new Comparator<Highscore>() {
 
                                                        @Override
@@ -39,7 +39,10 @@ public class HighscoreManager {
 
     private HighscoreManager(Context context) {
         this.mContext = context;
+        Static.numberFormat.setMaximumFractionDigits(2);
+        Static.numberFormat.setMinimumFractionDigits(0);
         this.loadScores();
+
     }
 
     public static HighscoreManager initialize(Context context) {
@@ -87,6 +90,11 @@ public class HighscoreManager {
             }
         }
         return false;
+    }
+
+    public void clearHighscore() {
+        this.mScores = new ArrayList<Highscore>();
+        this.mContext.getSharedPreferences(Static.sScorePrefsName, 0).edit().clear().commit();
     }
 
     public boolean addHighscore(Highscore score) {

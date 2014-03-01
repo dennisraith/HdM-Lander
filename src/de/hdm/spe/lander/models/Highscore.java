@@ -27,7 +27,8 @@ public class Highscore {
     }
 
     public static float calculateHighscore(float time, Vector2 speed) {
-        return Math.abs(time * 1 / speed.getY());
+        float x = (1 / time) * (1 / speed.getY());
+        return Math.abs(x * 10000);
     }
 
 }
