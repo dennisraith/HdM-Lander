@@ -26,6 +26,8 @@ public class Static {
 
     public final static String sScorePrefsName    = "lander.scores";
     public final static String sSettingsPrefsName = "lander.settings";
+    public final static String sSettingsMusic = "settings.music";
+    public final static String sSettingsLanguage = "settings.language";    
 
     public static NumberFormat numberFormat       = NumberFormat.getNumberInstance();
 

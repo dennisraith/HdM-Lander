@@ -25,7 +25,7 @@ public class Options extends GameState{
 	
     public Options(Game game) {
 		super(game);
-		optionManager = new OptionManager();
+		optionManager = new OptionManager(game.getContext());
 	}
     
     private SpriteFont   fontTitleOpt;
@@ -159,6 +159,7 @@ public class Options extends GameState{
 	            	this.textOptions[3].setText(clickedOption);
 	                break;
 	            case 4:
+	            	optionManager.saveOptions();
 	                this.setGameState(StateType.MENU);
 	                break;
 	        }
@@ -168,7 +169,6 @@ public class Options extends GameState{
 
 	        for (int i = 0; i < this.aabbOptions.length; ++i) {
 	            AABB aabb = this.aabbOptions[i];
-	            Log.d("for drin", "bla argagasd");
 	            if (point.intersects(aabb)) {
 	                if (action == InputAction.DOWN){
 	                	MediaManager.getInstance().playSound();
