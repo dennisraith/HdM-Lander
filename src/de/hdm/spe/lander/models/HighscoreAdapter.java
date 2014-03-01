@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import de.hdm.spe.lander.R;
+import de.hdm.spe.lander.statics.Static;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class HighscoreAdapter extends ArrayAdapter<Highscore> {
         Highscore score = this.getItem(position);
 
         holder.name.setText(score.getName());
-        holder.score.setText("" + score.getScore());
+        holder.score.setText("" + Static.numberFormat.format(score.getScore()));
 
         return convertView;
 

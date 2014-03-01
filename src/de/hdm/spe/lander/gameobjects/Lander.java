@@ -7,6 +7,7 @@ import android.graphics.RectF;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Material;
 import de.hdm.spe.lander.graphics.Mesh;
+import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.math.Vector2;
 import de.hdm.spe.lander.math.Vector4;
@@ -48,10 +49,13 @@ public class Lander extends Square implements DrawableObject {
 
     private boolean         isAccelerating;
 
+    private final Fire      mFire;
+
     public Lander(Difficulty gravity) {
         this.material = new Material();
         this.gravityVector = gravity.getGravityVector();
         this.world.translate(0, 90, 0);
+        this.mFire = new Fire();
     }
 
     private void onAccelerationChanged() {
@@ -89,6 +93,7 @@ public class Lander extends Square implements DrawableObject {
         this.mCurrentSpeed = velocity;
         VehicleState.GRAVITY.velocity = new Vector2();
         this.horizontalSpeed = 0;
+        this.mFire.setWorld(this.getWorld());
     }
 
     private void moveShip(Vector2 velocity) {
@@ -102,6 +107,13 @@ public class Lander extends Square implements DrawableObject {
             time = 1;
         }
         return new Vector2(speed.getX(), speed.getY() * time);
+    }
+
+    public void draw(Renderer renderer) {
+        renderer.draw(this);
+        if (this.isAccelerating) {
+            renderer.draw(this.mFire);
+        }
     }
 
     @Override
@@ -128,6 +140,7 @@ public class Lander extends Square implements DrawableObject {
         this.getWorld().translate(0, 0, -2).scale(1.4f);
         stream = context.getAssets().open(Static.sLanderTex);
         this.material.setTexture(device.createTexture(stream));
+        this.mFire.prepare(context, device);
     }
 
     @Override

@@ -8,7 +8,6 @@ import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.game.LanderGame;
 import de.hdm.spe.lander.gameobjects.Background;
-import de.hdm.spe.lander.gameobjects.Fire;
 import de.hdm.spe.lander.gameobjects.Lander;
 import de.hdm.spe.lander.gameobjects.Obstacles;
 import de.hdm.spe.lander.gameobjects.Platform;
@@ -34,7 +33,6 @@ public abstract class Level extends GameState {
     protected final Platform   mPlatform;
     private Obstacles          mObstacles;
     private boolean            activeObstacles;
-    private final Fire         mFire;
 
     public Level(Game game) {
         super(game);
@@ -42,7 +40,7 @@ public abstract class Level extends GameState {
         this.mBG = new Background();
         this.mPlatform = new Platform();
         this.mLander = new Lander(Difficulty.EASY);
-        this.mFire = new Fire();
+
         this.mBG.getWorld().translate(0, 0, -20).scale(13.5f, -13f, 0);
 
     }
@@ -52,11 +50,7 @@ public abstract class Level extends GameState {
         renderer.draw(this.mBG);
         this.mStatusBar.draw(deltaSeconds, renderer);
         renderer.draw(this.mPlatform);
-        renderer.draw(this.mLander);
-        if (this.mLander.isAccelerating()) {
-            renderer.draw(this.mFire);
-        }
-
+        this.mLander.draw(renderer);
         if (this.activeObstacles) {
             this.mObstacles.draw(deltaSeconds, renderer);
         }
@@ -90,7 +84,6 @@ public abstract class Level extends GameState {
         this.mStatusBar.prepare(context, device);
         this.mBG.prepare(context, device);
         this.mPlatform.prepare(context, device);
-        this.mFire.prepare(context, device);
         this.mLander.prepare(context, device);
         if (this.activeObstacles) {
             this.mObstacles.prepare(context, device);
@@ -101,7 +94,7 @@ public abstract class Level extends GameState {
     public void update(float deltaSeconds) {
         this.mStatusBar.update(deltaSeconds);
         this.mLander.updatePosition(deltaSeconds);
-        this.mFire.setWorld(this.mLander.getWorld());
+
         //        Vector3 v3 = this.getCamera().project(new Vector3(this.mLander.getPosition(), 0), 1);
 
         if (this.activeObstacles) {

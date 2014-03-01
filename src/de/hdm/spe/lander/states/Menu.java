@@ -2,13 +2,10 @@
 package de.hdm.spe.lander.states;
 
 import android.content.Context;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
-import android.util.Log;
 
-import de.hdm.spe.lander.R;
-import de.hdm.spe.lander.collision.AABB;
+import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.game.LanderGame;
@@ -21,8 +18,6 @@ import de.hdm.spe.lander.input.InputEvent.InputAction;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.MediaManager;
 
-import java.io.IOException;
-
 
 public class Menu extends GameState {
 
@@ -34,7 +29,6 @@ public class Menu extends GameState {
     private TextBuffer[] textMenu;
     private Matrix4x4[]  matMenu;
     private Square[]     aabbMenu;
-
 
     private MediaPlayer  mediaPlayer;
     private SoundPool    soundPool;
@@ -59,6 +53,7 @@ public class Menu extends GameState {
     @Override
     public void prepare(Context context, GraphicsDevice device) {
 
+        long time = System.currentTimeMillis();
 
         this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);
@@ -78,6 +73,8 @@ public class Menu extends GameState {
         this.textMenu[3].setText("Credits");
         this.textMenu[4].setText("Quit");
 
+        Logger.log("Loading Time Text Buffers", System.currentTimeMillis() - time);
+        time = System.currentTimeMillis();
         new Matrix4x4();
         this.matTitle = Matrix4x4.createTranslation(-300, 400, 0);
         this.matMenu = new Matrix4x4[] {
@@ -96,26 +93,27 @@ public class Menu extends GameState {
                 new Square(-40, -180, 250, 80),
                 new Square(-85, -300, 160, 80)
         };
-
-        for (Square sq : this.aabbMenu) {
-            try {
-                sq.prepare(context, device);
-                sq.getWorld().translate(0, 0, -2);
-                sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
+        Logger.log("Loading Matrices", System.currentTimeMillis() - time);
+        time = System.currentTimeMillis();
+        //        for (Square sq : this.aabbMenu) {
+        //            try {
+        //                sq.prepare(context, device);
+        //                sq.getWorld().translate(0, 0, -2);
+        //                sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
+        //
+        //            } catch (IOException e) {
+        //                e.printStackTrace();
+        //            }
+        //        }
+        Logger.log("Loading Time Preparation squares", System.currentTimeMillis() - time);
+        time = System.currentTimeMillis();
         MediaManager.getInstance().loadTrack("space-menu.mp3");
         MediaManager.getInstance().loadSounds();
-
+        Logger.log("Loading Time Sounds", System.currentTimeMillis() - time);
     }
 
     @Override
     public void update(float deltaSeconds) {
-        // TODO Auto-generated method stub
 
     }
 
@@ -126,9 +124,9 @@ public class Menu extends GameState {
 
     @Override
     public void draw(float deltaSeconds, Renderer renderer) {
-        for (Square sq : this.aabbMenu) {
-            renderer.draw(sq);
-        }
+        //        for (Square sq : this.aabbMenu) {
+        //            renderer.draw(sq);
+        //        }
 
         renderer.drawText(this.textTitle, this.matTitle);
         for (int i = 0; i < this.matMenu.length; i++) {
@@ -144,17 +142,17 @@ public class Menu extends GameState {
                 this.setGameState(StateType.LEVEL1);
                 break;
             case 1:
-            	((LanderGame)getGame()).onHighscoreListRequested();
-            	break;
+                ((LanderGame) this.getGame()).onHighscoreListRequested();
+                break;
             case 2:
-            	this.setGameState(StateType.OPTIONS);
-            	break;
+                this.setGameState(StateType.OPTIONS);
+                break;
             case 3:
-                
+
                 break;
             case 4:
-            	this.getGame().finish();
-            	break;
+                this.getGame().finish();
+                break;
         }
     }
 
@@ -162,26 +160,23 @@ public class Menu extends GameState {
     public void onScreenTouched(Point point, InputAction action) {
 
         for (int i = 0; i < this.aabbMenu.length; ++i) {
-            AABB aabb = this.aabbMenu[i];
-            Log.d("for drin", "bla argagasd");
-            if (point.intersects(aabb)) {
-                if (action == InputAction.DOWN)
-                	MediaManager.getInstance().playSound();
 
-                this.onMenuItemClicked(i);
+            if (point.intersects(this.aabbMenu[i])) {
+                if (action == InputAction.DOWN) {
+                    MediaManager.getInstance().playSound();
+                    this.onMenuItemClicked(i);
+                }
             }
         }
     }
 
     @Override
     public void onKeyboardKeyPressed(int event) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void onAccelerometerEvent(float[] values) {
-        // TODO Auto-generated method stub
 
     }
 
