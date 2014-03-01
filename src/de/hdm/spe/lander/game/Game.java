@@ -10,6 +10,7 @@ import android.widget.Toast;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.models.InputEventManager;
 import de.hdm.spe.lander.models.MediaManager;
+import de.hdm.spe.lander.models.OptionManager;
 import de.hdm.spe.lander.states.GameState;
 import de.hdm.spe.lander.states.GameState.StateType;
 import de.hdm.spe.lander.states.Level1;
@@ -48,6 +49,7 @@ public abstract class Game implements Renderer {
 
         this.mInputManager = new InputEventManager(this, view);
         this.mediaManager = MediaManager.initialize(this.context);
+        OptionManager.initialize(this.context);
     }
 
     @Override

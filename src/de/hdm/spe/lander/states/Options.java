@@ -25,7 +25,7 @@ public class Options extends GameState {
 
     public Options(Game game) {
         super(game);
-        this.optionManager = new OptionManager(game.getContext());
+        this.optionManager = OptionManager.getInstance();
     }
 
     private SpriteFont   fontTitleOpt;
@@ -68,8 +68,6 @@ public class Options extends GameState {
         this.fontTitleOpt = device.createSpriteFont(null, 96);
         this.textTitleOpt = device.createTextBuffer(this.fontTitleOpt, 16);
         this.textTitleOpt.setText("Options");
-
-        this.optionManager.loadOptions();
 
         this.fontOptions = device.createSpriteFont(null, 70);
         this.textOptions = new TextBuffer[] {
