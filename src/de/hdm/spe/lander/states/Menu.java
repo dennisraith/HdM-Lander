@@ -73,7 +73,7 @@ public class Menu extends GameState {
                 device.createTextBuffer(this.fontMenu, 16)
         };
         this.textMenu[0].setText("Start Game");
-        this.textMenu[1].setText("High Score");
+        this.textMenu[1].setText("Highscore");
         this.textMenu[2].setText("Options");
         this.textMenu[3].setText("Credits");
         this.textMenu[4].setText("Quit");
@@ -150,7 +150,7 @@ public class Menu extends GameState {
             	this.setGameState(StateType.OPTIONS);
             	break;
             case 3:
-                
+                this.setGameState(StateType.CREDITSLEVEL);
                 break;
             case 4:
             	this.getGame().finish();
@@ -163,7 +163,6 @@ public class Menu extends GameState {
 
         for (int i = 0; i < this.aabbMenu.length; ++i) {
             AABB aabb = this.aabbMenu[i];
-            Log.d("for drin", "bla argagasd");
             if (point.intersects(aabb)) {
                 if (action == InputAction.DOWN)
                 	MediaManager.getInstance().playSound();

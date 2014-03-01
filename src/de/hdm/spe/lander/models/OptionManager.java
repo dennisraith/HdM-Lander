@@ -29,7 +29,7 @@ public class OptionManager {
 		String langString = this.languageState?"DE":"EN";
 		
 			options[0] = "Music "+musicState;
-			options[1] = "Highscore";
+			options[1] = "Clear Highscore";
 			options[2] = "Schwierigkeit";
 			options[3] = "Sprache "+langString;
 			options[4] = "Zurück";

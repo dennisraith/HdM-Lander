@@ -90,21 +90,21 @@ public class Options extends GameState{
         this.textOptions[4].setText(optionManager.getOption(4));
 
         new Matrix4x4();
-        this.matTitleOpt = Matrix4x4.createTranslation(-300, 400, 0);
+        this.matTitleOpt = Matrix4x4.createTranslation(-220, 400, 0);
         this.matOptions = new Matrix4x4[] {
-                Matrix4x4.createTranslation(-150, 160, -1),
-                Matrix4x4.createTranslation(-150, 40, -1),
-                Matrix4x4.createTranslation(-150, -80, -1),
-                Matrix4x4.createTranslation(-150, -200, -1),
-                Matrix4x4.createTranslation(-150, -320, -1)
+                Matrix4x4.createTranslation(-220, 160, -1),
+                Matrix4x4.createTranslation(-220, 40, -1),
+                Matrix4x4.createTranslation(-220, -80, -1),
+                Matrix4x4.createTranslation(-220, -200, -1),
+                Matrix4x4.createTranslation(-220, -320, -1)
         };
 
         this.aabbOptions = new Square[] {
-                new Square(20, 180, 360, 80),
-                new Square(15, 60, 350, 80),
-                new Square(60, -60, 440, 80),
-                new Square(30, -180, 390, 80),
-                new Square(-40, -300, 250, 80),
+                new Square(-50, 180, 360, 80),
+                new Square(30, 60, 520, 80),
+                new Square(-10, -60, 440, 80),
+                new Square(-35, -180, 390, 80),
+                new Square(-105, -300, 250, 80),
         };
 
         for (Square sq : this.aabbOptions) {
@@ -180,7 +180,7 @@ public class Options extends GameState{
 
 	@Override
 	public void shutdown() {
-		
+
 	}
 
 	@Override
