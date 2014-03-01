@@ -89,6 +89,10 @@ public class HighscoreManager {
         return false;
     }
 
+    public void clearHighscore() {
+        this.mContext.getSharedPreferences(Static.sScorePrefsName, 0).edit().clear().commit();
+    }
+
     public boolean addHighscore(Highscore score) {
         if (!this.checkHighscore(score.getScore())) {
             return false;
