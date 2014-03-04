@@ -33,7 +33,6 @@ public class GameStatusBar {
     public void prepare(Context context, GraphicsDevice device) throws IOException {
         SpriteFont font = device.createSpriteFont(null, 64);
         this.mText = device.createTextBuffer(font, 32);
-        this.mText.setText("TEXTBUFFER");
     }
 
     public void draw(float deltaTime, Renderer renderer) {
@@ -60,8 +59,8 @@ public class GameStatusBar {
         this.mTimer.resume();
     }
 
-    public GameTimer getTimer() {
-        return this.mTimer;
+    public float getElapsedTime() {
+        return this.mTimer.getTime();
     }
 
 }

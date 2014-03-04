@@ -7,6 +7,7 @@ import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.game.LanderGame;
+import de.hdm.spe.lander.gameobjects.Asteroid;
 import de.hdm.spe.lander.gameobjects.Background;
 import de.hdm.spe.lander.gameobjects.Lander;
 import de.hdm.spe.lander.gameobjects.Obstacles;
@@ -18,6 +19,7 @@ import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.GameStatusBar;
 import de.hdm.spe.lander.models.Highscore;
 import de.hdm.spe.lander.models.HighscoreManager;
+import de.hdm.spe.lander.models.LevelHelper;
 import de.hdm.spe.lander.models.MediaManager;
 import de.hdm.spe.lander.models.MediaManager.LanderSound;
 import de.hdm.spe.lander.statics.Difficulty;
@@ -30,29 +32,36 @@ public abstract class Level extends GameState {
 
     protected final Lander     mLander;
 
-    protected GameStatusBar    mStatusBar;
     protected final Background mBG;
     protected final Platform   mPlatform;
     private Obstacles          mObstacles;
     private boolean            activeObstacles;
+    private final LevelHelper  mHelper;
+    protected GameStatusBar    mStatusBar;
+
+    private final Asteroid     mAst;
 
     public Level(Game game) {
         super(game);
-        this.mStatusBar = new GameStatusBar(this);
+
         this.mBG = new Background();
         this.mPlatform = new Platform();
         this.mLander = new Lander(Difficulty.EASY);
-
+        this.mHelper = new LevelHelper(this);
         this.mBG.getWorld().translate(0, 0, -20).scale(13.5f, -13f, 0);
+        this.mStatusBar = new GameStatusBar(this);
+        this.mAst = new Asteroid();
 
     }
 
     @Override
     public void draw(float deltaSeconds, Renderer renderer) {
         renderer.draw(this.mBG);
-        this.mStatusBar.draw(deltaSeconds, renderer);
+        this.mHelper.draw(deltaSeconds, renderer);
         renderer.draw(this.mPlatform);
+        this.mStatusBar.draw(deltaSeconds, renderer);
         this.mLander.draw(renderer);
+        renderer.draw(this.mAst);
         if (this.activeObstacles) {
             this.mObstacles.draw(deltaSeconds, renderer);
         }
@@ -83,6 +92,8 @@ public abstract class Level extends GameState {
 
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
+        this.mAst.prepare(context, device);
+        this.mHelper.prepare(context, device);
         this.mStatusBar.prepare(context, device);
         this.mBG.prepare(context, device);
         this.mPlatform.prepare(context, device);
@@ -92,17 +103,18 @@ public abstract class Level extends GameState {
         }
     }
 
+    //        Vector3 v3 = this.getCamera().project(new Vector3(this.mLander.getPosition(), 0), 1);
     @Override
     public void update(float deltaSeconds) {
-        this.mStatusBar.update(deltaSeconds);
-        this.mLander.updatePosition(deltaSeconds);
 
-        //        Vector3 v3 = this.getCamera().project(new Vector3(this.mLander.getPosition(), 0), 1);
+        if (this.mHelper.update(deltaSeconds)) {
+            this.mLander.updatePosition(deltaSeconds);
+            this.mStatusBar.update(deltaSeconds);
+            if (this.activeObstacles) {
+                this.mObstacles.update(deltaSeconds);
+            }
 
-        if (this.activeObstacles) {
-            this.mObstacles.update(deltaSeconds);
         }
-
         this.checkGameState();
     }
 
@@ -112,6 +124,9 @@ public abstract class Level extends GameState {
                 this.onLoose();
                 return;
             }
+        }
+        if (this.mLander.intersects(this.mAst)) {
+            this.getGame().postToast("Asteroid collision");
         }
 
         if (this.mLander.intersects(this.mPlatform)) {
@@ -135,7 +150,7 @@ public abstract class Level extends GameState {
     protected void onWin() {
         this.pause();
         this.getGame().postToast("Landed!");
-        float score = Highscore.calculateHighscore(this.mStatusBar.getTimer().getTime(), this.mLander.getCurrentSpeed());
+        float score = Highscore.calculateHighscore(this.mStatusBar.getElapsedTime(), this.mLander.getCurrentSpeed());
         if (HighscoreManager.getInstance().checkHighscore(score)) {
             Logger.log("HighscoreCheck", "Highscore! " + score);
             ((LanderGame) this.getGame()).onHighscoreDialogRequested(score);

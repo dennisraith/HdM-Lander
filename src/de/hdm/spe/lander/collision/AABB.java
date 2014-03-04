@@ -51,10 +51,11 @@ public class AABB implements Shape2D {
     public boolean intersects(Circle circle) {
         Vector2 center = circle.getCenter();
 
-        if (center.getX() >= this.getMin().getX() && center.getX() <= this.getMax().getX())
+        if (center.getX() >= this.getMin().getX() && center.getX() <= this.getMax().getX() && center.getY() >= this.getMin().getY()
+                && center.getY() <= this.getMax().getY())
+        {
             return true;
-        if (center.getY() >= this.getMin().getY() && center.getY() <= this.getMax().getY())
-            return true;
+        }
 
         Vector2 nearestPosition = new Vector2(
                 MathHelper.clamp(center.getX(), this.getMin().getX(), this.getMax().getX()),
