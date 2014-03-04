@@ -2,8 +2,6 @@
 package de.hdm.spe.lander.states;
 
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.media.SoundPool;
 
 import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.collision.Point;
@@ -17,22 +15,19 @@ import de.hdm.spe.lander.graphics.TextBuffer;
 import de.hdm.spe.lander.input.InputEvent.InputAction;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.MediaManager;
+import de.hdm.spe.lander.models.MediaManager.LanderSound;
 
 
 public class Menu extends GameState {
 
-    private SpriteFont   fontTitle;
-    private TextBuffer   textTitle;
-    private Matrix4x4    matTitle;
+    protected SpriteFont   fontTitle;
+    protected TextBuffer   textTitle;
+    protected Matrix4x4    matTitle;
 
-    private SpriteFont   fontMenu;
-    private TextBuffer[] textMenu;
-    private Matrix4x4[]  matMenu;
-    private Square[]     aabbMenu;
-
-    private MediaPlayer  mediaPlayer;
-    private SoundPool    soundPool;
-    private int          clickSound;
+    protected SpriteFont   fontEntries;
+    protected TextBuffer[] textEntries;
+    protected Matrix4x4[]  matEntries;
+    protected Square[]     aabbEntries;
 
     public Menu(Game game) {
         super(game);
@@ -59,25 +54,25 @@ public class Menu extends GameState {
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);
         this.textTitle.setText("Moon Landing");
 
-        this.fontMenu = device.createSpriteFont(null, 70);
-        this.textMenu = new TextBuffer[] {
-                device.createTextBuffer(this.fontMenu, 16),
-                device.createTextBuffer(this.fontMenu, 16),
-                device.createTextBuffer(this.fontMenu, 16),
-                device.createTextBuffer(this.fontMenu, 16),
-                device.createTextBuffer(this.fontMenu, 16)
+        this.fontEntries = device.createSpriteFont(null, 70);
+        this.textEntries = new TextBuffer[] {
+                device.createTextBuffer(this.fontEntries, 16),
+                device.createTextBuffer(this.fontEntries, 16),
+                device.createTextBuffer(this.fontEntries, 16),
+                device.createTextBuffer(this.fontEntries, 16),
+                device.createTextBuffer(this.fontEntries, 16)
         };
-        this.textMenu[0].setText("Start Game");
-        this.textMenu[1].setText("Highscore");
-        this.textMenu[2].setText("Options");
-        this.textMenu[3].setText("Credits");
-        this.textMenu[4].setText("Quit");
+        this.textEntries[0].setText("Start Game");
+        this.textEntries[1].setText("Highscore");
+        this.textEntries[2].setText("Options");
+        this.textEntries[3].setText("Credits");
+        this.textEntries[4].setText("Quit");
 
         Logger.log("Loading Time Text Buffers", System.currentTimeMillis() - time);
         time = System.currentTimeMillis();
         new Matrix4x4();
         this.matTitle = Matrix4x4.createTranslation(-300, 400, 0);
-        this.matMenu = new Matrix4x4[] {
+        this.matEntries = new Matrix4x4[] {
                 Matrix4x4.createTranslation(-150, 160, -1),
                 Matrix4x4.createTranslation(-150, 40, -1),
                 Matrix4x4.createTranslation(-150, -80, -1),
@@ -86,7 +81,7 @@ public class Menu extends GameState {
 
         };
 
-        this.aabbMenu = new Square[] {
+        this.aabbEntries = new Square[] {
                 new Square(25, 180, 380, 80),
                 new Square(20, 60, 370, 80),
                 new Square(-30, -60, 270, 80),
@@ -108,7 +103,6 @@ public class Menu extends GameState {
         Logger.log("Loading Time Preparation squares", System.currentTimeMillis() - time);
         time = System.currentTimeMillis();
         MediaManager.getInstance().loadTrack("space-menu.mp3");
-        MediaManager.getInstance().loadSounds();
         Logger.log("Loading Time Sounds", System.currentTimeMillis() - time);
     }
 
@@ -129,13 +123,13 @@ public class Menu extends GameState {
         //        }
 
         renderer.drawText(this.textTitle, this.matTitle);
-        for (int i = 0; i < this.matMenu.length; i++) {
-            renderer.drawText(this.textMenu[i], this.matMenu[i]);
+        for (int i = 0; i < this.matEntries.length; i++) {
+            renderer.drawText(this.textEntries[i], this.matEntries[i]);
         }
 
     }
 
-    private void onMenuItemClicked(int i) {
+    protected void onMenuItemClicked(int i) {
 
         switch (i) {
             case 0:
@@ -159,10 +153,10 @@ public class Menu extends GameState {
     @Override
     public void onScreenTouched(Point point, InputAction action) {
 
-        for (int i = 0; i < this.aabbMenu.length; ++i) {
-            if (point.intersects(this.aabbMenu[i])) {
+        for (int i = 0; i < this.aabbEntries.length; ++i) {
+            if (point.intersects(this.aabbEntries[i])) {
                 if (action == InputAction.DOWN) {
-                    MediaManager.getInstance().playSound();
+                    MediaManager.getInstance().playSound(LanderSound.MenuClick);
                     this.onMenuItemClicked(i);
                 }
             }

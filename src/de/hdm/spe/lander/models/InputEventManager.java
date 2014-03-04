@@ -35,6 +35,10 @@ public class InputEventManager {
                                 case KeyEvent.KEYCODE_MENU:
                                     this.mGame.getCurrentGameState().onKeyboardKeyPressed(KeyEvent.KEYCODE_MENU);
                                     break;
+
+                                case KeyEvent.KEYCODE_BACK:
+                                    this.mGame.getCurrentGameState().onBackPressed();
+                                    break;
                             }
                             break;
                     }
@@ -75,6 +79,8 @@ public class InputEventManager {
         public void onKeyboardKeyPressed(int keyEvent);
 
         public void onAccelerometerEvent(float[] values);
+
+        public void onBackPressed();
 
     }
 

@@ -18,6 +18,8 @@ import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.GameStatusBar;
 import de.hdm.spe.lander.models.Highscore;
 import de.hdm.spe.lander.models.HighscoreManager;
+import de.hdm.spe.lander.models.MediaManager;
+import de.hdm.spe.lander.models.MediaManager.LanderSound;
 import de.hdm.spe.lander.statics.Difficulty;
 import de.hdm.spe.lander.statics.Static;
 
@@ -126,6 +128,7 @@ public abstract class Level extends GameState {
     protected void onLoose() {
         this.pause();
         this.getGame().postToast("Crash!");
+        MediaManager.getInstance().playSound(LanderSound.Explosion);
         this.setGameState(StateType.MENU);
     };
 

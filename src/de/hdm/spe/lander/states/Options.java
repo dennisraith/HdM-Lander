@@ -4,22 +4,16 @@ package de.hdm.spe.lander.states;
 import android.content.Context;
 import android.util.Log;
 
-import de.hdm.spe.lander.collision.AABB;
-import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.gameobjects.Square;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
-import de.hdm.spe.lander.graphics.Renderer;
-import de.hdm.spe.lander.graphics.SpriteFont;
 import de.hdm.spe.lander.graphics.TextBuffer;
-import de.hdm.spe.lander.input.InputEvent.InputAction;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.HighscoreManager;
-import de.hdm.spe.lander.models.MediaManager;
 import de.hdm.spe.lander.models.OptionManager;
 
 
-public class Options extends GameState {
+public class Options extends Menu {
 
     private final OptionManager optionManager;
 
@@ -28,64 +22,32 @@ public class Options extends GameState {
         this.optionManager = OptionManager.getInstance();
     }
 
-    private SpriteFont   fontTitleOpt;
-    private TextBuffer   textTitleOpt;
-    private Matrix4x4    matTitleOpt;
-
-    private SpriteFont   fontOptions;
-    private TextBuffer[] textOptions;
-    private Matrix4x4[]  matOptions;
-    private Square[]     aabbOptions;
-
-    private String       clickedOption;
-
-    @Override
-    public void prepareCamera(float width, float height) {
-        if (width == 0 || height == 0) {
-            width = 1000;
-            height = 1000;
-        }
-        Matrix4x4 projection = new Matrix4x4();
-        projection.setOrthogonalProjection(-width / 2, width / 2, -height / 2, height / 2, 0.0f, 100.0f);
-        this.getCamera().setProjection(projection);
-    }
-
-    @Override
-    public void onKeyboardKeyPressed(int keyEvent) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onAccelerometerEvent(float[] values) {
-        // TODO Auto-generated method stub
-
-    }
+    private String clickedOption;
 
     @Override
     public void prepare(Context context, GraphicsDevice device) {
 
-        this.fontTitleOpt = device.createSpriteFont(null, 96);
-        this.textTitleOpt = device.createTextBuffer(this.fontTitleOpt, 16);
-        this.textTitleOpt.setText("Options");
+        this.fontTitle = device.createSpriteFont(null, 96);
+        this.textTitle = device.createTextBuffer(this.fontTitle, 16);
+        this.textTitle.setText("Options");
 
-        this.fontOptions = device.createSpriteFont(null, 70);
-        this.textOptions = new TextBuffer[] {
-                device.createTextBuffer(this.fontOptions, 16),
-                device.createTextBuffer(this.fontOptions, 16),
-                device.createTextBuffer(this.fontOptions, 16),
-                device.createTextBuffer(this.fontOptions, 16),
-                device.createTextBuffer(this.fontOptions, 16)
+        this.fontEntries = device.createSpriteFont(null, 70);
+        this.textEntries = new TextBuffer[] {
+                device.createTextBuffer(this.fontEntries, 16),
+                device.createTextBuffer(this.fontEntries, 16),
+                device.createTextBuffer(this.fontEntries, 16),
+                device.createTextBuffer(this.fontEntries, 16),
+                device.createTextBuffer(this.fontEntries, 16)
         };
-        this.textOptions[0].setText(this.optionManager.getOption(0));
-        this.textOptions[1].setText(this.optionManager.getOption(1));
-        this.textOptions[2].setText(this.optionManager.getOption(2));
-        this.textOptions[3].setText(this.optionManager.getOption(3));
-        this.textOptions[4].setText(this.optionManager.getOption(4));
+        this.textEntries[0].setText(this.optionManager.getOption(0));
+        this.textEntries[1].setText(this.optionManager.getOption(1));
+        this.textEntries[2].setText(this.optionManager.getOption(2));
+        this.textEntries[3].setText(this.optionManager.getOption(3));
+        this.textEntries[4].setText(this.optionManager.getOption(4));
 
         new Matrix4x4();
-        this.matTitleOpt = Matrix4x4.createTranslation(-220, 400, 0);
-        this.matOptions = new Matrix4x4[] {
+        this.matTitle = Matrix4x4.createTranslation(-220, 400, 0);
+        this.matEntries = new Matrix4x4[] {
                 Matrix4x4.createTranslation(-220, 160, -1),
                 Matrix4x4.createTranslation(-220, 40, -1),
                 Matrix4x4.createTranslation(-220, -80, -1),
@@ -93,7 +55,7 @@ public class Options extends GameState {
                 Matrix4x4.createTranslation(-220, -320, -1)
         };
 
-        this.aabbOptions = new Square[] {
+        this.aabbEntries = new Square[] {
                 new Square(-50, 180, 360, 80),
                 new Square(30, 60, 520, 80),
                 new Square(-10, -60, 440, 80),
@@ -101,31 +63,15 @@ public class Options extends GameState {
                 new Square(-105, -300, 250, 80),
         };
 
-        //        MediaManager.getInstance().loadTrack("space-menu.mp3");
-        MediaManager.getInstance().loadSounds();
     }
 
     @Override
-    public void update(float deltaSeconds) {
-
-    }
-
-    @Override
-    public void draw(float deltaSeconds, Renderer renderer) {
-
-        renderer.drawText(this.textTitleOpt, this.matTitleOpt);
-        for (int i = 0; i < this.matOptions.length; i++) {
-            renderer.drawText(this.textOptions[i], this.matOptions[i]);
-        }
-
-    }
-
-    private void onMenuItemClicked(int i) {
+    protected void onMenuItemClicked(int i) {
         this.optionManager.changeOptions(i);
         this.clickedOption = this.optionManager.getOption(i);
         switch (i) {
             case 0:
-                this.textOptions[0].setText(this.clickedOption);
+                this.textEntries[0].setText(this.clickedOption);
                 Log.d("case 0", "msg");
                 break;
             case 1:
@@ -136,32 +82,13 @@ public class Options extends GameState {
 
                 break;
             case 3:
-                this.textOptions[3].setText(this.clickedOption);
+                this.textEntries[3].setText(this.clickedOption);
                 break;
             case 4:
                 this.optionManager.saveOptions();
                 this.setGameState(StateType.MENU);
                 break;
         }
-    }
-
-    @Override
-    public void onScreenTouched(Point point, InputAction action) {
-
-
-        for (int i = 0; i < this.aabbOptions.length; ++i) {
-            if (point.intersects(this.aabbOptions[i])) {
-                if (action == InputAction.DOWN) {
-                    MediaManager.getInstance().playSound();
-                    this.onMenuItemClicked(i);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void shutdown() {
-
     }
 
     @Override

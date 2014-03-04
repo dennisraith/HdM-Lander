@@ -14,9 +14,30 @@ import java.io.IOException;
 
 public class MediaManager {
 
+    public enum LanderSound {
+        MenuClick(R.raw.click),
+        RocketBurst(R.raw.thruster_sound),
+        Explosion(R.raw.explosion);
+
+        int resId;
+        int soundId;
+        int streamID;
+
+        LanderSound(int resId) {
+            this.resId = resId;
+        }
+
+        void setSoundID(int id) {
+            this.soundId = id;
+        }
+
+        void setStreamID(int id) {
+            this.streamID = id;
+        }
+    }
+
     private final MediaPlayer   mediaPlayer;
     private final SoundPool     soundPool;
-    private int                 click;
 
     private static MediaManager sInstance = null;
     private final Context       mContext;
@@ -24,22 +45,15 @@ public class MediaManager {
     private MediaManager(Context context) {
         this.mContext = context;
         this.mediaPlayer = new MediaPlayer();
-        this.soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+        this.soundPool = new SoundPool(LanderSound.values().length, AudioManager.STREAM_MUSIC, 0);
+        this.loadSounds();
 
     }
 
-    public static MediaManager initialize(Context context) {
-        MediaManager.sInstance = new MediaManager(context);
-        return MediaManager.sInstance;
-    }
+    private void loadSounds() {
 
-    public void loadSounds() {
-        this.click = this.soundPool.load(this.mContext, R.raw.click, 1);
-    }
-
-    public void playSound() {
-        if (OptionManager.getInstance().isSoundEnabled()) {
-            this.soundPool.play(this.click, 1, 1, 0, 0, 1);
+        for (LanderSound s : LanderSound.values()) {
+            s.setSoundID(this.soundPool.load(this.mContext, s.resId, 1));
         }
     }
 
@@ -56,10 +70,25 @@ public class MediaManager {
             this.mediaPlayer.prepare();
 
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        this.mediaPlayer.start();
+        this.startTrack();
+    }
+
+    public void startTrack() {
+        if (OptionManager.getInstance().isSoundEnabled()) {
+            this.mediaPlayer.start();
+        }
+    }
+
+    public void playSound(LanderSound sound) {
+        if (OptionManager.getInstance().isSoundEnabled()) {
+            sound.setStreamID(this.soundPool.play(sound.soundId, 1, 1, 0, 0, 1));
+        }
+    }
+
+    public void stopSound(LanderSound sound) {
+        this.soundPool.stop(sound.streamID);
     }
 
     public void reset() {
@@ -71,4 +100,8 @@ public class MediaManager {
         return MediaManager.sInstance;
     }
 
+    public static MediaManager initialize(Context context) {
+        MediaManager.sInstance = new MediaManager(context);
+        return MediaManager.sInstance;
+    }
 }

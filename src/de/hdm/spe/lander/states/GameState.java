@@ -18,7 +18,7 @@ public abstract class GameState implements InputReceiver {
         MENU,
         LEVEL1,
         LEVEL2,
-        OPTIONS, 
+        OPTIONS,
         CREDITSLEVEL
     }
 
@@ -59,6 +59,16 @@ public abstract class GameState implements InputReceiver {
 
     public void setGameState(StateType state) {
         this.mGame.setGameState(state);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (this.getStateType() != StateType.MENU) {
+            this.getGame().setGameState(StateType.MENU);
+        }
+        else {
+            this.mGame.finish();
+        }
     }
 
 }
