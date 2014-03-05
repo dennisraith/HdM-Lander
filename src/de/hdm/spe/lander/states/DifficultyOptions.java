@@ -3,6 +3,7 @@ package de.hdm.spe.lander.states;
 import java.io.IOException;
 
 import android.content.Context;
+import android.util.Log;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.gameobjects.Square;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
@@ -11,6 +12,7 @@ import de.hdm.spe.lander.graphics.TextBuffer;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.OptionManager;
 import de.hdm.spe.lander.states.GameState.StateType;
+import de.hdm.spe.lander.statics.Difficulty;
 
 public class DifficultyOptions extends Menu {
 	
@@ -21,7 +23,6 @@ public class DifficultyOptions extends Menu {
 		this.optionManager = OptionManager.getInstance();
 	}
 
-	private String clickedOption;
 	
 	@Override
 	public void prepare(Context context, GraphicsDevice device){
@@ -38,7 +39,7 @@ public class DifficultyOptions extends Menu {
         		device.createTextBuffer(this.fontEntries, 16)
         };
         this.textEntries[0].setText("Easy");
-        this.textEntries[1].setText("Normal");
+        this.textEntries[1].setText("Medium");
         this.textEntries[2].setText("Hard");
         this.textEntries[3].setText("Zurück");
         
@@ -81,19 +82,26 @@ public class DifficultyOptions extends Menu {
 	
 	@Override
     protected void onMenuItemClicked(int i) {
-        this.optionManager.changeOptions(i);
-        this.clickedOption = this.optionManager.getOption(i);
+        Log.d("diff :",""+i);
+        Difficulty diff = null;
         switch (i) {
             case 0:
+            	diff= Difficulty.EASY;
                 break;
             case 1:
+            	diff= Difficulty.MEDIUM;
             	break;
             case 2:
+            	diff= Difficulty.HARD;
                 break;
             case 3:
-                this.setGameState(StateType.MENU);
                 break;
         }
+        if(diff!=null ){
+        	OptionManager.getInstance().setDifficulty(diff);
+        	getGame().postToast("Difficulty set to "+diff.name());
+        }
+        this.setGameState(StateType.OPTIONS);
     }
 	
 	@Override

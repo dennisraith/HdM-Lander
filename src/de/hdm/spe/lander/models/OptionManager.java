@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import de.hdm.spe.lander.statics.Difficulty;
 import de.hdm.spe.lander.statics.Static;
 
 
@@ -28,6 +29,8 @@ public class OptionManager {
     // true  = DE
     private boolean       languageState = true;
     private final Context mContext;
+    
+    private Difficulty difficulty = Difficulty.EASY;
 
     private OptionManager(Context context) {
         this.mContext = context;
@@ -59,6 +62,10 @@ public class OptionManager {
 
     public boolean getLanguage() {
         return this.languageState;
+    }
+    
+    public void setDifficulty(Difficulty diff){
+    	this.difficulty = diff;
     }
 
     public void saveOptions() {
