@@ -18,6 +18,7 @@ import de.hdm.spe.lander.states.Level1;
 import de.hdm.spe.lander.states.Level2;
 import de.hdm.spe.lander.states.Level3;
 import de.hdm.spe.lander.states.Level4;
+import de.hdm.spe.lander.states.LevelMenu;
 import de.hdm.spe.lander.states.Menu;
 import de.hdm.spe.lander.states.Options;
 
@@ -112,6 +113,8 @@ public abstract class Game implements Renderer {
                 return new Options(this);
             case CREDITSLEVEL:
                 return new CreditsLevel(this);
+            case LEVELMENU:
+            	return new LevelMenu(this);
             default:
                 return null;
         }

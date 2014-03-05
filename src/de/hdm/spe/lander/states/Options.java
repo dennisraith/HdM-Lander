@@ -72,7 +72,6 @@ public class Options extends Menu {
         switch (i) {
             case 0:
                 this.textEntries[0].setText(this.clickedOption);
-                Log.d("case 0", "msg");
                 break;
             case 1:
                 HighscoreManager.getInstance().clearHighscore();

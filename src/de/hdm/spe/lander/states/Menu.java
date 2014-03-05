@@ -133,7 +133,7 @@ public class Menu extends GameState {
 
         switch (i) {
             case 0:
-                this.setGameState(StateType.LEVEL1);
+                this.setGameState(StateType.LEVELMENU);
                 break;
             case 1:
                 ((LanderGame) this.getGame()).onHighscoreListRequested();
