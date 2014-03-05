@@ -10,40 +10,38 @@ import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.graphics.TextBuffer;
 import de.hdm.spe.lander.math.Matrix4x4;
-import de.hdm.spe.lander.models.HighscoreManager;
 import de.hdm.spe.lander.models.OptionManager;
 import de.hdm.spe.lander.states.GameState.StateType;
+import de.hdm.spe.lander.statics.Difficulty;
 
-public class LevelMenu extends Menu{
-
-	private final OptionManager optionManager;
+public class DifficultyOptions extends Menu {
 	
-	public LevelMenu(Game game) {
+	private final OptionManager optionManager;
+
+	public DifficultyOptions(Game game) {
 		super(game);
 		this.optionManager = OptionManager.getInstance();
 	}
-	
 
+	
 	@Override
 	public void prepare(Context context, GraphicsDevice device){
 		
 		this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);
-        this.textTitle.setText("Levels");
+        this.textTitle.setText("Difficulty");
         
         this.fontEntries = device.createSpriteFont(null, 70);
         this.textEntries = new TextBuffer[]{
         		device.createTextBuffer(this.fontEntries, 16),
         		device.createTextBuffer(this.fontEntries, 16),
         		device.createTextBuffer(this.fontEntries, 16),
-        		device.createTextBuffer(this.fontEntries, 16),
         		device.createTextBuffer(this.fontEntries, 16)
         };
-        this.textEntries[0].setText("Level 1");
-        this.textEntries[1].setText("Level 2");
-        this.textEntries[2].setText("Level 3");
-        this.textEntries[3].setText("Level 4");
-        this.textEntries[4].setText("Zurück");
+        this.textEntries[0].setText("Easy");
+        this.textEntries[1].setText("Medium");
+        this.textEntries[2].setText("Hard");
+        this.textEntries[3].setText("Zurück");
         
         new Matrix4x4();
         this.matTitle = Matrix4x4.createTranslation(-220, 400, 0);
@@ -51,16 +49,15 @@ public class LevelMenu extends Menu{
                 Matrix4x4.createTranslation(-150, 160, -1),
                 Matrix4x4.createTranslation(-150, 40, -1),
                 Matrix4x4.createTranslation(-150, -80, -1),
-                Matrix4x4.createTranslation(-150, -200, -1),
-                Matrix4x4.createTranslation(-150, -320, -1)
+                Matrix4x4.createTranslation(-150, -200, -1)
         };
         this.aabbEntries = new Square[] {
                 new Square(-40, 180, 250, 80),
                 new Square(-40, 60, 250, 80),
                 new Square(-40, -60, 250, 80),
-                new Square(-40, -180, 250, 80),
-                new Square(-40, -300, 250, 80)
+                new Square(-40, -180, 250, 80)
         };
+        
 //                for (Square sq : this.aabbEntries) {
 //                    try {
 //                        sq.prepare(context, device);
@@ -71,6 +68,7 @@ public class LevelMenu extends Menu{
 //                        e.printStackTrace();
 //                    }
 //                }
+        
 	}
 	
 //	@Override
@@ -81,30 +79,36 @@ public class LevelMenu extends Menu{
 //                }
 //	}
 	
+	
 	@Override
     protected void onMenuItemClicked(int i) {
+        Log.d("diff :",""+i);
+        Difficulty diff = null;
         switch (i) {
             case 0:
-                this.setGameState(StateType.LEVEL1);
+            	diff= Difficulty.EASY;
                 break;
             case 1:
-            	this.setGameState(StateType.LEVEL2);
+            	diff= Difficulty.MEDIUM;
             	break;
             case 2:
-            	this.setGameState(StateType.LEVEL3);
+            	diff= Difficulty.HARD;
                 break;
             case 3:
-            	this.setGameState(StateType.LEVEL4);
-                break;
-            case 4:
-                this.setGameState(StateType.MENU);
                 break;
         }
+        if(diff!=null ){
+        	OptionManager.getInstance().setDifficulty(diff);
+        	getGame().postToast("Difficulty set to "+diff.name());
+        }
+        this.setGameState(StateType.OPTIONS);
     }
 	
 	@Override
     public StateType getStateType() {
-        return StateType.LEVELMENU;
+        return StateType.DIFFICULTYOPTIONS;
     }
+	
+	
 	
 }
