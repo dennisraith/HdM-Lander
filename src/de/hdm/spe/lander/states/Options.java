@@ -2,8 +2,8 @@
 package de.hdm.spe.lander.states;
 
 import android.content.Context;
-import android.util.Log;
 
+import de.hdm.spe.lander.R;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.gameobjects.Square;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
@@ -11,6 +11,7 @@ import de.hdm.spe.lander.graphics.TextBuffer;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.HighscoreManager;
 import de.hdm.spe.lander.models.OptionManager;
+import de.hdm.spe.lander.statics.Lang;
 
 
 public class Options extends Menu {
@@ -29,15 +30,15 @@ public class Options extends Menu {
 
         this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);
-        this.textTitle.setText("Options");
+        this.textTitle.setText(Lang.OPTIONS_NAME);
 
         this.fontEntries = device.createSpriteFont(null, 70);
         this.textEntries = new TextBuffer[] {
-                device.createTextBuffer(this.fontEntries, 16),
-                device.createTextBuffer(this.fontEntries, 16),
-                device.createTextBuffer(this.fontEntries, 16),
-                device.createTextBuffer(this.fontEntries, 16),
-                device.createTextBuffer(this.fontEntries, 16)
+                device.createTextBuffer(this.fontEntries, 32),
+                device.createTextBuffer(this.fontEntries, 32),
+                device.createTextBuffer(this.fontEntries, 32),
+                device.createTextBuffer(this.fontEntries, 32),
+                device.createTextBuffer(this.fontEntries, 32)
         };
         this.textEntries[0].setText(this.optionManager.getOption(0));
         this.textEntries[1].setText(this.optionManager.getOption(1));
@@ -75,7 +76,7 @@ public class Options extends Menu {
                 break;
             case 1:
                 HighscoreManager.getInstance().clearHighscore();
-                this.getGame().postToast("Highscore cleared");
+                this.getGame().postToast(R.string.highscore_reset);
                 break;
             case 2:
 

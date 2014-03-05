@@ -16,6 +16,7 @@ import de.hdm.spe.lander.input.InputEvent.InputAction;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.MediaManager;
 import de.hdm.spe.lander.models.MediaManager.LanderSound;
+import de.hdm.spe.lander.statics.Lang;
 
 
 public class Menu extends GameState {
@@ -52,7 +53,7 @@ public class Menu extends GameState {
 
         this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);
-        this.textTitle.setText("Moon Landing");
+        this.textTitle.setText(Lang.GAME_NAME);
 
         this.fontEntries = device.createSpriteFont(null, 70);
         this.textEntries = new TextBuffer[] {
@@ -62,11 +63,11 @@ public class Menu extends GameState {
                 device.createTextBuffer(this.fontEntries, 16),
                 device.createTextBuffer(this.fontEntries, 16)
         };
-        this.textEntries[0].setText("Start Game");
-        this.textEntries[1].setText("Highscore");
-        this.textEntries[2].setText("Options");
+        this.textEntries[0].setText(Lang.MENU_NEWGAME);
+        this.textEntries[1].setText("Highscores");
+        this.textEntries[2].setText(Lang.OPTIONS_NAME);
         this.textEntries[3].setText("Credits");
-        this.textEntries[4].setText("Quit");
+        this.textEntries[4].setText(Lang.MENU_QUIT);
 
         Logger.log("Loading Time Text Buffers", System.currentTimeMillis() - time);
         time = System.currentTimeMillis();

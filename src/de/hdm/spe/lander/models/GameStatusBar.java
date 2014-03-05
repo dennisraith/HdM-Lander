@@ -10,6 +10,7 @@ import de.hdm.spe.lander.graphics.SpriteFont;
 import de.hdm.spe.lander.graphics.TextBuffer;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.states.Level;
+import de.hdm.spe.lander.statics.Lang;
 import de.hdm.spe.lander.statics.Static;
 
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class GameStatusBar {
     }
 
     public void updateText(String speed, String time, String fuel) {
-        this.mText.setText("Speed: " + speed + "m/s" + " Time: " + time + " sec" + " Fuel: " + fuel + " %");
+        this.mText.setText(Lang.GAME_SPEED + "" + speed + "m/s " + Lang.GAME_TIME + " " + time + "s " + Lang.GAME_FUEL + "" + fuel + " %");
     }
 
     public void update(float deltaTime) {

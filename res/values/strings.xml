@@ -2,7 +2,24 @@
 <resources>
 
     <string name="app_name">Lander</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="menu_name">Menu</string>
+    <string name="menu_newgame">New Game</string>
+    <string name="options_name">Options</string>
+    <string name="options_music">Music</string>
+    <string name="options_highscore">Reset Highscores</string>
+    <string name="options_difficulty">Difficulty</string>
+    <string name="options_language">Language</string>
+    <string name="back">Back</string>
+    <string name="quit">Quit</string>
+    <string name="state_on">ON</string>
+    <string name="state_off">OFF</string>
+    <string name="lang_de">DE</string>
+    <string name="lang_en">EN</string>
+    <string name="game_speed">Speed:</string>
+    <string name="game_time">Time:</string>
+    <string name="game_fuel">Fuel:</string>
+    <string name="game_crash">Crashed!</string>
+    <string name="game_landing">Landed!</string>
+    <string name="highscore_reset">Highscores removed!</string>
 
 </resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Lander</string>
+    <string name="menu_name">Menü</string>
+    <string name="menu_newgame">Neues Spiel</string>
+    <string name="options_name">Optionen</string>
+    <string name="options_music">Musik</string>
+    <string name="options_highscore">Highscores resetten</string>
+    <string name="options_difficulty">Schwierigkeitsgrad</string>
+    <string name="options_language">Sprache</string>
+    <string name="back">Zurück</string>
+    <string name="quit">Beenden</string>
+    <string name="state_on">AN</string>
+    <string name="state_off">AUS</string>
+    <string name="lang_de">DE</string>
+    <string name="lang_en">EN</string>
+    <string name="game_speed">Geschw.:</string>
+    <string name="game_time">Zeit:</string>
+    <string name="game_fuel">Sprit:</string>
+    <string name="game_crash">Bruchlandung!</string>
+    <string name="game_landing">Gelandet!</string>
+    <string name="highscore_reset">Highscores gelöscht!</string>
+
+</resources>

@@ -5,16 +5,20 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import de.hdm.spe.lander.statics.Lang;
 import de.hdm.spe.lander.statics.Static;
+
+import java.util.Locale;
 
 
 public class OptionManager {
 
     private static OptionManager sInstance = null;
 
-    public static OptionManager initialize(Context context) {
+    public static OptionManager initialize(Context context, LocaleChangeListener listener) {
         if (OptionManager.sInstance == null) {
             OptionManager.sInstance = new OptionManager(context);
+            OptionManager.sInstance.mListener = listener;
         }
         return OptionManager.sInstance;
     }
@@ -23,11 +27,13 @@ public class OptionManager {
         return OptionManager.sInstance;
     }
 
-    public String[]       options;
-    private boolean       musicState    = true;
+    public String[]              options;
+    private boolean              musicState    = true;
     // true  = DE
-    private boolean       languageState = true;
-    private final Context mContext;
+    private boolean              languageState = true;
+    private final Context        mContext;
+
+    private LocaleChangeListener mListener;
 
     private OptionManager(Context context) {
         this.mContext = context;
@@ -42,14 +48,14 @@ public class OptionManager {
 
         this.options = new String[5];
 
-        String musicState = this.musicState ? "ON" : "OFF";
-        String langString = this.languageState ? "DE" : "EN";
+        String musicState = this.musicState ? Lang.STATE_ON : Lang.STATE_OFF;
+        String langString = this.languageState ? Lang.LANG_DE : Lang.LANG_EN;
 
-        this.options[0] = "Music " + musicState;
-        this.options[1] = "Highscore";
-        this.options[2] = "Schwierigkeit";
-        this.options[3] = "Sprache " + langString;
-        this.options[4] = "Zurück";
+        this.options[0] = Lang.OPTIONS_MUSIC + " " + musicState;
+        this.options[1] = Lang.OPTIONS_HIGHSCORE;
+        this.options[2] = Lang.OPTIONS_DIFFICULTY;
+        this.options[3] = Lang.OPTIONS_LANG + " " + langString;
+        this.options[4] = Lang.BACK;
 
     }
 
@@ -73,21 +79,25 @@ public class OptionManager {
         switch (i) {
             case 0:
                 if (this.musicState) {
-                    this.options[0] = "Music OFF";
+                    this.options[0] = Lang.OPTIONS_MUSIC + " " + Lang.STATE_OFF;
                     this.musicState = false;
                 } else {
-                    this.options[0] = "Music ON";
+                    this.options[0] = Lang.OPTIONS_MUSIC + " " + Lang.STATE_ON;
                     this.musicState = true;
                 }
                 break;
             case 3:
+                Locale locale;
                 if (this.languageState) {
-                    this.options[3] = "Sprache EN";
+                    this.options[3] = Lang.OPTIONS_LANG + " " + Lang.LANG_EN;
                     this.languageState = false;
+                    locale = Locale.ENGLISH;
                 } else {
-                    this.options[3] = "Sprache DE";
+                    this.options[3] = Lang.OPTIONS_LANG + " " + Lang.LANG_DE;
                     this.languageState = true;
+                    locale = Locale.GERMANY;
                 }
+                this.mListener.onLocaleChanged(locale);
                 break;
         }
 
@@ -95,6 +105,11 @@ public class OptionManager {
 
     public String getOption(int i) {
         return this.options[i];
+    }
+
+    public interface LocaleChangeListener {
+
+        void onLocaleChanged(Locale locale);
     }
 
 }

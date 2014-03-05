@@ -3,6 +3,7 @@ package de.hdm.spe.lander.game;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.opengl.GLSurfaceView.Renderer;
 import android.view.View;
 import android.widget.Toast;
@@ -11,6 +12,7 @@ import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.models.InputEventManager;
 import de.hdm.spe.lander.models.MediaManager;
 import de.hdm.spe.lander.models.OptionManager;
+import de.hdm.spe.lander.models.OptionManager.LocaleChangeListener;
 import de.hdm.spe.lander.states.CreditsLevel;
 import de.hdm.spe.lander.states.GameState;
 import de.hdm.spe.lander.states.GameState.StateType;
@@ -21,14 +23,16 @@ import de.hdm.spe.lander.states.Level4;
 import de.hdm.spe.lander.states.LevelMenu;
 import de.hdm.spe.lander.states.Menu;
 import de.hdm.spe.lander.states.Options;
+import de.hdm.spe.lander.statics.Lang;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 
-public abstract class Game implements Renderer {
+public abstract class Game implements Renderer, LocaleChangeListener {
 
     private boolean                               initialized;
     private long                                  lastTime;
@@ -50,10 +54,11 @@ public abstract class Game implements Renderer {
     public Game(View view) {
         this.view = view;
         this.context = view.getContext();
-
+        Lang.prepare(this.context);
         this.mInputManager = new InputEventManager(this, view);
         MediaManager.initialize(this.context);
-        OptionManager.initialize(this.context);
+        OptionManager.initialize(this.context, this);
+
     }
 
     @Override
@@ -114,7 +119,7 @@ public abstract class Game implements Renderer {
             case CREDITSLEVEL:
                 return new CreditsLevel(this);
             case LEVELMENU:
-            	return new LevelMenu(this);
+                return new LevelMenu(this);
             default:
                 return null;
         }
@@ -126,6 +131,16 @@ public abstract class Game implements Renderer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onLocaleChanged(Locale locale) {
+        Locale.setDefault(locale);
+        Configuration conf = new Configuration(this.context.getResources().getConfiguration());
+        conf.locale = locale;
+        this.getContext().getResources().updateConfiguration(conf, this.context.getResources().getDisplayMetrics());
+        Lang.prepare(this.context);
+        this.mMenu.prepare(this.context, this.graphicsDevice);
     }
 
     public void update(float deltaSeconds) {
@@ -219,6 +234,16 @@ public abstract class Game implements Renderer {
             @Override
             public void run() {
                 Toast.makeText(Game.this.context, msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void postToast(final int resId) {
+        this.view.post(new Runnable() {
+
+            @Override
+            public void run() {
+                Toast.makeText(Game.this.context, resId, Toast.LENGTH_SHORT).show();
             }
         });
     }
