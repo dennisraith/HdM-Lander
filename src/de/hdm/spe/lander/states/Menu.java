@@ -1,12 +1,15 @@
 
 package de.hdm.spe.lander.states;
 
+import java.io.IOException;
+
 import android.content.Context;
 
 import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.game.LanderGame;
+import de.hdm.spe.lander.gameobjects.Background;
 import de.hdm.spe.lander.gameobjects.Square;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
@@ -29,10 +32,12 @@ public class Menu extends GameState {
     protected TextBuffer[] textEntries;
     protected Matrix4x4[]  matEntries;
     protected Square[]     aabbEntries;
+    
+    protected final Background mBG;
 
     public Menu(Game game) {
         super(game);
-
+        this.mBG = new Background();
     }
 
     @Override
@@ -47,7 +52,11 @@ public class Menu extends GameState {
     }
 
     @Override
-    public void prepare(Context context, GraphicsDevice device) {
+    public void prepare(Context context, GraphicsDevice device) throws IOException {
+    	
+    	mBG.setBackground("moonLanding.jpg");
+    	mBG.prepare(context, device);
+    	this.mBG.getWorld().translate(0, 0, -1).scale(86, -75, 0);
 
         long time = System.currentTimeMillis();
 
@@ -74,11 +83,11 @@ public class Menu extends GameState {
         new Matrix4x4();
         this.matTitle = Matrix4x4.createTranslation(-300, 400, 0);
         this.matEntries = new Matrix4x4[] {
-                Matrix4x4.createTranslation(-150, 160, -1),
-                Matrix4x4.createTranslation(-150, 40, -1),
-                Matrix4x4.createTranslation(-150, -80, -1),
-                Matrix4x4.createTranslation(-150, -200, -1),
-                Matrix4x4.createTranslation(-150, -320, -1)
+                Matrix4x4.createTranslation(-150, 160, 0),
+                Matrix4x4.createTranslation(-150, 40, 0),
+                Matrix4x4.createTranslation(-150, -80, 0),
+                Matrix4x4.createTranslation(-150, -200, 0),
+                Matrix4x4.createTranslation(-150, -320, 0)
 
         };
 
@@ -122,7 +131,7 @@ public class Menu extends GameState {
         //        for (Square sq : this.aabbMenu) {
         //            renderer.draw(sq);
         //        }
-
+    	renderer.draw(this.mBG);
         renderer.drawText(this.textTitle, this.matTitle);
         for (int i = 0; i < this.matEntries.length; i++) {
             renderer.drawText(this.textEntries[i], this.matEntries[i]);

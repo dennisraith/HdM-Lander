@@ -11,6 +11,8 @@ import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.OptionManager;
 import de.hdm.spe.lander.statics.Lang;
 
+import java.io.IOException;
+
 
 public class LevelMenu extends Menu {
 
@@ -19,7 +21,11 @@ public class LevelMenu extends Menu {
     }
 
     @Override
-    public void prepare(Context context, GraphicsDevice device) {
+    public void prepare(Context context, GraphicsDevice device) throws IOException {
+
+        this.mBG.setBackground("moonLanding.jpg");
+        this.mBG.prepare(context, device);
+        this.mBG.getWorld().translate(0, 0, -1).scale(86, -75, 0);
 
         this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);
@@ -43,7 +49,7 @@ public class LevelMenu extends Menu {
         this.textEntries[5].setText("Level 4");
         this.textEntries[6].setText(Lang.BACK);
 
-        this.matTitle = Matrix4x4.createTranslation(-220, 400, 0);
+        this.matTitle = Matrix4x4.createTranslation(-180, 400, 0);
         this.matEntries = new Matrix4x4[] {
                 Matrix4x4.createTranslation(-150, 300, -1),
                 Matrix4x4.createTranslation(-150, 240, -1),

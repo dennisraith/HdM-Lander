@@ -19,6 +19,8 @@ public class Background implements DrawableObject {
     private final Material  material;
     private final Matrix4x4 mWorld;
 
+    private String fileName = "bg_earth.jpg";
+    
     public Background() {
         this.material = new Material();
         this.mWorld = new Matrix4x4();
@@ -29,8 +31,12 @@ public class Background implements DrawableObject {
         InputStream in;
         in = context.getAssets().open("bg_earth.obj");
         this.mObject = Mesh.loadFromOBJ(in);
-        in = context.getAssets().open("bg_earth.jpg");
+        in = context.getAssets().open(fileName);
         this.material.setTexture(device.createTexture(in));
+    }
+    
+    public void setBackground(String name){
+    	fileName = name;
     }
 
     @Override

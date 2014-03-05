@@ -1,6 +1,8 @@
 
 package de.hdm.spe.lander.states;
 
+import java.io.IOException;
+
 import android.content.Context;
 
 import de.hdm.spe.lander.R;
@@ -26,7 +28,11 @@ public class Options extends Menu {
     private String clickedOption;
 
     @Override
-    public void prepare(Context context, GraphicsDevice device) {
+    public void prepare(Context context, GraphicsDevice device) throws IOException {
+    	
+    	mBG.setBackground("moonLanding.jpg");
+    	mBG.prepare(context, device);
+    	this.mBG.getWorld().translate(0, 0, -1).scale(86, -75, 0);
 
         this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);
@@ -44,11 +50,11 @@ public class Options extends Menu {
         new Matrix4x4();
         this.matTitle = Matrix4x4.createTranslation(-220, 400, 0);
         this.matEntries = new Matrix4x4[] {
-                Matrix4x4.createTranslation(-220, 160, -1),
-                Matrix4x4.createTranslation(-220, 40, -1),
-                Matrix4x4.createTranslation(-220, -80, -1),
-                Matrix4x4.createTranslation(-220, -200, -1),
-                Matrix4x4.createTranslation(-220, -320, -1)
+                Matrix4x4.createTranslation(-220, 160, 0),
+                Matrix4x4.createTranslation(-220, 40, 0),
+                Matrix4x4.createTranslation(-220, -80, 0),
+                Matrix4x4.createTranslation(-220, -200, 0),
+                Matrix4x4.createTranslation(-220, -320, 0)
         };
 
         this.aabbEntries = new Square[] {

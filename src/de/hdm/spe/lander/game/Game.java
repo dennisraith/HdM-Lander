@@ -142,7 +142,12 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         conf.locale = locale;
         this.getContext().getResources().updateConfiguration(conf, this.context.getResources().getDisplayMetrics());
         Lang.prepare(this.context);
-        this.mMenu.prepare(this.context, this.graphicsDevice);
+        try {
+            this.mMenu.prepare(this.context, this.graphicsDevice);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void update(float deltaSeconds) {
@@ -176,7 +181,11 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         }
         if (type == StateType.MENU) {
             this.mCurrentState = this.mMenu;
-            this.mMenu.prepare(this.context, this.graphicsDevice);
+            try {
+                this.mMenu.prepare(this.context, this.graphicsDevice);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         else if (this.mCurrentState == null || this.mCurrentState.getStateType() != type) {
             GameState state = this.getStateInstance(type);
