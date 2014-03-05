@@ -11,10 +11,14 @@ import java.io.IOException;
 
 public class Obstacles {
 
-    private final Obstacle[] obstacles;
+    private final Asteroid[] obstacles;
 
-    public Obstacles(int count, int width, int height) {
-        this.obstacles = Obstacle.getRandomObstacles(count, width, height);
+    public Obstacles(float size, int count) {
+        this.obstacles = this.newRandom(size, count);
+    }
+
+    public Obstacles(Asteroid[] data) {
+        this.obstacles = data;
 
     }
 
@@ -31,13 +35,15 @@ public class Obstacles {
     }
 
     public void update(float deltaSeconds) {
-
+        for (int i = 0; i < this.obstacles.length; i++) {
+            this.obstacles[i].update(deltaSeconds);
+        }
     }
 
     public boolean collide(Lander lander) {
 
         for (int i = 0; i < this.obstacles.length; i++) {
-            if (lander.intersects(this.obstacles[i])) {
+            if (this.obstacles[i].intersects(lander)) {
                 return true;
             }
         }
@@ -45,22 +51,11 @@ public class Obstacles {
 
     }
 
-    static class Obstacle extends Square {
-
-        public Obstacle(int x, int y, int width, int height) {
-            super(x, y, width, height);
-        }
-
-        @Override
-        public void prepare(Context context, GraphicsDevice device) throws IOException {
-            this.generateMesh();
-        }
-
-        public static Obstacle newRandom(int width, int height) {
-            Obstacle ob;
-
-            double x = Math.random() * 50;
-            double y = Math.random() * 50;
+    public Asteroid[] newRandom(float scale, int count) {
+        Asteroid[] asts = new Asteroid[count];
+        for (int i = 0; i < count; i++) {
+            float x = (float) (Math.random() * 70);
+            float y = (float) (Math.random() * 70);
 
             if (Math.random() > 0.5)
             {
@@ -70,19 +65,11 @@ public class Obstacles {
             {
                 y = -y;
             }
-
-            ob = new Obstacle((int) x, (int) y, width, height);
-
-            return ob;
+            asts[i] = Asteroid.newInstance(scale, x, y);
         }
 
-        public static Obstacle[] getRandomObstacles(int count, int width, int height) {
-            Obstacle[] obs = new Obstacle[count];
-            for (int i = 0; i < count; i++) {
-                obs[i] = Obstacle.newRandom(width, height);
-            }
-            return obs;
-        }
+        return asts;
 
     }
+
 }

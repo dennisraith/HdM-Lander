@@ -1,8 +1,7 @@
 
 package de.hdm.spe.lander.collision;
 
-import android.util.Log;
-
+import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.math.MathHelper;
 import de.hdm.spe.lander.math.Vector2;
 
@@ -50,45 +49,33 @@ public class AABB implements Shape2D {
     @Override
     public boolean intersects(Circle circle) {
         Vector2 center = circle.getCenter();
-
-        if (center.getX() >= this.getMin().getX() && center.getX() <= this.getMax().getX() && center.getY() >= this.getMin().getY()
+        if (center.getX() >= this.getMin().getX()
+                && center.getX() <= this.getMax().getX()
+                && center.getY() >= this.getMin().getY()
                 && center.getY() <= this.getMax().getY())
         {
+            Logger.log("intersection test 1", "intersection");
             return true;
         }
-
         Vector2 nearestPosition = new Vector2(
                 MathHelper.clamp(center.getX(), this.getMin().getX(), this.getMax().getX()),
                 MathHelper.clamp(center.getY(), this.getMin().getY(), this.getMax().getY()));
 
         float radius = circle.getRadius();
-        return nearestPosition.getLengthSqr() < radius * radius;
-    }
+        boolean intersects = nearestPosition.getLength() < radius * radius;
+        Logger.log("lngthsqr", nearestPosition.getLength());
+        Logger.log("radius*radius", radius);
 
-    void log(String name, float diff) {
-        Log.d(this.getClass().getName(), "intersection: " + name + " " + diff);
-    }
-
-    void log() {
-        this.log("minX", this.getMin().getX());
-        this.log("maxX", this.getMax().getX());
-        this.log("minY", this.getMin().getY());
-        this.log("maxY", this.getMax().getY());
+        if (intersects) {
+            Logger.log("Center", center);
+            Logger.log("Min", this.getMin());
+            Logger.log("Max", this.getMax());
+        }
+        return intersects;
     }
 
     @Override
     public boolean intersects(AABB box) {
-        //        this.log();
-        //        box.log();
-        float diffMaxX = box.getMax().getX() - this.getMax().getX();
-        float diffMinX = box.getMin().getX() - this.getMin().getX();
-        float diffMaxY = box.getMax().getY() - this.getMax().getY();
-        float diffMinY = box.getMin().getY() - this.getMin().getY();
-
-        //        this.log("diffmaxY", diffMaxX);
-        //        this.log("diffMinX", diffMinX);
-        //        this.log("diffMaxY", diffMaxY);
-        //        this.log("diffMinY", diffMinY);
 
         if (this.getMin().getX() >= box.getMax().getX() || this.getMax().getX() <= box.getMin().getX())
             return false;

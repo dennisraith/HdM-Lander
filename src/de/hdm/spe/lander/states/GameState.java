@@ -18,6 +18,8 @@ public abstract class GameState implements InputReceiver {
         MENU,
         LEVEL1,
         LEVEL2,
+        LEVEL3,
+        LEVEL4,
         OPTIONS,
         CREDITSLEVEL
     }

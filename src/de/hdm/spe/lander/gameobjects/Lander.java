@@ -4,6 +4,7 @@ package de.hdm.spe.lander.gameobjects;
 import android.content.Context;
 import android.graphics.RectF;
 
+import de.hdm.spe.lander.collision.AABB;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Material;
 import de.hdm.spe.lander.graphics.Mesh;
@@ -21,7 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-public class Lander extends Square implements DrawableObject {
+public class Lander extends AABB implements DrawableObject {
 
     private static float vehicleSpeedY = .6f;
 
@@ -56,8 +57,9 @@ public class Lander extends Square implements DrawableObject {
     public Lander(Difficulty gravity) {
         this.material = new Material();
         this.gravityVector = gravity.getGravityVector();
-        this.world.translate(0, 90, 0);
+        this.world.translate(0, 40, 0);
         this.mFire = new Fire();
+
     }
 
     private void onAccelerationChanged() {
@@ -98,7 +100,7 @@ public class Lander extends Square implements DrawableObject {
         this.mCurrentSpeed = velocity;
         VehicleState.GRAVITY.velocity = new Vector2();
         this.horizontalSpeed = 0;
-        this.mFire.setWorld(this.getWorld());
+        this.mFire.setWorld(this.world);
     }
 
     private void moveShip(Vector2 velocity) {
@@ -140,12 +142,18 @@ public class Lander extends Square implements DrawableObject {
         stream = context.getAssets().open(Static.sLanderMesh);
         this.mesh = Mesh.loadFromOBJ(stream);
         RectF b = this.mesh.getBounds();
-        RectF bounds = new RectF(b.left, b.top, b.right, b.bottom - 12);
+        RectF bounds = new RectF(b.left, b.top, b.right, b.bottom - 5);
         this.setBounds(bounds);
         this.getWorld().translate(0, 0, -2).scale(1.4f);
         stream = context.getAssets().open(Static.sLanderTex);
         this.material.setTexture(device.createTexture(stream));
         this.mFire.prepare(context, device);
+    }
+
+    private void setBounds(RectF bounds) {
+        this.BOTTOM_LEFT = new Vector2(bounds.left, bounds.bottom);
+        this.TOP_RIGHT = new Vector2(bounds.right, bounds.top);
+        this.moveShip(new Vector2());
     }
 
     @Override

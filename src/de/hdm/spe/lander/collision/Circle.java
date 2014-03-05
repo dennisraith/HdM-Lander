@@ -47,16 +47,16 @@ public class Circle implements Shape2D {
         Vector2 min = box.getMin();
         Vector2 max = box.getMax();
 
-        if (this.center.getX() >= min.getX() && this.center.getX() <= max.getX())
-            return true;
-        if (this.center.getY() >= min.getY() && this.center.getY() <= max.getY())
-            return true;
+        //        if (this.center.getX() >= min.getX() && this.center.getX() <= max.getX() && this.center.getY() >= min.getY() && this.center.getY() <= max.getY())
+        //        {
+        //            return true;
+        //        }
 
         Vector2 nearestPosition = new Vector2(
                 MathHelper.clamp(this.center.getX(), min.getX(), max.getX()),
                 MathHelper.clamp(this.center.getY(), min.getY(), max.getY()));
-
-        return nearestPosition.getLengthSqr() < this.radius * this.radius;
+        Vector2 distance = nearestPosition.subtract(this.getCenter());
+        return distance.getLength() < this.radius;
     }
 
     @Override

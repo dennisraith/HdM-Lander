@@ -31,4 +31,9 @@ public class CreditsLevel extends Level {
         return StateType.CREDITSLEVEL;
     }
 
+    @Override
+    protected boolean prepareObstacles() {
+        return false;
+    }
+
 }

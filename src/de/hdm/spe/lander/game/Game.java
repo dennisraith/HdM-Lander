@@ -14,7 +14,9 @@ import de.hdm.spe.lander.models.OptionManager;
 import de.hdm.spe.lander.states.CreditsLevel;
 import de.hdm.spe.lander.states.GameState;
 import de.hdm.spe.lander.states.GameState.StateType;
-import de.hdm.spe.lander.states.Level1;
+import de.hdm.spe.lander.states.Level2;
+import de.hdm.spe.lander.states.Level3;
+import de.hdm.spe.lander.states.Level4;
 import de.hdm.spe.lander.states.Menu;
 import de.hdm.spe.lander.states.Options;
 
@@ -38,7 +40,6 @@ public abstract class Game implements Renderer {
     protected int                                 screenWidth  = 1;
     protected int                                 screenHeight = 1;
     private boolean                               isPaused     = false;
-    private final MediaManager                    mediaManager;
     private final Menu                            mMenu        = new Menu(this);
     protected GameState                           mCurrentState;
 
@@ -49,7 +50,7 @@ public abstract class Game implements Renderer {
         this.context = view.getContext();
 
         this.mInputManager = new InputEventManager(this, view);
-        this.mediaManager = MediaManager.initialize(this.context);
+        MediaManager.initialize(this.context);
         OptionManager.initialize(this.context);
     }
 
@@ -97,9 +98,13 @@ public abstract class Game implements Renderer {
     private GameState getStateInstance(StateType type) {
         switch (type) {
             case LEVEL1:
-                return new Level1(this);
+                return new Level4(this);
             case LEVEL2:
-                return new Level1(this);
+                return new Level2(this);
+            case LEVEL3:
+                return new Level3(this);
+            case LEVEL4:
+                return new Level4(this);
             case MENU:
                 return new Menu(this);
             case OPTIONS:

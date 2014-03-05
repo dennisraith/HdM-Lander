@@ -27,8 +27,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class Square extends AABB implements DrawableObject, Shape2D {
 
-    private static Square         sMenuSquare  = null;
-
     private int                   vertexSize   = 0;
     private final int[]           drawOrder    = {0, 1, 2, 0, 2, 3};
     private VertexElement         vElementPos;
@@ -41,7 +39,7 @@ public class Square extends AABB implements DrawableObject, Shape2D {
     Vector2                       BOTTOM_RIGHT = new Vector2(1f, -1f);
     Vector2                       TOP_LEFT     = new Vector2(-1f, 1f);
 
-    private float                 Z            = 0;
+    private final float           Z            = 0;
 
     private Vector2               mPosition;
     private RectF                 mBounds;
@@ -90,10 +88,6 @@ public class Square extends AABB implements DrawableObject, Shape2D {
         InputStream stream = context.getAssets().open("road.png");
         this.material.setTexture(device.createTexture(stream));
 
-    }
-
-    public void setZaxis(float z) {
-        this.Z = z;
     }
 
     public RectF getBounds() {

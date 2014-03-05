@@ -3,12 +3,14 @@ package de.hdm.spe.lander.gameobjects;
 
 import android.content.Context;
 
+import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.collision.Circle;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Material;
 import de.hdm.spe.lander.graphics.Mesh;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.math.Vector2;
+import de.hdm.spe.lander.math.Vector4;
 import de.hdm.spe.lander.models.DrawableObject;
 import de.hdm.spe.lander.statics.Static;
 
@@ -19,11 +21,19 @@ import java.io.InputStream;
 public class Asteroid extends Circle implements DrawableObject {
 
     private Mesh            mesh;
-    private final Matrix4x4 world    = new Matrix4x4();
-    private final Material  material = new Material();  ;
+    private final Matrix4x4 world       = new Matrix4x4();
+    private final Material  material    = new Material();
+    private float           scaleFactor = 5;
 
     public Asteroid() {
-        this.world.translate(0, 0, -5).scale(15);
+    }
+
+    public static Asteroid newInstance(float scale, float x, float y) {
+        float rotation = (float) (360 * Math.random());
+        Asteroid ast = new Asteroid();
+        ast.scaleFactor = scale;
+        ast.world.translate(x, y, -20).rotateY(rotation).scale(ast.scaleFactor);
+        return ast;
     }
 
     @Override
@@ -33,8 +43,25 @@ public class Asteroid extends Circle implements DrawableObject {
         this.mesh = Mesh.loadFromOBJ(in);
         in = context.getAssets().open(Static.sAsteroidTex);
         this.material.setTexture(device.createTexture(in));
-        this.setCenter(new Vector2(this.mesh.getBounds().centerX(), this.mesh.getBounds().centerY()));
-        this.setRadius(this.mesh.getBounds().width() / 2);
+        Vector4 center = this.world.multiply(new Vector4(this.mesh.getBounds().centerX(), this.mesh.getBounds().centerY(), 0, 1));
+        this.setPosition(new Vector2(center.getX(), center.getY()));
+        this.setRadius(Math.abs(this.scaleFactor * (this.mesh.getBounds().width() / 2)));
+        Logger.log("Asteroid pos", this.getPosition());
+    }
+
+    private void updatePosition() {
+        Vector4 pos = this.world.multiply(new Vector4(0, 0, 0, 1));
+        this.setPosition(new Vector2(pos.getX(), pos.getY()));
+    }
+
+    public void translate(float x, float y) {
+        this.world.translate(x, y, 0);
+        this.updatePosition();
+    }
+
+    public void update(float deltaSeconds) {
+        //        world.translate(-deltaSeconds, 0, 0);
+        this.world.rotateY(deltaSeconds * 5);
     }
 
     @Override
