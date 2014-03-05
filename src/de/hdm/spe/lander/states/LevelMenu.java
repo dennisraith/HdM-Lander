@@ -1,10 +1,13 @@
 package de.hdm.spe.lander.states;
 
+import java.io.IOException;
+
 import android.content.Context;
 import android.util.Log;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.gameobjects.Square;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
+import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.graphics.TextBuffer;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.HighscoreManager;
@@ -53,13 +56,31 @@ public class LevelMenu extends Menu{
                 Matrix4x4.createTranslation(-150, -320, -1)
         };
         this.aabbEntries = new Square[] {
-                new Square(0, 180, 250, 80),
-                new Square(0, 60, 250, 80),
-                new Square(0, -60, 250, 80),
-                new Square(0, -180, 250, 80),
-                new Square(0, -300, 250, 80)
+                new Square(-40, 180, 250, 80),
+                new Square(-40, 60, 250, 80),
+                new Square(-40, -60, 250, 80),
+                new Square(-40, -180, 250, 80),
+                new Square(-40, -300, 250, 80)
         };
+//                for (Square sq : this.aabbEntries) {
+//                    try {
+//                        sq.prepare(context, device);
+//                        sq.getWorld().translate(0, 0, -2);
+//                        sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
+//        
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
 	}
+	
+//	@Override
+//	public void draw(float deltaSeconds, Renderer renderer){
+//		super.draw(deltaSeconds, renderer);
+//                for (Square sq : this.aabbEntries) {
+//                    renderer.draw(sq);
+//                }
+//	}
 	
 	@Override
     protected void onMenuItemClicked(int i) {
