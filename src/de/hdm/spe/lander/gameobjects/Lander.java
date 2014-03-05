@@ -13,6 +13,7 @@ import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.math.Vector2;
 import de.hdm.spe.lander.math.Vector4;
 import de.hdm.spe.lander.models.DrawableObject;
+import de.hdm.spe.lander.models.Fuel;
 import de.hdm.spe.lander.models.MediaManager;
 import de.hdm.spe.lander.models.MediaManager.LanderSound;
 import de.hdm.spe.lander.statics.Difficulty;
@@ -38,27 +39,31 @@ public class Lander extends AABB implements DrawableObject {
 
     }
 
-    private Mesh            mesh;
-    private final Material  material;
-    private final Matrix4x4 world           = new Matrix4x4();
-    private VehicleState    state           = VehicleState.GRAVITY;
+    private Mesh             mesh;
+    private final Material   material;
+    private final Matrix4x4  world           = new Matrix4x4();
+    private VehicleState     state           = VehicleState.GRAVITY;
 
-    private float           horizontalSpeed = 0;
-    private float           vehAccTime      = 0;
-    private float           gravAccTime     = 0;
+    private float            horizontalSpeed = 0;
+    private float            vehAccTime      = 0;
+    private float            gravAccTime     = 0;
 
-    private Vector2         gravityVector   = new Vector2();
-    private Vector2         mCurrentSpeed   = new Vector2();
+    private Vector2          gravityVector   = new Vector2();
+    private Vector2          mCurrentSpeed   = new Vector2();
 
-    private boolean         isAccelerating;
+    private boolean          isAccelerating;
 
-    private final Fire      mFire;
+    private final Fire       mFire;
+    private final Fuel       mFuel;
+    private final Difficulty difficulty;
 
-    public Lander(Difficulty gravity) {
+    public Lander(Difficulty difficulty) {
+        this.difficulty = difficulty;
         this.material = new Material();
-        this.gravityVector = gravity.getGravityVector();
+        this.gravityVector = difficulty.getGravityVector();
         this.world.translate(0, 40, 0);
         this.mFire = new Fire();
+        this.mFuel = new Fuel(difficulty);
 
     }
 
@@ -78,7 +83,7 @@ public class Lander extends AABB implements DrawableObject {
     }
 
     public void setAccelerating(boolean accelerating) {
-        if (this.isAccelerating != accelerating) {
+        if (this.isAccelerating != accelerating && !this.mFuel.isEmpty()) {
             this.isAccelerating = accelerating;
             this.onAccelerationChanged();
         }
@@ -91,6 +96,9 @@ public class Lander extends AABB implements DrawableObject {
     public void updatePosition(float deltaTime) {
         this.vehAccTime += deltaTime;
         this.gravAccTime += deltaTime;
+        if (this.isAccelerating) {
+            this.mFuel.onAccelerating(deltaTime);
+        }
 
         Vector2 shipspeed = this.accelerate(this.state.velocity, this.vehAccTime);
         Vector2 gravity = this.accelerate(this.gravityVector, this.gravAccTime);
@@ -101,6 +109,11 @@ public class Lander extends AABB implements DrawableObject {
         VehicleState.GRAVITY.velocity = new Vector2();
         this.horizontalSpeed = 0;
         this.mFire.setWorld(this.world);
+
+        if (this.mFuel.isEmpty()) {
+            this.isAccelerating = false;
+            this.onAccelerationChanged();
+        }
     }
 
     private void moveShip(Vector2 velocity) {
@@ -168,6 +181,14 @@ public class Lander extends AABB implements DrawableObject {
 
     public Vector2 getCurrentSpeed() {
         return this.mCurrentSpeed;
+    }
+
+    public Difficulty getDifficulty() {
+        return this.difficulty;
+    }
+
+    public Fuel getFuel() {
+        return this.mFuel;
     }
 
 }
