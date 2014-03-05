@@ -22,4 +22,9 @@
     <string name="game_landing">Landed!</string>
     <string name="highscore_reset">Highscores removed!</string>
 
+    <string name="diff_easy">Easy</string>
+    <string name="diff_medium">Medium</string>
+    <string name="diff_hard">Hard</string>
+    <string name="diff_set">Difficulty set to</string>
+    <string name="diff_curr">Difficulty:</string>
 </resources>

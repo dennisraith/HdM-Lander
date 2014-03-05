@@ -138,7 +138,6 @@ public abstract class Game implements Renderer, LocaleChangeListener {
 
     @Override
     public void onLocaleChanged(Locale locale) {
-        Locale.setDefault(locale);
         Configuration conf = new Configuration(this.context.getResources().getConfiguration());
         conf.locale = locale;
         this.getContext().getResources().updateConfiguration(conf, this.context.getResources().getDisplayMetrics());
@@ -177,6 +176,7 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         }
         if (type == StateType.MENU) {
             this.mCurrentState = this.mMenu;
+            this.mMenu.prepare(this.context, this.graphicsDevice);
         }
         else if (this.mCurrentState == null || this.mCurrentState.getStateType() != type) {
             GameState state = this.getStateInstance(type);

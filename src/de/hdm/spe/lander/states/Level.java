@@ -21,7 +21,7 @@ import de.hdm.spe.lander.models.HighscoreManager;
 import de.hdm.spe.lander.models.LevelHelper;
 import de.hdm.spe.lander.models.MediaManager;
 import de.hdm.spe.lander.models.MediaManager.LanderSound;
-import de.hdm.spe.lander.statics.Difficulty;
+import de.hdm.spe.lander.models.OptionManager;
 import de.hdm.spe.lander.statics.Static;
 
 import java.io.IOException;
@@ -43,7 +43,7 @@ public abstract class Level extends GameState {
         this.mBG = new Background();
         this.mBG.getWorld().translate(0, 0, -20).scale(13.5f, -13f, 0);
 
-        this.mLander = new Lander(Difficulty.EASY);
+        this.mLander = new Lander(OptionManager.getInstance().getDifficulty());
         this.mHelper = new LevelHelper(this);
 
         this.mStatusBar = new GameStatusBar(this);

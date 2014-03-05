@@ -40,11 +40,6 @@ public class Options extends Menu {
                 device.createTextBuffer(this.fontEntries, 32),
                 device.createTextBuffer(this.fontEntries, 32)
         };
-        this.textEntries[0].setText(this.optionManager.getOption(0));
-        this.textEntries[1].setText(this.optionManager.getOption(1));
-        this.textEntries[2].setText(this.optionManager.getOption(2));
-        this.textEntries[3].setText(this.optionManager.getOption(3));
-        this.textEntries[4].setText(this.optionManager.getOption(4));
 
         new Matrix4x4();
         this.matTitle = Matrix4x4.createTranslation(-220, 400, 0);
@@ -67,6 +62,15 @@ public class Options extends Menu {
     }
 
     @Override
+    public void update(float deltaSeconds) {
+        this.textEntries[0].setText(this.optionManager.getOption(0));
+        this.textEntries[1].setText(this.optionManager.getOption(1));
+        this.textEntries[2].setText(this.optionManager.getOption(2));
+        this.textEntries[3].setText(this.optionManager.getOption(3));
+        this.textEntries[4].setText(this.optionManager.getOption(4));
+    }
+
+    @Override
     protected void onMenuItemClicked(int i) {
         this.optionManager.changeOptions(i);
         this.clickedOption = this.optionManager.getOption(i);
@@ -79,7 +83,7 @@ public class Options extends Menu {
                 this.getGame().postToast(R.string.highscore_reset);
                 break;
             case 2:
-            	this.setGameState(StateType.DIFFICULTYOPTIONS);
+                this.setGameState(StateType.DIFFICULTYOPTIONS);
                 break;
             case 3:
                 this.textEntries[3].setText(this.clickedOption);
