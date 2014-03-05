@@ -22,7 +22,8 @@ public abstract class GameState implements InputReceiver {
         LEVEL4,
         OPTIONS,
         CREDITSLEVEL, 
-        LEVELMENU
+        LEVELMENU, 
+        DIFFICULTYOPTIONS
     }
 
     private final Game mGame;

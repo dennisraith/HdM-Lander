@@ -12,6 +12,7 @@ import de.hdm.spe.lander.models.InputEventManager;
 import de.hdm.spe.lander.models.MediaManager;
 import de.hdm.spe.lander.models.OptionManager;
 import de.hdm.spe.lander.states.CreditsLevel;
+import de.hdm.spe.lander.states.DifficultyOptions;
 import de.hdm.spe.lander.states.GameState;
 import de.hdm.spe.lander.states.GameState.StateType;
 import de.hdm.spe.lander.states.Level2;
@@ -114,6 +115,8 @@ public abstract class Game implements Renderer {
                 return new CreditsLevel(this);
             case LEVELMENU:
             	return new LevelMenu(this);
+            case DIFFICULTYOPTIONS:
+            	return new DifficultyOptions(this);
             default:
                 return null;
         }

@@ -78,7 +78,7 @@ public class Options extends Menu {
                 this.getGame().postToast("Highscore cleared");
                 break;
             case 2:
-
+            	this.setGameState(StateType.DIFFICULTYOPTIONS);
                 break;
             case 3:
                 this.textEntries[3].setText(this.clickedOption);
