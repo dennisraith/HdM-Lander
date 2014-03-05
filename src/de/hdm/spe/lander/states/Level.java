@@ -39,13 +39,14 @@ public abstract class Level extends GameState {
 
     public Level(Game game) {
         super(game);
-
-        this.mStatusBar = new GameStatusBar(this);
-        this.mBG = new Background();
         this.mPlatform = new Platform();
+        this.mBG = new Background();
+        this.mBG.getWorld().translate(0, 0, -20).scale(13.5f, -13f, 0);
+
         this.mLander = new Lander(Difficulty.EASY);
         this.mHelper = new LevelHelper(this);
-        this.mBG.getWorld().translate(0, 0, -20).scale(13.5f, -13f, 0);
+
+        this.mStatusBar = new GameStatusBar(this);
 
     }
 
@@ -133,7 +134,6 @@ public abstract class Level extends GameState {
         this.getGame().postToast("Landed!");
         float score = Highscore.calculateHighscore(this.mStatusBar.getElapsedTime(), this.mLander.getCurrentSpeed());
         if (HighscoreManager.getInstance().checkHighscore(score)) {
-            Logger.log("HighscoreCheck", "Highscore! " + score);
             ((LanderGame) this.getGame()).onHighscoreDialogRequested(score);
         }
     };
@@ -157,7 +157,12 @@ public abstract class Level extends GameState {
 
     @Override
     public void onScreenTouched(Point point, InputAction action) {
-        this.mLander.setAccelerating(action == InputAction.DOWN);
+        if (action == InputAction.UP) {
+            this.mLander.setAccelerating(false);
+        }
+        else {
+            this.mLander.setAccelerating(true);
+        }
 
     }
 

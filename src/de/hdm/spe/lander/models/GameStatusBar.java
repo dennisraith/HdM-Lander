@@ -3,6 +3,7 @@ package de.hdm.spe.lander.models;
 
 import android.content.Context;
 
+import de.hdm.spe.lander.gameobjects.Lander;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.graphics.SpriteFont;
@@ -20,6 +21,8 @@ public class GameStatusBar {
     private final GameTimer   mTimer;
     private final Level       mLevel;
     TextBuffer                mText;
+    private final Lander      mLander;
+    private final float       fuelMax;
 
     public GameStatusBar(Level level) {
         this.mTimer = new GameTimer();
@@ -28,27 +31,30 @@ public class GameStatusBar {
         this.mLevel = level;
         Static.numberFormat.setMaximumFractionDigits(1);
         Static.numberFormat.setMinimumFractionDigits(1);
+        this.mLander = this.mLevel.getLander();
+        this.fuelMax = this.mLander.getDifficulty().getFuelCapacity();
     }
 
     public void prepare(Context context, GraphicsDevice device) throws IOException {
         SpriteFont font = device.createSpriteFont(null, 64);
-        this.mText = device.createTextBuffer(font, 32);
+        this.mText = device.createTextBuffer(font, 48);
     }
 
     public void draw(float deltaTime, Renderer renderer) {
         renderer.drawText(this.mText, this.mTextWorld);
     }
 
-    public void updateText(String speed, String time) {
-        this.mText.setText("Speed: " + speed + "m/s" + " Time: " + time + " sec");
+    public void updateText(String speed, String time, String fuel) {
+        this.mText.setText("Speed: " + speed + "m/s" + " Time: " + time + " sec" + " Fuel: " + fuel + " %");
     }
 
     public void update(float deltaTime) {
         this.mTimer.update(deltaTime);
 
-        String speed = Static.numberFormat.format(this.mLevel.getLander().getCurrentSpeed().getLength());
+        String speed = Static.numberFormat.format(this.mLander.getCurrentSpeed().getLength());
         String time = Static.numberFormat.format(this.mTimer.getTime());
-        this.updateText(speed, time);
+        String fuel = Static.numberFormat.format((this.mLander.getFuel().getCurrentAmount() / this.fuelMax) * 100);
+        this.updateText(speed, time, fuel);
     }
 
     public void onPause() {

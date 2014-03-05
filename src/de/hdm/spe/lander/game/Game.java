@@ -15,6 +15,7 @@ import de.hdm.spe.lander.states.CreditsLevel;
 import de.hdm.spe.lander.states.DifficultyOptions;
 import de.hdm.spe.lander.states.GameState;
 import de.hdm.spe.lander.states.GameState.StateType;
+import de.hdm.spe.lander.states.Level1;
 import de.hdm.spe.lander.states.Level2;
 import de.hdm.spe.lander.states.Level3;
 import de.hdm.spe.lander.states.Level4;
@@ -100,7 +101,7 @@ public abstract class Game implements Renderer {
     private GameState getStateInstance(StateType type) {
         switch (type) {
             case LEVEL1:
-                return new Level4(this);
+                return new Level1(this);
             case LEVEL2:
                 return new Level2(this);
             case LEVEL3:
