@@ -78,6 +78,7 @@ public class MediaManager {
     public void startTrack() {
         if (OptionManager.getInstance().isSoundEnabled()) {
             this.mediaPlayer.start();
+            this.mediaPlayer.setLooping(true);
         }
     }
 

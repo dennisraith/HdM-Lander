@@ -88,9 +88,11 @@ public class OptionManager {
                 if (this.musicState) {
                     this.options[0] = Lang.OPTIONS_MUSIC + " " + Lang.STATE_OFF;
                     this.musicState = false;
+                    	MediaManager.getInstance().reset();
                 } else {
                     this.options[0] = Lang.OPTIONS_MUSIC + " " + Lang.STATE_ON;
                     this.musicState = true;
+//                    	MediaManager.getInstance().loadTrack("space-menu.mp3");
                 }
                 break;
             case 3:

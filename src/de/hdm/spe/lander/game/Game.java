@@ -178,7 +178,7 @@ public abstract class Game implements Renderer, LocaleChangeListener {
 
     public void setGameState(GameState.StateType type) {
         if (this.mCurrentState != null) {
-            this.mCurrentState.shutdown();
+            this.mCurrentState.shutdown(type);
         }
         if (type == StateType.MENU) {
             this.mCurrentState = this.mMenu;
@@ -257,7 +257,7 @@ public abstract class Game implements Renderer, LocaleChangeListener {
     }
 
     public void finish() {
-        this.mCurrentState.shutdown();
+        this.mCurrentState.shutdown(null);
         this.view.post(new Runnable() {
 
             @Override

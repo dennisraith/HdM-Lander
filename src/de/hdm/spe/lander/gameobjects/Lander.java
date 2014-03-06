@@ -72,6 +72,7 @@ public class Lander extends AABB implements DrawableObject {
             this.state = VehicleState.ACCELERATING;
             this.vehAccTime = 0;
             MediaManager.getInstance().playSound(LanderSound.RocketBurst);
+            
         }
         else {
             this.state = VehicleState.GRAVITY;

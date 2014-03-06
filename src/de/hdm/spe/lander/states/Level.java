@@ -75,6 +75,8 @@ public abstract class Level extends GameState {
                     Static.CAM_FAR);
         }
         this.getCamera().setProjection(projection);
+        
+        MediaManager.getInstance().loadTrack("space-level.mp3");
     }
 
     @Override
@@ -150,10 +152,7 @@ public abstract class Level extends GameState {
         super.resume();
     }
 
-    @Override
-    public void shutdown() {
 
-    }
 
     @Override
     public void onScreenTouched(Point point, InputAction action) {

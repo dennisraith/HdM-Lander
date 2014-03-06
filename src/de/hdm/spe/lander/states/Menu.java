@@ -121,10 +121,6 @@ public class Menu extends GameState {
 
     }
 
-    @Override
-    public void shutdown() {
-        MediaManager.getInstance().reset();
-    }
 
     @Override
     public void draw(float deltaSeconds, Renderer renderer) {
@@ -172,6 +168,7 @@ public class Menu extends GameState {
             }
         }
     }
+    
 
     @Override
     public void onKeyboardKeyPressed(int event) {

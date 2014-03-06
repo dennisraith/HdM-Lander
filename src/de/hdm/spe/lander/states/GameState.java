@@ -2,12 +2,14 @@
 package de.hdm.spe.lander.states;
 
 import android.content.Context;
+import android.util.Log;
 
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.graphics.Camera;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.models.InputEventManager.InputReceiver;
+import de.hdm.spe.lander.models.MediaManager;
 
 import java.io.IOException;
 
@@ -45,7 +47,18 @@ public abstract class GameState implements InputReceiver {
 
     public abstract void draw(float deltaSeconds, Renderer renderer);
 
-    public abstract void shutdown();
+    public final void shutdown(StateType type){
+    	Log.d("LEVEL", "" + type);
+    	if((type == null) || (type == StateType.MENU)){
+    		Log.d("LEVEL", "changed");
+    		cleanUp();
+    	}
+    }
+    
+    protected void cleanUp(){
+    	MediaManager.getInstance().reset();
+    	
+    }
 
     public void pause() {
         this.mGame.pause();
