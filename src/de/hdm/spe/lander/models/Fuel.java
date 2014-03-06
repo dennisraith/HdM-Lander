@@ -8,6 +8,7 @@ public class Fuel {
 
     private float      mFuel;
     private Difficulty mDiff;
+    private boolean    infinite = false;
 
     public Fuel(int capacity) {
         this.mFuel = capacity;
@@ -19,11 +20,17 @@ public class Fuel {
     }
 
     public void onAccelerating(float deltatime) {
-        this.mFuel = this.mFuel - deltatime;
+        if (!this.infinite) {
+            this.mFuel = this.mFuel - deltatime;
+        }
     }
 
     public boolean isEmpty() {
         return this.mFuel <= 0;
+    }
+
+    public void setInfinite(boolean infinite) {
+        this.infinite = infinite;
     }
 
     public float getPercentage() {

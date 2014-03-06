@@ -223,8 +223,14 @@ public abstract class Game implements Renderer, LocaleChangeListener {
 
     public void resume() {
         this.isPaused = false;
+        if (this.mCurrentState != null) {
+            try {
+                this.mCurrentState.prepare(this.context, this.graphicsDevice);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
-
 
     public boolean isInitialized() {
         return this.initialized;
