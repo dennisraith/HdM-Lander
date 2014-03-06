@@ -30,6 +30,13 @@ public class Lang {
     public static String GAME_FUEL;
     public static String GAME_CRASH;
     public static String GAME_LANDING;
+    public static String GAME_OOBOUNDS;
+
+    public static String DIFF_EASY;
+    public static String DIFF_MEDIUM;
+    public static String DIFF_HARD;
+    public static String DIFF_SET;
+    public static String CURR_DIFF;
 
     public static void prepare(Context context) {
         Lang.MENU = context.getString(R.string.menu_name);
@@ -50,6 +57,14 @@ public class Lang {
         Lang.GAME_FUEL = context.getString(R.string.game_fuel);
         Lang.GAME_CRASH = context.getString(R.string.game_crash);
         Lang.GAME_LANDING = context.getString(R.string.game_landing);
+        Lang.GAME_OOBOUNDS = context.getString(R.string.game_oobounds);
+
+        Lang.DIFF_EASY = context.getString(R.string.diff_easy);
+        Lang.DIFF_MEDIUM = context.getString(R.string.diff_medium);
+        Lang.DIFF_HARD = context.getString(R.string.diff_hard);
+        Lang.DIFF_SET = context.getString(R.string.diff_set);
+        Lang.CURR_DIFF = context.getString(R.string.diff_curr);
+
     }
 
 }

@@ -1,8 +1,6 @@
 
 package de.hdm.spe.lander.states;
 
-import java.io.IOException;
-
 import android.content.Context;
 
 import de.hdm.spe.lander.Logger;
@@ -20,24 +18,28 @@ import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.MediaManager;
 import de.hdm.spe.lander.models.MediaManager.LanderSound;
 import de.hdm.spe.lander.statics.Lang;
+import de.hdm.spe.lander.statics.Static;
+
+import java.io.IOException;
 
 
 public class Menu extends GameState {
 
-    protected SpriteFont   fontTitle;
-    protected TextBuffer   textTitle;
-    protected Matrix4x4    matTitle;
+    private static final float sBGscaleX = 86;
+    private static final float sBGscaleY = -75;
 
-    protected SpriteFont   fontEntries;
-    protected TextBuffer[] textEntries;
-    protected Matrix4x4[]  matEntries;
-    protected Square[]     aabbEntries;
-    
-    protected final Background mBG;
+    protected SpriteFont       fontTitle;
+    protected TextBuffer       textTitle;
+    protected Matrix4x4        matTitle;
+
+    protected SpriteFont       fontEntries;
+    protected TextBuffer[]     textEntries;
+    protected Matrix4x4[]      matEntries;
+    protected Square[]         aabbEntries;
 
     public Menu(Game game) {
         super(game);
-        this.mBG = new Background();
+        this.mBackground = new Background(Static.sMenuBgImage);
     }
 
     @Override
@@ -51,13 +53,14 @@ public class Menu extends GameState {
         this.getCamera().setProjection(projection);
     }
 
+    protected void prepareBackground(Context context, GraphicsDevice device) throws IOException {
+        this.mBackground.prepare(context, device);
+        this.mBackground.autoScale(this.getGame().getScreenWidth(), this.getGame().getScreenHeight(), Menu.sBGscaleX, Menu.sBGscaleY);
+    }
+
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
-    	
-    	mBG.setBackground("moonLanding.jpg");
-    	mBG.prepare(context, device);
-    	this.mBG.getWorld().translate(0, 0, -1).scale(86, -75, 0);
-
+        this.prepareBackground(context, device);
         long time = System.currentTimeMillis();
 
         this.fontTitle = device.createSpriteFont(null, 96);
@@ -114,6 +117,7 @@ public class Menu extends GameState {
         time = System.currentTimeMillis();
         MediaManager.getInstance().loadTrack("space-menu.mp3");
         Logger.log("Loading Time Sounds", System.currentTimeMillis() - time);
+        this.setPrepared(true);
     }
 
     @Override
@@ -127,7 +131,7 @@ public class Menu extends GameState {
         //        for (Square sq : this.aabbMenu) {
         //            renderer.draw(sq);
         //        }
-    	renderer.draw(this.mBG);
+        renderer.draw(this.mBackground);
         renderer.drawText(this.textTitle, this.matTitle);
         for (int i = 0; i < this.matEntries.length; i++) {
             renderer.drawText(this.textEntries[i], this.matEntries[i]);

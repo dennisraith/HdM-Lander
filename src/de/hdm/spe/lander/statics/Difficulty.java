@@ -34,4 +34,17 @@ public enum Difficulty {
     public Vector2 getGravityVector() {
         return new Vector2(this.horizontalSpeed, this.verticalSpeed);
     }
+
+    public String getLocaleString() {
+        switch (this) {
+            case EASY:
+                return Lang.DIFF_EASY;
+            case HARD:
+                return Lang.DIFF_HARD;
+            case MEDIUM:
+                return Lang.DIFF_MEDIUM;
+            default:
+                return null;
+        }
+    }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import de.hdm.spe.lander.game.Game;
+import de.hdm.spe.lander.gameobjects.Background;
 import de.hdm.spe.lander.graphics.Camera;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
@@ -23,13 +24,15 @@ public abstract class GameState implements InputReceiver {
         LEVEL3,
         LEVEL4,
         OPTIONS,
-        CREDITSLEVEL, 
-        LEVELMENU, 
+        CREDITSLEVEL,
+        LEVELMENU,
         DIFFICULTYOPTIONS
     }
 
-    private final Game mGame;
-    protected Camera   mCamera = new Camera();
+    private final Game   mGame;
+    protected Camera     mCamera     = new Camera();
+    private boolean      mIsPrepared = false;
+    protected Background mBackground;
 
     public GameState(Game game) {
         this.mGame = game;
@@ -59,6 +62,15 @@ public abstract class GameState implements InputReceiver {
     	MediaManager.getInstance().reset();
     	
     }
+    public void setPrepared(boolean initialized) {
+        this.mIsPrepared = initialized;
+    }
+
+    public boolean isPrepared() {
+        return this.mIsPrepared;
+    }
+
+
 
     public void pause() {
         this.mGame.pause();

@@ -9,9 +9,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import de.hdm.spe.lander.graphics.GraphicsDevice;
+import de.hdm.spe.lander.models.HighscoreManager;
 import de.hdm.spe.lander.models.InputEventManager;
 import de.hdm.spe.lander.models.MediaManager;
 import de.hdm.spe.lander.models.OptionManager;
+import de.hdm.spe.lander.models.OptionManager.Language;
 import de.hdm.spe.lander.models.OptionManager.LocaleChangeListener;
 import de.hdm.spe.lander.states.CreditsLevel;
 import de.hdm.spe.lander.states.DifficultyOptions;
@@ -27,7 +29,6 @@ import de.hdm.spe.lander.states.Options;
 import de.hdm.spe.lander.statics.Lang;
 
 import java.io.IOException;
-import java.util.Locale;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -47,7 +48,10 @@ public abstract class Game implements Renderer, LocaleChangeListener {
     protected int                                 screenWidth  = 1;
     protected int                                 screenHeight = 1;
     private boolean                               isPaused     = false;
-    private final Menu                            mMenu        = new Menu(this);
+    private Menu                                  mMenu;
+    private Options                               mOptions;
+    private LevelMenu                             mLevelMenu;
+    private DifficultyOptions                     mDiffOptions;
     protected GameState                           mCurrentState;
 
     public abstract void initialize();
@@ -55,10 +59,15 @@ public abstract class Game implements Renderer, LocaleChangeListener {
     public Game(View view) {
         this.view = view;
         this.context = view.getContext();
-        Lang.prepare(this.context);
+        this.screenHeight = this.context.getResources().getDisplayMetrics().heightPixels;
+        this.screenWidth = this.context.getResources().getDisplayMetrics().widthPixels;
+
+        this.mMenu = new Menu(this);
         this.mInputManager = new InputEventManager(this, view);
+        HighscoreManager.initialize(this.context);
         MediaManager.initialize(this.context);
         OptionManager.initialize(this.context, this);
+        Lang.prepare(this.context);
 
     }
 
@@ -114,41 +123,81 @@ public abstract class Game implements Renderer, LocaleChangeListener {
             case LEVEL4:
                 return new Level4(this);
             case MENU:
-                return new Menu(this);
+                if (this.mMenu == null) {
+                    this.mMenu = new Menu(this);
+                }
+                return this.mMenu;
             case OPTIONS:
-                return new Options(this);
+                if (this.mOptions == null) {
+                    this.mOptions = new Options(this);
+                }
+                return this.mOptions;
             case CREDITSLEVEL:
                 return new CreditsLevel(this);
             case LEVELMENU:
-                return new LevelMenu(this);
+                if (this.mLevelMenu == null) {
+                    this.mLevelMenu = new LevelMenu(this);
+                }
+                return this.mLevelMenu;
             case DIFFICULTYOPTIONS:
-                return new DifficultyOptions(this);
+                if (this.mDiffOptions == null) {
+                    this.mDiffOptions = new DifficultyOptions(this);
+                }
+                return this.mDiffOptions;
+
             default:
                 return null;
         }
     }
 
+    public void setGameState(GameState.StateType type) {
+        if (this.mCurrentState != null) {
+            this.mCurrentState.shutdown(type);
+        }
+        if (this.mCurrentState == null || this.mCurrentState.getStateType() != type) {
+            GameState state = this.getStateInstance(type);
+            this.onGameStateChanged(state);
+        }
+    }
+
+    protected void onGameStateChanged(GameState newState) {
+        newState.prepareCamera(this.screenWidth, this.screenHeight);
+        this.loadContent(newState);
+
+        this.mCurrentState = newState;
+        if (this.isPaused) {
+            this.resume();
+        }
+
+    }
+
     public void loadContent(GameState state) {
-        try {
-            state.prepare(this.context, this.graphicsDevice);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!state.isPrepared()) {
+            try {
+                state.prepare(this.context, this.graphicsDevice);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
-    public void onLocaleChanged(Locale locale) {
-        Locale.setDefault(locale);
+    public void setLocale(Language locale) {
         Configuration conf = new Configuration(this.context.getResources().getConfiguration());
-        conf.locale = locale;
+        conf.locale = locale.getLocale();
         this.getContext().getResources().updateConfiguration(conf, this.context.getResources().getDisplayMetrics());
         Lang.prepare(this.context);
+    }
+
+    @Override
+    public void onLocaleChanged(Language locale) {
+        this.setLocale(locale);
+
         try {
-			this.mMenu.prepare(this.context, this.graphicsDevice);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+            this.mMenu.prepare(this.context, this.graphicsDevice);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void update(float deltaSeconds) {
@@ -176,29 +225,6 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         this.isPaused = false;
     }
 
-    public void setGameState(GameState.StateType type) {
-        if (this.mCurrentState != null) {
-            this.mCurrentState.shutdown(type);
-        }
-        if (type == StateType.MENU) {
-            this.mCurrentState = this.mMenu;
-        }
-        else if (this.mCurrentState == null || this.mCurrentState.getStateType() != type) {
-            GameState state = this.getStateInstance(type);
-            this.onGameStateChanged(state);
-        }
-    }
-
-    protected void onGameStateChanged(GameState newState) {
-        newState.prepareCamera(this.screenWidth, this.screenHeight);
-        this.loadContent(newState);
-
-        this.mCurrentState = newState;
-        if (this.isPaused) {
-            this.resume();
-        }
-
-    }
 
     public boolean isInitialized() {
         return this.initialized;

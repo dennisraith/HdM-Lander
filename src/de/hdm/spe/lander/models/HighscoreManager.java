@@ -64,10 +64,14 @@ public class HighscoreManager {
         }
 
         Collections.sort(this.mScores, this.comparator);
+        while (this.mScores.size() > 10) {
+            this.mScores.remove(this.mScores.size() - 1);
+        }
     }
 
     public void saveScores() {
-        Editor edit = this.mContext.getSharedPreferences(Static.sScorePrefsName, 0).edit();
+
+        Editor edit = this.mContext.getSharedPreferences(Static.sScorePrefsName, 0).edit().clear();
         for (Highscore score : this.mScores) {
 
             edit.putFloat(score.getName(), score.getScore());
@@ -86,6 +90,7 @@ public class HighscoreManager {
         }
         for (Highscore hs : this.mScores) {
             if (hs.getScore() < score) {
+                this.mScores.remove(this.mScores.size() - 1);
                 return true;
             }
         }
@@ -108,6 +113,7 @@ public class HighscoreManager {
     }
 
     public HighscoreAdapter getAdapter() {
+        Collections.sort(this.mScores, this.comparator);
         return new HighscoreAdapter(this.mContext, 0, this.mScores);
     }
 

@@ -15,13 +15,15 @@ import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.input.InputEvent.InputAction;
 import de.hdm.spe.lander.math.Matrix4x4;
+import de.hdm.spe.lander.math.Vector2;
 import de.hdm.spe.lander.models.GameStatusBar;
 import de.hdm.spe.lander.models.Highscore;
 import de.hdm.spe.lander.models.HighscoreManager;
 import de.hdm.spe.lander.models.LevelHelper;
 import de.hdm.spe.lander.models.MediaManager;
 import de.hdm.spe.lander.models.MediaManager.LanderSound;
-import de.hdm.spe.lander.statics.Difficulty;
+import de.hdm.spe.lander.models.OptionManager;
+import de.hdm.spe.lander.statics.Lang;
 import de.hdm.spe.lander.statics.Static;
 
 import java.io.IOException;
@@ -29,30 +31,35 @@ import java.io.IOException;
 
 public abstract class Level extends GameState {
 
-    protected final Lander     mLander;
+    protected final Lander    mLander;
 
-    protected final Background mBG;
-    protected final Platform   mPlatform;
-    protected Obstacles        mObstacles;
-    private final LevelHelper  mHelper;
-    protected GameStatusBar    mStatusBar;
+    protected final Platform  mPlatform;
+    protected Obstacles       mObstacles;
+    private final LevelHelper mHelper;
+    protected GameStatusBar   mStatusBar;
 
     public Level(Game game) {
         super(game);
         this.mPlatform = new Platform();
-        this.mBG = new Background();
-        this.mBG.getWorld().translate(0, 0, -20).scale(13.5f, -13f, 0);
+        this.mBackground = new Background();
+        this.mBackground.getWorld().translate(0, 0, -20).scale(13.5f, -13f, 0);
 
-        this.mLander = new Lander(Difficulty.EASY);
+        this.mLander = new Lander(OptionManager.getInstance().getDifficulty());
         this.mHelper = new LevelHelper(this);
 
         this.mStatusBar = new GameStatusBar(this);
 
     }
 
+    protected void prepareBackground(Context context, GraphicsDevice device) throws IOException {
+        this.mBackground.prepare(context, device);
+        //        this.mBackground.autoScale(this.getGame().getScreenWidth(), this.getGame().getScreenHeight(), 13, -13).translate(0, 0, -18);
+        //        this.mBackground.getWorld().scale(13.5f, -13f, 0);
+    }
+
     @Override
     public void draw(float deltaSeconds, Renderer renderer) {
-        renderer.draw(this.mBG);
+        renderer.draw(this.mBackground);
         this.mHelper.draw(deltaSeconds, renderer);
         renderer.draw(this.mPlatform);
         this.mStatusBar.draw(deltaSeconds, renderer);
@@ -81,14 +88,16 @@ public abstract class Level extends GameState {
 
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
+        this.prepareBackground(context, device);
         this.mHelper.prepare(context, device);
         this.mStatusBar.prepare(context, device);
-        this.mBG.prepare(context, device);
         this.mPlatform.prepare(context, device);
         this.mLander.prepare(context, device);
         if (this.prepareObstacles()) {
             this.mObstacles.prepare(context, device);
         }
+
+        this.setPrepared(true);
     }
 
     //        Vector3 v3 = this.getCamera().project(new Vector3(this.mLander.getPosition(), 0), 1);
@@ -108,7 +117,7 @@ public abstract class Level extends GameState {
     public void checkGameState() {
         if (this.mObstacles != null && this.getStateType() != StateType.CREDITSLEVEL) {
             if (this.mObstacles.collide(this.mLander)) {
-                this.onLoose();
+                this.onLoose(true);
                 return;
             }
         }
@@ -116,17 +125,21 @@ public abstract class Level extends GameState {
         if (this.mLander.intersects(this.mPlatform)) {
             Logger.log("landerspeed", this.mLander.getCurrentSpeed().getY());
             if (this.mLander.getCurrentSpeed().getLength() > 0.3f) {
-                this.onLoose();
+                this.onLoose(true);
             }
             else {
                 this.onWin();
             }
         }
+        if (this.checkOutOfBounds()) {
+            this.onLoose(false);
+        }
     }
 
-    protected void onLoose() {
+    protected void onLoose(boolean crash) {
         this.pause();
-        this.getGame().postToast("Crash!");
+        String reason = crash ? Lang.GAME_CRASH : Lang.GAME_OOBOUNDS;
+        this.getGame().postToast(reason);
         MediaManager.getInstance().playSound(LanderSound.Explosion);
         this.setGameState(StateType.MENU);
     };
@@ -134,11 +147,22 @@ public abstract class Level extends GameState {
     protected void onWin() {
         this.pause();
         this.getGame().postToast("Landed!");
-        float score = Highscore.calculateHighscore(this.mStatusBar.getElapsedTime(), this.mLander.getCurrentSpeed());
+        float score = Highscore.calculateHighscore(this.mStatusBar.getElapsedTime(), this.mLander.getCurrentSpeed(), this.mLander.getFuel());
         if (HighscoreManager.getInstance().checkHighscore(score)) {
             ((LanderGame) this.getGame()).onHighscoreDialogRequested(score);
         }
     };
+
+    private boolean checkOutOfBounds() {
+        Vector2 position = this.mLander.getPosition();
+        if (position.getX() > 100 || position.getX() < -100) {
+            return true;
+        }
+        if (position.getY() > 100 || position.getY() < -100) {
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public void pause() {
@@ -151,7 +175,6 @@ public abstract class Level extends GameState {
         this.mStatusBar.onResume();
         super.resume();
     }
-
 
 
     @Override

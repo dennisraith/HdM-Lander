@@ -17,21 +17,23 @@ import java.text.NumberFormat;
 
 public class Static {
 
-    public static int          CAM_DIMEN          = 100;
-    public static int          CAM_FAR            = 100;
-    public static int          CAM_NEAR           = 0;
+    public static int          CAM_DIMEN           = 100;
+    public static int          CAM_FAR             = 100;
+    public static int          CAM_NEAR            = 0;
 
-    public final static String sLanderMesh        = "rocket.obj";
-    public final static String sLanderTex         = "customRocketTex.png";
-    public final static String sAsteroidMesh      = "asteroid.obj";
-    public final static String sAsteroidTex       = "comet_texture.jpg";
+    public final static String sLanderMesh         = "rocket.obj";
+    public final static String sLanderTex          = "customRocketTex.png";
+    public final static String sAsteroidMesh       = "asteroid.obj";
+    public final static String sAsteroidTex        = "comet_texture.jpg";
+    public final static String sMenuBgImage        = "moonLanding.jpg";
 
-    public final static String sScorePrefsName    = "lander.scores";
-    public final static String sSettingsPrefsName = "lander.settings";
-    public final static String sSettingsMusic     = "settings.music";
-    public final static String sSettingsLanguage  = "settings.language";
+    public final static String sScorePrefsName     = "lander.scores";
+    public final static String sSettingsPrefsName  = "lander.settings";
+    public final static String sSettingsMusic      = "settings.music";
+    public final static String sSettingsDifficulty = "settings.difficulty";
+    public final static String sSettingsLanguage   = "settings.lang";
 
-    public static NumberFormat numberFormat       = NumberFormat.getNumberInstance();
+    public static NumberFormat numberFormat        = NumberFormat.getNumberInstance();
 
     public static AlertDialog createScoreDialog(Context context, float score, OnClickListener listener) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);

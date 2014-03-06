@@ -1,7 +1,6 @@
 
 package de.hdm.spe.lander.models;
 
-import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.statics.Difficulty;
 
 
@@ -21,11 +20,14 @@ public class Fuel {
 
     public void onAccelerating(float deltatime) {
         this.mFuel = this.mFuel - deltatime;
-        Logger.log("FUEL", this.mFuel);
     }
 
     public boolean isEmpty() {
         return this.mFuel <= 0;
+    }
+
+    public float getPercentage() {
+        return (this.getCurrentAmount() / this.mDiff.getFuelCapacity()) * 100;
     }
 
     public float getCurrentAmount() {

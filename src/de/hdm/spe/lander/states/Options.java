@@ -1,8 +1,6 @@
 
 package de.hdm.spe.lander.states;
 
-import java.io.IOException;
-
 import android.content.Context;
 
 import de.hdm.spe.lander.R;
@@ -14,6 +12,8 @@ import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.HighscoreManager;
 import de.hdm.spe.lander.models.OptionManager;
 import de.hdm.spe.lander.statics.Lang;
+
+import java.io.IOException;
 
 
 public class Options extends Menu {
@@ -29,10 +29,8 @@ public class Options extends Menu {
 
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
-    	
-    	mBG.setBackground("moonLanding.jpg");
-    	mBG.prepare(context, device);
-    	this.mBG.getWorld().translate(0, 0, -1).scale(86, -75, 0);
+
+        this.prepareBackground(context, device);
 
         this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);
@@ -46,11 +44,6 @@ public class Options extends Menu {
                 device.createTextBuffer(this.fontEntries, 32),
                 device.createTextBuffer(this.fontEntries, 32)
         };
-        this.textEntries[0].setText(this.optionManager.getOption(0));
-        this.textEntries[1].setText(this.optionManager.getOption(1));
-        this.textEntries[2].setText(this.optionManager.getOption(2));
-        this.textEntries[3].setText(this.optionManager.getOption(3));
-        this.textEntries[4].setText(this.optionManager.getOption(4));
 
         new Matrix4x4();
         this.matTitle = Matrix4x4.createTranslation(-220, 400, 0);
@@ -69,7 +62,16 @@ public class Options extends Menu {
                 new Square(-35, -180, 390, 80),
                 new Square(-105, -300, 250, 80),
         };
+        this.setPrepared(true);
+    }
 
+    @Override
+    public void update(float deltaSeconds) {
+        this.textEntries[0].setText(this.optionManager.getOption(0));
+        this.textEntries[1].setText(this.optionManager.getOption(1));
+        this.textEntries[2].setText(this.optionManager.getOption(2));
+        this.textEntries[3].setText(this.optionManager.getOption(3));
+        this.textEntries[4].setText(this.optionManager.getOption(4));
     }
 
     @Override
@@ -85,7 +87,7 @@ public class Options extends Menu {
                 this.getGame().postToast(R.string.highscore_reset);
                 break;
             case 2:
-            	this.setGameState(StateType.DIFFICULTYOPTIONS);
+                this.setGameState(StateType.DIFFICULTYOPTIONS);
                 break;
             case 3:
                 this.textEntries[3].setText(this.clickedOption);

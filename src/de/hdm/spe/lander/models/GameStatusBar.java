@@ -23,7 +23,6 @@ public class GameStatusBar {
     private final Level       mLevel;
     TextBuffer                mText;
     private final Lander      mLander;
-    private final float       fuelMax;
 
     public GameStatusBar(Level level) {
         this.mTimer = new GameTimer();
@@ -33,7 +32,6 @@ public class GameStatusBar {
         Static.numberFormat.setMaximumFractionDigits(1);
         Static.numberFormat.setMinimumFractionDigits(1);
         this.mLander = this.mLevel.getLander();
-        this.fuelMax = this.mLander.getDifficulty().getFuelCapacity();
     }
 
     public void prepare(Context context, GraphicsDevice device) throws IOException {
@@ -54,7 +52,7 @@ public class GameStatusBar {
 
         String speed = Static.numberFormat.format(this.mLander.getCurrentSpeed().getLength());
         String time = Static.numberFormat.format(this.mTimer.getTime());
-        String fuel = Static.numberFormat.format((this.mLander.getFuel().getCurrentAmount() / this.fuelMax) * 100);
+        String fuel = Static.numberFormat.format((this.mLander.getFuel().getPercentage()));
         this.updateText(speed, time, fuel);
     }
 
