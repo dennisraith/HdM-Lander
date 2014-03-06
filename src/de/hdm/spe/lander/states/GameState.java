@@ -18,13 +18,13 @@ import java.io.IOException;
 public abstract class GameState implements InputReceiver {
 
     public enum StateType {
-        MENU,
+    	CREDITSLEVEL,
         LEVEL1,
         LEVEL2,
         LEVEL3,
         LEVEL4,
+        MENU,
         OPTIONS,
-        CREDITSLEVEL,
         LEVELMENU,
         DIFFICULTYOPTIONS
     }
@@ -51,17 +51,14 @@ public abstract class GameState implements InputReceiver {
     public abstract void draw(float deltaSeconds, Renderer renderer);
 
     public final void shutdown(StateType type){
-    	Log.d("LEVEL", "" + type);
-    	if((type == null) || (type == StateType.MENU)){
-    		Log.d("LEVEL", "changed");
-    		cleanUp();
+    	if(this.getStateType().ordinal()>StateType.LEVEL4.ordinal() && type.ordinal()<=StateType.LEVEL4.ordinal()){
+    		onPause();
+    	}
+    	else if(this.getStateType().ordinal()<=StateType.LEVEL4.ordinal() && type.ordinal()>StateType.LEVEL4.ordinal()){
+    		onPause();
     	}
     }
     
-    protected void cleanUp(){
-    	MediaManager.getInstance().reset();
-    	
-    }
     public void setPrepared(boolean initialized) {
         this.mIsPrepared = initialized;
     }
@@ -72,13 +69,12 @@ public abstract class GameState implements InputReceiver {
 
 
 
-    public void pause() {
-        this.mGame.pause();
+    public void onPause() {
+    	MediaManager.getInstance().reset();
+    	
     };
 
-    public void resume() {
-        this.mGame.resume();
-    }
+    public abstract void onResume();
 
     public abstract StateType getStateType();
 

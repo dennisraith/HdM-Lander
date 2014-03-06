@@ -83,7 +83,7 @@ public abstract class Level extends GameState {
         }
         this.getCamera().setProjection(projection);
         
-        MediaManager.getInstance().loadTrack("space-level.mp3");
+        
     }
 
     @Override
@@ -137,7 +137,6 @@ public abstract class Level extends GameState {
     }
 
     protected void onLoose(boolean crash) {
-        this.pause();
         String reason = crash ? Lang.GAME_CRASH : Lang.GAME_OOBOUNDS;
         this.getGame().postToast(reason);
         MediaManager.getInstance().playSound(LanderSound.Explosion);
@@ -145,7 +144,6 @@ public abstract class Level extends GameState {
     };
 
     protected void onWin() {
-        this.pause();
         this.getGame().postToast("Landed!");
         float score = Highscore.calculateHighscore(this.mStatusBar.getElapsedTime(), this.mLander.getCurrentSpeed(), this.mLander.getFuel());
         if (HighscoreManager.getInstance().checkHighscore(score)) {
@@ -165,15 +163,15 @@ public abstract class Level extends GameState {
     }
 
     @Override
-    public void pause() {
+    public void onPause() {
         this.mStatusBar.onPause();
-        super.pause();
+        super.onPause();
     }
 
     @Override
-    public void resume() {
+    public void onResume() {
         this.mStatusBar.onResume();
-        super.resume();
+        MediaManager.getInstance().loadTrack("space-level.mp3");
     }
 
 

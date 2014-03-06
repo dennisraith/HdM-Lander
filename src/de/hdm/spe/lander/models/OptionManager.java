@@ -111,7 +111,7 @@ public class OptionManager {
                 } else {
                     this.options[0] = Lang.OPTIONS_MUSIC + " " + Lang.STATE_ON;
                     this.musicState = true;
-//                    	MediaManager.getInstance().loadTrack("space-menu.mp3");
+                    	MediaManager.getInstance().loadTrack("space-menu.mp3");
                 }
                 break;
             case 3:
