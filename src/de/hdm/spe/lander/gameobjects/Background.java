@@ -15,15 +15,20 @@ import java.io.InputStream;
 
 public class Background implements DrawableObject {
 
-    private Mesh            mObject;
-    private final Material  material;
-    private final Matrix4x4 mWorld;
+    protected Mesh           mObject;
+    protected final Material material;
+    protected Matrix4x4      mWorld;
 
-    private String fileName = "bg_earth.jpg";
-    
+    private String           fileName = "bg_earth.jpg";
+
     public Background() {
         this.material = new Material();
         this.mWorld = new Matrix4x4();
+    }
+
+    public Background(String imgName) {
+        this();
+        this.fileName = imgName;
     }
 
     @Override
@@ -31,12 +36,35 @@ public class Background implements DrawableObject {
         InputStream in;
         in = context.getAssets().open("bg_earth.obj");
         this.mObject = Mesh.loadFromOBJ(in);
-        in = context.getAssets().open(fileName);
+        in = context.getAssets().open(this.fileName);
         this.material.setTexture(device.createTexture(in));
+
     }
-    
-    public void setBackground(String name){
-    	fileName = name;
+
+    public Matrix4x4 autoScale(float dpWidth, float dpHeight) {
+
+        return this.autoScale(dpWidth, dpHeight, 0, 0);
+    }
+
+    public Matrix4x4 autoScale(float dpWidth, float dpHeight, float customScaleX, float customScaleY) {
+
+        float bgheight = this.mObject.getBounds().height();
+        float bgwidth = this.mObject.getBounds().width();
+
+        float scaleWidth = dpWidth / bgwidth;
+        float scaleHeight = dpHeight / bgheight;
+        if (customScaleX != 0) {
+            scaleWidth = scaleWidth + (scaleWidth / customScaleX);
+        }
+        if (customScaleY != 0) {
+            scaleHeight = scaleHeight + (scaleHeight / customScaleY);
+        }
+        this.mWorld = new Matrix4x4().scale(scaleWidth, scaleHeight - 2, 1).translate(0, 0, -2);
+        return this.mWorld;
+    }
+
+    public void setBackground(String name) {
+        this.fileName = name;
     }
 
     @Override

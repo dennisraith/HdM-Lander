@@ -65,7 +65,7 @@ public class OptionManager {
         this.musicState = sharedPre.getBoolean(Static.sSettingsMusic, true);
         this.difficulty = Difficulty.valueOf(sharedPre.getString(Static.sSettingsDifficulty, Difficulty.EASY.toString()));
         this.mLanguage = Language.valueOf(sharedPre.getString(Static.sSettingsLanguage, Language.DE.toString()));
-        this.mListener.onLocaleChanged(this.mLanguage);
+        this.mListener.setLocale(this.mLanguage);
         this.prepareStrings();
     }
 
@@ -136,6 +136,8 @@ public class OptionManager {
     public interface LocaleChangeListener {
 
         void onLocaleChanged(Language locale);
+
+        void setLocale(Language locale);
     }
 
 }

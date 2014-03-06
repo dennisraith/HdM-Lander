@@ -30,8 +30,7 @@ public class Options extends Menu {
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
 
-        this.mBG.setBackground("moonLanding.jpg");
-        this.mBG.prepare(context, device);
+        this.prepareBackground(context, device);
 
         this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);
@@ -63,7 +62,7 @@ public class Options extends Menu {
                 new Square(-35, -180, 390, 80),
                 new Square(-105, -300, 250, 80),
         };
-
+        this.setPrepared(true);
     }
 
     @Override

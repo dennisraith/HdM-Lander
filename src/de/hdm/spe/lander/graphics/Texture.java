@@ -1,26 +1,46 @@
+
 package de.hdm.spe.lander.graphics;
 
+import android.graphics.Bitmap;
+
+
 public class Texture {
-	
-	private int handle;
-	private int width, height;
-	
-	Texture(int handle, int width, int height) {
-		this.handle = handle;
-		this.width = width;
-		this.height = height;
-	}
 
-	int getHandle() {
-		return handle;
-	}
+    private final int handle;
+    private final int width, height;
+    private Bitmap    mBitmap;
 
-	public int getWidth() {
-		return width;
-	}
+    Texture(int handle, int width, int height) {
+        this.handle = handle;
+        this.width = width;
+        this.height = height;
+    }
 
-	public int getHeight() {
-		return height;
-	}
-	
+    Texture(int handle, int width, int height, Bitmap bmp) {
+        this.handle = handle;
+        this.width = width;
+        this.height = height;
+        this.mBitmap = bmp;
+    }
+
+    public void setBitmap(Bitmap bmp) {
+        this.mBitmap = bmp;
+    }
+
+    public Bitmap getBitmap() {
+        return this.mBitmap;
+    }
+
+    int getHandle() {
+        return this.handle;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
 }

@@ -112,7 +112,7 @@ public class GraphicsDevice {
         this.gl.glBindTexture(GL10.GL_TEXTURE_2D, handles[0]);
 
         Texture texture = new Texture(handles[0], width, height);
-
+        texture.setBitmap(bitmap);
         // Bitmap an der Y-Achse spiegeln 
         Matrix matrix = new Matrix();
         matrix.setScale(1, -1);

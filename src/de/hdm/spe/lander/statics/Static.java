@@ -25,6 +25,7 @@ public class Static {
     public final static String sLanderTex          = "customRocketTex.png";
     public final static String sAsteroidMesh       = "asteroid.obj";
     public final static String sAsteroidTex        = "comet_texture.jpg";
+    public final static String sMenuBgImage        = "moonLanding.jpg";
 
     public final static String sScorePrefsName     = "lander.scores";
     public final static String sSettingsPrefsName  = "lander.settings";
