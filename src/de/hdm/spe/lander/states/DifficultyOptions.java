@@ -27,7 +27,6 @@ public class DifficultyOptions extends Menu {
 
         this.mBG.setBackground("moonLanding.jpg");
         this.mBG.prepare(context, device);
-        this.mBG.getWorld().translate(0, 0, -1).scale(86, -75, 0);
 
         this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);

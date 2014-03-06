@@ -1,8 +1,6 @@
 
 package de.hdm.spe.lander.states;
 
-import java.io.IOException;
-
 import android.content.Context;
 
 import de.hdm.spe.lander.Logger;
@@ -21,23 +19,27 @@ import de.hdm.spe.lander.models.MediaManager;
 import de.hdm.spe.lander.models.MediaManager.LanderSound;
 import de.hdm.spe.lander.statics.Lang;
 
+import java.io.IOException;
+
 
 public class Menu extends GameState {
 
-    protected SpriteFont   fontTitle;
-    protected TextBuffer   textTitle;
-    protected Matrix4x4    matTitle;
+    protected SpriteFont       fontTitle;
+    protected TextBuffer       textTitle;
+    protected Matrix4x4        matTitle;
 
-    protected SpriteFont   fontEntries;
-    protected TextBuffer[] textEntries;
-    protected Matrix4x4[]  matEntries;
-    protected Square[]     aabbEntries;
-    
+    protected SpriteFont       fontEntries;
+    protected TextBuffer[]     textEntries;
+    protected Matrix4x4[]      matEntries;
+    protected Square[]         aabbEntries;
+
     protected final Background mBG;
 
     public Menu(Game game) {
         super(game);
         this.mBG = new Background();
+        this.mBG.getWorld().translate(0, 0, -1).scale(86, -75, 0);
+
     }
 
     @Override
@@ -53,10 +55,8 @@ public class Menu extends GameState {
 
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
-    	
-    	mBG.setBackground("moonLanding.jpg");
-    	mBG.prepare(context, device);
-    	this.mBG.getWorld().translate(0, 0, -1).scale(86, -75, 0);
+        this.mBG.setBackground("moonLanding.jpg");
+        this.mBG.prepare(context, device);
 
         long time = System.currentTimeMillis();
 
@@ -131,7 +131,7 @@ public class Menu extends GameState {
         //        for (Square sq : this.aabbMenu) {
         //            renderer.draw(sq);
         //        }
-    	renderer.draw(this.mBG);
+        renderer.draw(this.mBG);
         renderer.drawText(this.textTitle, this.matTitle);
         for (int i = 0; i < this.matEntries.length; i++) {
             renderer.drawText(this.textEntries[i], this.matEntries[i]);

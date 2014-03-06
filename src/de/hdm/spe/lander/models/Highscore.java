@@ -22,13 +22,17 @@ public class Highscore {
         return this.name;
     }
 
-    public static Highscore fromGame(float time, Vector2 speed, String name) {
-        return new Highscore(name, Highscore.calculateHighscore(time, speed));
-    }
+    //    public static Highscore fromGame(float time, Vector2 speed, String name) {
+    //        return new Highscore(name, Highscore.calculateHighscore(time, speed));
+    //    }
 
-    public static float calculateHighscore(float time, Vector2 speed) {
-        float x = (1 / time) * (1 / speed.getY());
-        return Math.abs(x * 10000);
+    public static float calculateHighscore(float time, Vector2 speed, Fuel fuel) {
+        float timeWeight = 1 / time;
+        float speedWeight = 1 / speed.getY();
+        float fuelWeight = fuel.getPercentage() / 100;
+
+        float x = timeWeight * speedWeight * fuelWeight;
+        return Math.round(Math.abs(x * 10000));
     }
 
 }

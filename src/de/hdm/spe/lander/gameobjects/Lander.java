@@ -126,7 +126,7 @@ public class Lander extends AABB implements DrawableObject {
         if (time > 1) {
             time = 1;
         }
-        return new Vector2(speed.getX(), speed.getY() * time);
+        return new Vector2(speed.getX() * time, speed.getY() * time);
     }
 
     public void draw(Renderer renderer) {

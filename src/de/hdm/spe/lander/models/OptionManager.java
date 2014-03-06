@@ -14,12 +14,27 @@ import java.util.Locale;
 
 public class OptionManager {
 
+    public enum Language {
+        DE(Locale.GERMAN),
+        EN(Locale.ENGLISH);
+
+        Locale locale;
+
+        Language(Locale locale) {
+            this.locale = locale;
+        }
+
+        public Locale getLocale() {
+            return this.locale;
+        }
+    }
+
     private static OptionManager sInstance = null;
 
     public static OptionManager initialize(Context context, LocaleChangeListener listener) {
         if (OptionManager.sInstance == null) {
-            OptionManager.sInstance = new OptionManager(context);
-            OptionManager.sInstance.mListener = listener;
+            OptionManager.sInstance = new OptionManager(context, listener);
+
         }
         return OptionManager.sInstance;
     }
@@ -28,18 +43,19 @@ public class OptionManager {
         return OptionManager.sInstance;
     }
 
-    public String[]              options;
-    private boolean              musicState = true;
+    public String[]                    options;
+    private boolean                    musicState = true;
     // true  = DE
-    private Locale               mLanguage;
-    private final Context        mContext;
+    private Language                   mLanguage;
+    private final Context              mContext;
 
-    private LocaleChangeListener mListener;
+    private final LocaleChangeListener mListener;
 
-    private Difficulty           difficulty = Difficulty.EASY;
+    private Difficulty                 difficulty = Difficulty.EASY;
 
-    private OptionManager(Context context) {
+    private OptionManager(Context context, LocaleChangeListener listener) {
         this.mContext = context;
+        this.mListener = listener;
         this.loadOptions();
     }
 
@@ -48,7 +64,8 @@ public class OptionManager {
         SharedPreferences sharedPre = this.mContext.getSharedPreferences(Static.sSettingsPrefsName, 0);
         this.musicState = sharedPre.getBoolean(Static.sSettingsMusic, true);
         this.difficulty = Difficulty.valueOf(sharedPre.getString(Static.sSettingsDifficulty, Difficulty.EASY.toString()));
-        this.mLanguage = this.mContext.getResources().getConfiguration().locale;
+        this.mLanguage = Language.valueOf(sharedPre.getString(Static.sSettingsLanguage, Language.DE.toString()));
+        this.mListener.onLocaleChanged(this.mLanguage);
         this.prepareStrings();
     }
 
@@ -79,6 +96,7 @@ public class OptionManager {
         Editor edit = this.mContext.getSharedPreferences(Static.sSettingsPrefsName, 0).edit();
         edit.putBoolean(Static.sSettingsMusic, this.musicState);
         edit.putString(Static.sSettingsDifficulty, this.difficulty.toString());
+        edit.putString(Static.sSettingsLanguage, this.mLanguage.toString());
         edit.commit();
     }
 
@@ -96,7 +114,7 @@ public class OptionManager {
                 break;
             case 3:
 
-                Locale locale = this.mLanguage == Locale.ENGLISH ? Locale.GERMAN : Locale.ENGLISH;
+                Language locale = this.mLanguage.locale == Locale.ENGLISH ? Language.DE : Language.EN;
                 this.mLanguage = locale;
                 this.mListener.onLocaleChanged(locale);
                 this.prepareStrings();
@@ -117,7 +135,7 @@ public class OptionManager {
 
     public interface LocaleChangeListener {
 
-        void onLocaleChanged(Locale locale);
+        void onLocaleChanged(Language locale);
     }
 
 }

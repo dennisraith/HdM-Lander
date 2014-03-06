@@ -9,9 +9,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import de.hdm.spe.lander.graphics.GraphicsDevice;
+import de.hdm.spe.lander.models.HighscoreManager;
 import de.hdm.spe.lander.models.InputEventManager;
 import de.hdm.spe.lander.models.MediaManager;
 import de.hdm.spe.lander.models.OptionManager;
+import de.hdm.spe.lander.models.OptionManager.Language;
 import de.hdm.spe.lander.models.OptionManager.LocaleChangeListener;
 import de.hdm.spe.lander.states.CreditsLevel;
 import de.hdm.spe.lander.states.DifficultyOptions;
@@ -27,7 +29,6 @@ import de.hdm.spe.lander.states.Options;
 import de.hdm.spe.lander.statics.Lang;
 
 import java.io.IOException;
-import java.util.Locale;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -47,7 +48,7 @@ public abstract class Game implements Renderer, LocaleChangeListener {
     protected int                                 screenWidth  = 1;
     protected int                                 screenHeight = 1;
     private boolean                               isPaused     = false;
-    private final Menu                            mMenu        = new Menu(this);
+    private final Menu                            mMenu;
     protected GameState                           mCurrentState;
 
     public abstract void initialize();
@@ -55,10 +56,12 @@ public abstract class Game implements Renderer, LocaleChangeListener {
     public Game(View view) {
         this.view = view;
         this.context = view.getContext();
-        Lang.prepare(this.context);
+        this.mMenu = new Menu(this);
         this.mInputManager = new InputEventManager(this, view);
+        HighscoreManager.initialize(this.context);
         MediaManager.initialize(this.context);
         OptionManager.initialize(this.context, this);
+        Lang.prepare(this.context);
 
     }
 
@@ -137,17 +140,16 @@ public abstract class Game implements Renderer, LocaleChangeListener {
     }
 
     @Override
-    public void onLocaleChanged(Locale locale) {
+    public void onLocaleChanged(Language locale) {
         Configuration conf = new Configuration(this.context.getResources().getConfiguration());
-        conf.locale = locale;
+        conf.locale = locale.getLocale();
         this.getContext().getResources().updateConfiguration(conf, this.context.getResources().getDisplayMetrics());
         Lang.prepare(this.context);
-        try {
-            this.mMenu.prepare(this.context, this.graphicsDevice);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        //        try {
+        //            this.mMenu.prepare(this.context, this.graphicsDevice);
+        //        } catch (IOException e) {
+        //            e.printStackTrace();
+        //        }
     }
 
     public void update(float deltaSeconds) {
@@ -179,15 +181,11 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         if (this.mCurrentState != null) {
             this.mCurrentState.shutdown();
         }
-        if (type == StateType.MENU) {
-            this.mCurrentState = this.mMenu;
-            try {
-                this.mMenu.prepare(this.context, this.graphicsDevice);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        else if (this.mCurrentState == null || this.mCurrentState.getStateType() != type) {
+        //        if (type == StateType.MENU) {
+        //            this.mCurrentState = this.mMenu;
+        //
+        //        }
+        if (this.mCurrentState == null || this.mCurrentState.getStateType() != type) {
             GameState state = this.getStateInstance(type);
             this.onGameStateChanged(state);
         }
@@ -196,7 +194,6 @@ public abstract class Game implements Renderer, LocaleChangeListener {
     protected void onGameStateChanged(GameState newState) {
         newState.prepareCamera(this.screenWidth, this.screenHeight);
         this.loadContent(newState);
-
         this.mCurrentState = newState;
         if (this.isPaused) {
             this.resume();

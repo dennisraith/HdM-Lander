@@ -9,15 +9,21 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import de.hdm.spe.lander.R;
-import de.hdm.spe.lander.statics.Static;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 
 public class HighscoreAdapter extends ArrayAdapter<Highscore> {
 
+    private final NumberFormat format;
+
     public HighscoreAdapter(Context context, int resource, List<Highscore> objects) {
         super(context, resource, objects);
+        this.format = NumberFormat.getIntegerInstance(Locale.getDefault());
+        this.format.setMaximumFractionDigits(0);
+        this.format.setMinimumFractionDigits(0);
     }
 
     @Override
@@ -36,8 +42,8 @@ public class HighscoreAdapter extends ArrayAdapter<Highscore> {
 
         Highscore score = this.getItem(position);
 
-        holder.name.setText(score.getName());
-        holder.score.setText("" + Static.numberFormat.format(score.getScore()));
+        holder.name.setText(position + 1 + ". " + score.getName());
+        holder.score.setText(this.format.format(score.getScore()));
 
         return convertView;
 

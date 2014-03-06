@@ -1,8 +1,6 @@
 
 package de.hdm.spe.lander.states;
 
-import java.io.IOException;
-
 import android.content.Context;
 
 import de.hdm.spe.lander.R;
@@ -14,6 +12,8 @@ import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.HighscoreManager;
 import de.hdm.spe.lander.models.OptionManager;
 import de.hdm.spe.lander.statics.Lang;
+
+import java.io.IOException;
 
 
 public class Options extends Menu {
@@ -29,10 +29,9 @@ public class Options extends Menu {
 
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
-    	
-    	mBG.setBackground("moonLanding.jpg");
-    	mBG.prepare(context, device);
-    	this.mBG.getWorld().translate(0, 0, -1).scale(86, -75, 0);
+
+        this.mBG.setBackground("moonLanding.jpg");
+        this.mBG.prepare(context, device);
 
         this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);

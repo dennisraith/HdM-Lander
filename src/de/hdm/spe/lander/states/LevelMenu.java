@@ -25,7 +25,6 @@ public class LevelMenu extends Menu {
 
         this.mBG.setBackground("moonLanding.jpg");
         this.mBG.prepare(context, device);
-        this.mBG.getWorld().translate(0, 0, -1).scale(86, -75, 0);
 
         this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);
@@ -51,18 +50,18 @@ public class LevelMenu extends Menu {
 
         this.matTitle = Matrix4x4.createTranslation(-180, 400, 0);
         this.matEntries = new Matrix4x4[] {
-                Matrix4x4.createTranslation(-150, 300, -1),
-                Matrix4x4.createTranslation(-150, 240, -1),
+                Matrix4x4.createTranslation(-150, 300, 0),
+                Matrix4x4.createTranslation(-150, 240, 0),
                 //lv1
-                Matrix4x4.createTranslation(-150, 120, -1),
+                Matrix4x4.createTranslation(-150, 120, 0),
                 //lv2
-                Matrix4x4.createTranslation(-150, 10, -1),
+                Matrix4x4.createTranslation(-150, 10, 0),
                 //lv3
-                Matrix4x4.createTranslation(-150, -100, -1),
+                Matrix4x4.createTranslation(-150, -100, 0),
                 //lv4
-                Matrix4x4.createTranslation(-150, -200, -1),
+                Matrix4x4.createTranslation(-150, -200, 0),
                 //back
-                Matrix4x4.createTranslation(-150, -300, -1)
+                Matrix4x4.createTranslation(-150, -300, 0)
         };
         this.aabbEntries = new Square[] {
                 new Square(-10, 300, 300, 140),
