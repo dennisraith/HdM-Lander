@@ -152,7 +152,8 @@ public abstract class Game implements Renderer, LocaleChangeListener {
 
     public void setGameState(GameState.StateType type) {
         if (this.mCurrentState != null) {
-            this.mCurrentState.shutdown(type);
+        	this.mCurrentState.shutdown(type);
+                    
         }
         if (this.mCurrentState == null || this.mCurrentState.getStateType() != type) {
             GameState state = this.getStateInstance(type);
@@ -165,6 +166,7 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         this.loadContent(newState);
 
         this.mCurrentState = newState;
+        mCurrentState.onResume();
         if (this.isPaused) {
             this.resume();
         }

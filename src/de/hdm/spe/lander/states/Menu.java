@@ -115,7 +115,7 @@ public class Menu extends GameState {
         //        }
         Logger.log("Loading Time Preparation squares", System.currentTimeMillis() - time);
         time = System.currentTimeMillis();
-        MediaManager.getInstance().loadTrack("space-menu.mp3");
+        
         Logger.log("Loading Time Sounds", System.currentTimeMillis() - time);
         this.setPrepared(true);
     }
@@ -188,5 +188,10 @@ public class Menu extends GameState {
     public StateType getStateType() {
         return StateType.MENU;
     }
+
+	@Override
+	public void onResume() {
+		MediaManager.getInstance().loadTrack("space-menu.mp3");		
+	}
 
 }
