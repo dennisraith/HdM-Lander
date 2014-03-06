@@ -27,7 +27,7 @@ public class LanderView extends GLSurfaceView {
 
     @Override
     public void onResume() {
-        this.game.resume();
         super.onResume();
+        this.game.resume();
     }
 }

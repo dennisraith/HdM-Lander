@@ -25,6 +25,7 @@ public class CreditsLevel extends Level {
     public CreditsLevel(Game game) {
         super(game);
         this.mLander.getWorld().translate(0, -90, 0);
+        this.mLander.getFuel().setInfinite(true);
     }
 
     @Override
@@ -51,6 +52,7 @@ public class CreditsLevel extends Level {
 
     @Override
     public void update(float deltaSeconds) {
+
         this.mLander.updatePosition(deltaSeconds);
         if (this.mLander.getPosition().getY() < -30) {
             this.mLander.setAccelerating(true);
