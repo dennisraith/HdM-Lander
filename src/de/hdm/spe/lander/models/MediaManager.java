@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class MediaManager {
 
-    public enum LanderSound {
+    public enum SoundEffect {
         MenuClick(R.raw.click),
         RocketBurst(R.raw.thruster_sound),
         Explosion(R.raw.explosion);
@@ -23,7 +23,7 @@ public class MediaManager {
         int soundId;
         int streamID;
 
-        LanderSound(int resId) {
+        SoundEffect(int resId) {
             this.resId = resId;
         }
 
@@ -36,59 +36,85 @@ public class MediaManager {
         }
     }
 
+    public enum Track {
+        Menu("space-menu.mp3"),
+        Level("space-level.mp3");
+
+        String              fileName;
+        AssetFileDescriptor descriptor;
+
+        Track(String fileName) {
+            this.fileName = fileName;
+        }
+
+        void setDescriptor(AssetFileDescriptor descriptor) {
+            this.descriptor = descriptor;
+        }
+
+    }
+
     private final MediaPlayer   mediaPlayer;
     private final SoundPool     soundPool;
 
     private static MediaManager sInstance = null;
     private final Context       mContext;
+    private Track               mCurrentTrack;
 
     private MediaManager(Context context) {
         this.mContext = context;
         this.mediaPlayer = new MediaPlayer();
-        this.soundPool = new SoundPool(LanderSound.values().length, AudioManager.STREAM_MUSIC, 0);
-        this.loadSounds();
+        this.soundPool = new SoundPool(SoundEffect.values().length, AudioManager.STREAM_MUSIC, 0);
+        this.initialize();
 
     }
 
-    private void loadSounds() {
+    private void initialize() {
 
-        for (LanderSound s : LanderSound.values()) {
+        for (SoundEffect s : SoundEffect.values()) {
             s.setSoundID(this.soundPool.load(this.mContext, s.resId, 1));
         }
+
+        for (Track t : Track.values()) {
+            try {
+                t.setDescriptor(this.mContext.getAssets().openFd(t.fileName));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
-    public void loadTrack(String fName) {
+    private void loadTrack(Track track) {
         if (this.mediaPlayer.isPlaying()) {
             this.mediaPlayer.stop();
             this.mediaPlayer.reset();
         }
         try {
-
-            AssetFileDescriptor afd = this.mContext.getAssets().openFd(fName);
-
+            AssetFileDescriptor afd = track.descriptor;
             this.mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             this.mediaPlayer.prepare();
-
+            this.mCurrentTrack = track;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.startTrack();
     }
 
-    public void startTrack() {
-        if (OptionManager.getInstance().isSoundEnabled()) {
-            this.mediaPlayer.start();
-            this.mediaPlayer.setLooping(true);
+    public void startTrack(Track track) {
+        if (!OptionManager.getInstance().isSoundEnabled() || this.mCurrentTrack == track && this.mediaPlayer.isPlaying()) {
+            return;
         }
+        this.loadTrack(track);
+        this.mediaPlayer.start();
+        this.mediaPlayer.setLooping(true);
     }
 
-    public void playSound(LanderSound sound) {
+    public void playSound(SoundEffect sound) {
         if (OptionManager.getInstance().isSoundEnabled()) {
             sound.setStreamID(this.soundPool.play(sound.soundId, 1, 1, 0, 0, 1));
         }
     }
 
-    public void stopSound(LanderSound sound) {
+    public void stopSound(SoundEffect sound) {
         this.soundPool.stop(sound.streamID);
     }
 

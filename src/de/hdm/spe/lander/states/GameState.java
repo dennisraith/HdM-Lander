@@ -2,7 +2,6 @@
 package de.hdm.spe.lander.states;
 
 import android.content.Context;
-import android.util.Log;
 
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.gameobjects.Background;
@@ -18,7 +17,7 @@ import java.io.IOException;
 public abstract class GameState implements InputReceiver {
 
     public enum StateType {
-    	CREDITSLEVEL,
+        CREDITSLEVEL,
         LEVEL1,
         LEVEL2,
         LEVEL3,
@@ -50,15 +49,19 @@ public abstract class GameState implements InputReceiver {
 
     public abstract void draw(float deltaSeconds, Renderer renderer);
 
-    public final void shutdown(StateType type){
-    	if(this.getStateType().ordinal()>StateType.LEVEL4.ordinal() && type.ordinal()<=StateType.LEVEL4.ordinal()){
-    		onPause();
-    	}
-    	else if(this.getStateType().ordinal()<=StateType.LEVEL4.ordinal() && type.ordinal()>StateType.LEVEL4.ordinal()){
-    		onPause();
-    	}
+    public final void shutdown(StateType type) {
+        if (type == null) {
+            this.onPause();
+            return;
+        }
+        if (this.getStateType().ordinal() > StateType.LEVEL4.ordinal() && type.ordinal() <= StateType.LEVEL4.ordinal()) {
+            this.onPause();
+        }
+        else if (this.getStateType().ordinal() <= StateType.LEVEL4.ordinal() && type.ordinal() > StateType.LEVEL4.ordinal()) {
+            this.onPause();
+        }
     }
-    
+
     public void setPrepared(boolean initialized) {
         this.mIsPrepared = initialized;
     }
@@ -67,11 +70,9 @@ public abstract class GameState implements InputReceiver {
         return this.mIsPrepared;
     }
 
-
-
     public void onPause() {
-    	MediaManager.getInstance().reset();
-    	
+        MediaManager.getInstance().reset();
+
     };
 
     public abstract void onResume();

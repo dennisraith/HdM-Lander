@@ -48,7 +48,7 @@ public abstract class Game implements Renderer, LocaleChangeListener {
     protected int                                 screenWidth  = 1;
     protected int                                 screenHeight = 1;
     private boolean                               isPaused     = false;
-    private Menu                                  mMenu;
+    private final Menu                            mMenu;
     private Options                               mOptions;
     private LevelMenu                             mLevelMenu;
     private DifficultyOptions                     mDiffOptions;
@@ -61,7 +61,6 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         this.context = view.getContext();
         this.screenHeight = this.context.getResources().getDisplayMetrics().heightPixels;
         this.screenWidth = this.context.getResources().getDisplayMetrics().widthPixels;
-
         this.mMenu = new Menu(this);
         this.mInputManager = new InputEventManager(this, view);
         HighscoreManager.initialize(this.context);
@@ -95,7 +94,9 @@ public abstract class Game implements Renderer, LocaleChangeListener {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         this.lastTime = System.currentTimeMillis();
-
+        if (this.mCurrentState != null) {
+            this.mCurrentState.setPrepared(false);
+        }
         if (!this.initialized) {
             this.graphicsDevice = new GraphicsDevice();
             this.graphicsDevice.onSurfaceCreated(gl);
@@ -123,9 +124,6 @@ public abstract class Game implements Renderer, LocaleChangeListener {
             case LEVEL4:
                 return new Level4(this);
             case MENU:
-                if (this.mMenu == null) {
-                    this.mMenu = new Menu(this);
-                }
                 return this.mMenu;
             case OPTIONS:
                 if (this.mOptions == null) {
@@ -152,13 +150,10 @@ public abstract class Game implements Renderer, LocaleChangeListener {
 
     public void setGameState(GameState.StateType type) {
         if (this.mCurrentState != null) {
-        	this.mCurrentState.shutdown(type);
-                    
-        }
-        if (this.mCurrentState == null || this.mCurrentState.getStateType() != type) {
-            GameState state = this.getStateInstance(type);
-            this.onGameStateChanged(state);
-        }
+            this.mCurrentState.shutdown(type);
+
+        };
+        this.onGameStateChanged(this.getStateInstance(type));
     }
 
     protected void onGameStateChanged(GameState newState) {
@@ -166,10 +161,10 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         this.loadContent(newState);
 
         this.mCurrentState = newState;
-        mCurrentState.onResume();
         if (this.isPaused) {
             this.resume();
         }
+        this.mCurrentState.onResume();
 
     }
 
@@ -225,13 +220,6 @@ public abstract class Game implements Renderer, LocaleChangeListener {
 
     public void resume() {
         this.isPaused = false;
-        if (this.mCurrentState != null) {
-            try {
-                this.mCurrentState.prepare(this.context, this.graphicsDevice);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public boolean isInitialized() {

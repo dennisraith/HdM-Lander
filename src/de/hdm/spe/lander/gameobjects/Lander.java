@@ -15,7 +15,7 @@ import de.hdm.spe.lander.math.Vector4;
 import de.hdm.spe.lander.models.DrawableObject;
 import de.hdm.spe.lander.models.Fuel;
 import de.hdm.spe.lander.models.MediaManager;
-import de.hdm.spe.lander.models.MediaManager.LanderSound;
+import de.hdm.spe.lander.models.MediaManager.SoundEffect;
 import de.hdm.spe.lander.statics.Difficulty;
 import de.hdm.spe.lander.statics.Static;
 
@@ -71,14 +71,14 @@ public class Lander extends AABB implements DrawableObject {
         if (this.isAccelerating) {
             this.state = VehicleState.ACCELERATING;
             this.vehAccTime = 0;
-            MediaManager.getInstance().playSound(LanderSound.RocketBurst);
+            MediaManager.getInstance().playSound(SoundEffect.RocketBurst);
             
         }
         else {
             this.state = VehicleState.GRAVITY;
             this.gravAccTime = 0;
             this.state.velocity = this.getCurrentSpeed();
-            MediaManager.getInstance().stopSound(LanderSound.RocketBurst);
+            MediaManager.getInstance().stopSound(SoundEffect.RocketBurst);
         }
 
     }

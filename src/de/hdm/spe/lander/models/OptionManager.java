@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import de.hdm.spe.lander.models.MediaManager.Track;
 import de.hdm.spe.lander.statics.Difficulty;
 import de.hdm.spe.lander.statics.Lang;
 import de.hdm.spe.lander.statics.Static;
@@ -107,11 +108,11 @@ public class OptionManager {
                 if (this.musicState) {
                     this.options[0] = Lang.OPTIONS_MUSIC + " " + Lang.STATE_OFF;
                     this.musicState = false;
-                    	MediaManager.getInstance().reset();
+                    MediaManager.getInstance().reset();
                 } else {
                     this.options[0] = Lang.OPTIONS_MUSIC + " " + Lang.STATE_ON;
                     this.musicState = true;
-                    	MediaManager.getInstance().loadTrack("space-menu.mp3");
+                    MediaManager.getInstance().startTrack(Track.Menu);
                 }
                 break;
             case 3:

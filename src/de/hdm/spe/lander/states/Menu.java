@@ -3,7 +3,6 @@ package de.hdm.spe.lander.states;
 
 import android.content.Context;
 
-import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.game.LanderGame;
@@ -16,7 +15,8 @@ import de.hdm.spe.lander.graphics.TextBuffer;
 import de.hdm.spe.lander.input.InputEvent.InputAction;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.MediaManager;
-import de.hdm.spe.lander.models.MediaManager.LanderSound;
+import de.hdm.spe.lander.models.MediaManager.SoundEffect;
+import de.hdm.spe.lander.models.MediaManager.Track;
 import de.hdm.spe.lander.statics.Lang;
 import de.hdm.spe.lander.statics.Static;
 
@@ -61,7 +61,6 @@ public class Menu extends GameState {
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
         this.prepareBackground(context, device);
-        long time = System.currentTimeMillis();
 
         this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);
@@ -81,9 +80,6 @@ public class Menu extends GameState {
         this.textEntries[3].setText("Credits");
         this.textEntries[4].setText(Lang.MENU_QUIT);
 
-        Logger.log("Loading Time Text Buffers", System.currentTimeMillis() - time);
-        time = System.currentTimeMillis();
-        new Matrix4x4();
         this.matTitle = Matrix4x4.createTranslation(-300, 400, 0);
         this.matEntries = new Matrix4x4[] {
                 Matrix4x4.createTranslation(-150, 160, 0),
@@ -101,8 +97,6 @@ public class Menu extends GameState {
                 new Square(-40, -180, 250, 80),
                 new Square(-85, -300, 160, 80)
         };
-        Logger.log("Loading Matrices", System.currentTimeMillis() - time);
-        time = System.currentTimeMillis();
         //        for (Square sq : this.aabbMenu) {
         //            try {
         //                sq.prepare(context, device);
@@ -113,10 +107,6 @@ public class Menu extends GameState {
         //                e.printStackTrace();
         //            }
         //        }
-        Logger.log("Loading Time Preparation squares", System.currentTimeMillis() - time);
-        time = System.currentTimeMillis();
-        
-        Logger.log("Loading Time Sounds", System.currentTimeMillis() - time);
         this.setPrepared(true);
     }
 
@@ -124,7 +114,6 @@ public class Menu extends GameState {
     public void update(float deltaSeconds) {
 
     }
-
 
     @Override
     public void draw(float deltaSeconds, Renderer renderer) {
@@ -166,13 +155,12 @@ public class Menu extends GameState {
         for (int i = 0; i < this.aabbEntries.length; ++i) {
             if (point.intersects(this.aabbEntries[i])) {
                 if (action == InputAction.DOWN) {
-                    MediaManager.getInstance().playSound(LanderSound.MenuClick);
+                    MediaManager.getInstance().playSound(SoundEffect.MenuClick);
                     this.onMenuItemClicked(i);
                 }
             }
         }
     }
-    
 
     @Override
     public void onKeyboardKeyPressed(int event) {
@@ -189,9 +177,9 @@ public class Menu extends GameState {
         return StateType.MENU;
     }
 
-	@Override
-	public void onResume() {
-		MediaManager.getInstance().loadTrack("space-menu.mp3");		
-	}
+    @Override
+    public void onResume() {
+        MediaManager.getInstance().startTrack(Track.Menu);
+    }
 
 }

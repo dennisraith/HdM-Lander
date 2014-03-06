@@ -21,7 +21,8 @@ import de.hdm.spe.lander.models.Highscore;
 import de.hdm.spe.lander.models.HighscoreManager;
 import de.hdm.spe.lander.models.LevelHelper;
 import de.hdm.spe.lander.models.MediaManager;
-import de.hdm.spe.lander.models.MediaManager.LanderSound;
+import de.hdm.spe.lander.models.MediaManager.SoundEffect;
+import de.hdm.spe.lander.models.MediaManager.Track;
 import de.hdm.spe.lander.models.OptionManager;
 import de.hdm.spe.lander.statics.Lang;
 import de.hdm.spe.lander.statics.Static;
@@ -82,8 +83,7 @@ public abstract class Level extends GameState {
                     Static.CAM_FAR);
         }
         this.getCamera().setProjection(projection);
-        
-        
+
     }
 
     @Override
@@ -139,12 +139,12 @@ public abstract class Level extends GameState {
     protected void onLoose(boolean crash) {
         String reason = crash ? Lang.GAME_CRASH : Lang.GAME_OOBOUNDS;
         this.getGame().postToast(reason);
-        MediaManager.getInstance().playSound(LanderSound.Explosion);
+        MediaManager.getInstance().playSound(SoundEffect.Explosion);
         this.setGameState(StateType.MENU);
     };
 
     protected void onWin() {
-        this.getGame().postToast("Landed!");
+        this.getGame().postToast(Lang.GAME_LANDING);
         float score = Highscore.calculateHighscore(this.mStatusBar.getElapsedTime(), this.mLander.getCurrentSpeed(), this.mLander.getFuel());
         if (HighscoreManager.getInstance().checkHighscore(score)) {
             ((LanderGame) this.getGame()).onHighscoreDialogRequested(score);
@@ -164,16 +164,13 @@ public abstract class Level extends GameState {
 
     @Override
     public void onPause() {
-        this.mStatusBar.onPause();
         super.onPause();
     }
 
     @Override
     public void onResume() {
-        this.mStatusBar.onResume();
-        MediaManager.getInstance().loadTrack("space-level.mp3");
+        MediaManager.getInstance().startTrack(Track.Level);
     }
-
 
     @Override
     public void onScreenTouched(Point point, InputAction action) {
