@@ -51,6 +51,10 @@ public abstract class GameState implements InputReceiver {
     public abstract void draw(float deltaSeconds, Renderer renderer);
 
     public final void shutdown(StateType type){
+    	if (type == null) {
+			onPause();
+			return;
+		}
     	if(this.getStateType().ordinal()>StateType.LEVEL4.ordinal() && type.ordinal()<=StateType.LEVEL4.ordinal()){
     		onPause();
     	}
