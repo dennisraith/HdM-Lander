@@ -73,14 +73,16 @@ public class OptionManager {
     }
 
     private void prepareStrings() {
-        this.options = new String[5];
+        this.options = new String[6];
         String musicState = this.musicState ? Lang.STATE_ON : Lang.STATE_OFF;
+        String vibrateState = this.allowsVibrate ? Lang.STATE_ON : Lang.STATE_OFF;
 
         this.options[0] = Lang.OPTIONS_MUSIC + " " + musicState;
-        this.options[1] = Lang.OPTIONS_HIGHSCORE;
-        this.options[2] = Lang.OPTIONS_DIFFICULTY;
-        this.options[3] = Lang.OPTIONS_LANG + " " + this.mLanguage.toString();
-        this.options[4] = Lang.BACK;
+		this.options[1] = Lang.OPTIONS_VIBRO + " " + vibrateState;
+        this.options[2] = Lang.OPTIONS_HIGHSCORE;
+        this.options[3] = Lang.OPTIONS_DIFFICULTY;
+        this.options[4] = Lang.OPTIONS_LANG + " " + this.mLanguage.toString();
+        this.options[5] = Lang.BACK;
     }
 
     public boolean isSoundEnabled() {
@@ -126,7 +128,16 @@ public class OptionManager {
                     MediaManager.getInstance().startTrack(Track.Menu);
                 }
                 break;
-            case 3:
+            case 1:
+                if (this.allowsVibrate) {
+                    this.options[1] = Lang.OPTIONS_VIBRO + " " + Lang.STATE_OFF;
+                    this.allowsVibrate = false;
+                } else {
+                    this.options[1] = Lang.OPTIONS_VIBRO + " " + Lang.STATE_ON;
+                    this.allowsVibrate = true;
+                }
+            	break;
+            case 4:
 
                 Language locale = this.mLanguage.locale == Locale.ENGLISH ? Language.DE : Language.EN;
                 this.mLanguage = locale;
