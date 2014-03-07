@@ -27,7 +27,7 @@ public class GameStatusBar {
     public GameStatusBar(Level level) {
         this.mTimer = new GameTimer();
         this.mTextWorld = new Matrix4x4();
-        this.mTextWorld.translate(-60, 94, 0).scale(.1f);
+        this.mTextWorld.translate(-55, 94, 0).scale(.1f);
         this.mLevel = level;
         Static.numberFormat.setMaximumFractionDigits(1);
         Static.numberFormat.setMinimumFractionDigits(1);

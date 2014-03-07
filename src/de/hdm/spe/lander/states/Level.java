@@ -156,7 +156,7 @@ public abstract class Level extends GameState {
 
     protected void onWin() {
         this.getGame().postToast(Lang.GAME_LANDING);
-        float score = Highscore.calculateHighscore(this.mStatusBar.getElapsedTime(), this.mLander.getCurrentSpeed(), this.mLander.getFuel());
+        float score = Highscore.calculateHighscore(this.mStatusBar.getElapsedTime(), this.mLander);
         if (HighscoreManager.getInstance().checkHighscore(score)) {
             ((LanderGame) this.getGame()).onHighscoreDialogRequested(score);
         }

@@ -1,7 +1,9 @@
 
 package de.hdm.spe.lander.models;
 
+import de.hdm.spe.lander.gameobjects.Lander;
 import de.hdm.spe.lander.math.Vector2;
+import de.hdm.spe.lander.statics.Difficulty;
 
 
 public class Highscore {
@@ -22,16 +24,16 @@ public class Highscore {
         return this.name;
     }
 
-    //    public static Highscore fromGame(float time, Vector2 speed, String name) {
-    //        return new Highscore(name, Highscore.calculateHighscore(time, speed));
-    //    }
+    public static float calculateHighscore(float time, Lander lander) {
+        Vector2 speed = lander.getCurrentSpeed();
+        Fuel fuel = lander.getFuel();
+        Difficulty diff = lander.getDifficulty();
 
-    public static float calculateHighscore(float time, Vector2 speed, Fuel fuel) {
         float timeWeight = 1 / time;
         float speedWeight = 1 / speed.getY();
         float fuelWeight = fuel.getPercentage() / 100;
 
-        float x = timeWeight * speedWeight * fuelWeight;
+        float x = timeWeight * speedWeight * fuelWeight * (diff.ordinal() + 1);
         return Math.round(Math.abs(x * 10000));
     }
 
