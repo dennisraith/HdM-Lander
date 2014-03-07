@@ -7,6 +7,7 @@ import de.hdm.spe.lander.R;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.gameobjects.Square;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
+import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.graphics.TextBuffer;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.HighscoreManager;
@@ -42,26 +43,39 @@ public class Options extends Menu {
                 device.createTextBuffer(this.fontEntries, 32),
                 device.createTextBuffer(this.fontEntries, 32),
                 device.createTextBuffer(this.fontEntries, 32),
+                device.createTextBuffer(this.fontEntries, 32),
                 device.createTextBuffer(this.fontEntries, 32)
         };
 
         new Matrix4x4();
-        this.matTitle = Matrix4x4.createTranslation(-220, 400, 0);
+        this.matTitle = Matrix4x4.createTranslation(-300, 400, 0);
         this.matEntries = new Matrix4x4[] {
-                Matrix4x4.createTranslation(-220, 160, 0),
-                Matrix4x4.createTranslation(-220, 40, 0),
-                Matrix4x4.createTranslation(-220, -80, 0),
-                Matrix4x4.createTranslation(-220, -200, 0),
-                Matrix4x4.createTranslation(-220, -320, 0)
+                Matrix4x4.createTranslation(-300, 160, 0),
+                Matrix4x4.createTranslation(-300, 40, 0),
+                Matrix4x4.createTranslation(-300, -80, 0),
+                Matrix4x4.createTranslation(-300, -200, 0),
+                Matrix4x4.createTranslation(-300, -320, 0),
+                Matrix4x4.createTranslation(-300, -440, 0)
         };
 
         this.aabbEntries = new Square[] {
-                new Square(-50, 180, 360, 80),
-                new Square(30, 60, 520, 80),
-                new Square(-10, -60, 440, 80),
-                new Square(-35, -180, 390, 80),
-                new Square(-105, -300, 250, 80),
+                new Square(-140, 180, 340, 80),
+                new Square(-140, 60, 340, 80),
+                new Square(10, -60, 650, 80),
+                new Square(-90, -180, 450, 80),
+                new Square(-85, -300, 430, 80),
+                new Square(-190, -420, 250, 80)
         };
+//	  for (Square sq : this.aabbEntries) {
+//	      try {
+//	          sq.prepare(context, device);
+//	          sq.getWorld().translate(0, 0, 0);
+//	          sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
+//	
+//	      } catch (IOException e) {
+//	          e.printStackTrace();
+//	      }
+//	  }
         this.setPrepared(true);
     }
 
@@ -72,8 +86,16 @@ public class Options extends Menu {
         this.textEntries[2].setText(this.optionManager.getOption(2));
         this.textEntries[3].setText(this.optionManager.getOption(3));
         this.textEntries[4].setText(this.optionManager.getOption(4));
+        this.textEntries[5].setText(this.optionManager.getOption(5));
     }
 
+//    @Override
+//    public void draw(float deltaSeconds, Renderer renderer) {
+//    	super.draw(deltaSeconds, renderer);
+//      for (Square sq : this.aabbEntries) {
+//          renderer.draw(sq);
+//      }
+//    }
     @Override
     protected void onMenuItemClicked(int i) {
         this.optionManager.changeOptions(i);

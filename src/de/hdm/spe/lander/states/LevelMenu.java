@@ -6,6 +6,7 @@ import android.content.Context;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.gameobjects.Square;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
+import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.graphics.TextBuffer;
 import de.hdm.spe.lander.math.Matrix4x4;
 import de.hdm.spe.lander.models.OptionManager;
@@ -47,9 +48,9 @@ public class LevelMenu extends Menu {
         this.textEntries[5].setText("Level 4");
         this.textEntries[6].setText(Lang.BACK);
 
-        this.matTitle = Matrix4x4.createTranslation(-180, 400, 0);
+        this.matTitle = Matrix4x4.createTranslation(-300, 400, 0);
         this.matEntries = new Matrix4x4[] {
-                Matrix4x4.createTranslation(-150, 300, 0),
+                Matrix4x4.createTranslation(-240, 310, 0),
                 Matrix4x4.createTranslation(-150, 240, 0),
                 //lv1
                 Matrix4x4.createTranslation(-150, 120, 0),
@@ -71,25 +72,25 @@ public class LevelMenu extends Menu {
                 new Square(-40, -280, 250, 80)
         };
         this.setPrepared(true);
-        //        for (Square sq : this.aabbEntries) {
-        //            try {
-        //                sq.prepare(context, device);
-        //                sq.getWorld().translate(0, 0, -2);
-        //                sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
-        //
-        //            } catch (IOException e) {
-        //                e.printStackTrace();
-        //            }
-        //        }
+//                for (Square sq : this.aabbEntries) {
+//                    try {
+//                        sq.prepare(context, device);
+//                        sq.getWorld().translate(0, 0, -2);
+//                        sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
+//        
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
     }
 
-    //    @Override
-    //    public void draw(float deltaSeconds, Renderer renderer) {
-    //        super.draw(deltaSeconds, renderer);
-    //        for (Square sq : this.aabbEntries) {
-    //            renderer.draw(sq);
-    //        }
-    //    }
+//        @Override
+//        public void draw(float deltaSeconds, Renderer renderer) {
+//            super.draw(deltaSeconds, renderer);
+//            for (Square sq : this.aabbEntries) {
+//                renderer.draw(sq);
+//            }
+//        }
 
     @Override
     public void update(float deltaSeconds) {

@@ -44,7 +44,7 @@ public class DifficultyOptions extends Menu {
         this.textEntries[3].setText(Lang.BACK);
 
         new Matrix4x4();
-        this.matTitle = Matrix4x4.createTranslation(-220, 400, 0);
+        this.matTitle = Matrix4x4.createTranslation(-300, 400, 0);
         this.matEntries = new Matrix4x4[] {
                 Matrix4x4.createTranslation(-150, 160, 0),
                 Matrix4x4.createTranslation(-150, 40, 0),

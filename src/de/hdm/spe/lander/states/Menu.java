@@ -82,31 +82,31 @@ public class Menu extends GameState {
 
         this.matTitle = Matrix4x4.createTranslation(-300, 400, 0);
         this.matEntries = new Matrix4x4[] {
-                Matrix4x4.createTranslation(-150, 160, 0),
-                Matrix4x4.createTranslation(-150, 40, 0),
-                Matrix4x4.createTranslation(-150, -80, 0),
-                Matrix4x4.createTranslation(-150, -200, 0),
-                Matrix4x4.createTranslation(-150, -320, 0)
+                Matrix4x4.createTranslation(-200, 160, 0),
+                Matrix4x4.createTranslation(-200, 40, 0),
+                Matrix4x4.createTranslation(-200, -80, 0),
+                Matrix4x4.createTranslation(-200, -200, 0),
+                Matrix4x4.createTranslation(-200, -320, 0)
 
         };
 
         this.aabbEntries = new Square[] {
-                new Square(25, 180, 380, 80),
-                new Square(20, 60, 370, 80),
-                new Square(-30, -60, 270, 80),
-                new Square(-40, -180, 250, 80),
-                new Square(-85, -300, 160, 80)
+                new Square(-15, 180, 380, 80),
+                new Square(-20, 60, 380, 80),
+                new Square(-80, -60, 270, 80),
+                new Square(-85, -180, 240, 80),
+                new Square(-60, -300, 290, 80)
         };
-        //        for (Square sq : this.aabbMenu) {
-        //            try {
-        //                sq.prepare(context, device);
-        //                sq.getWorld().translate(0, 0, -2);
-        //                sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
-        //
-        //            } catch (IOException e) {
-        //                e.printStackTrace();
-        //            }
-        //        }
+//                for (Square sq : this.aabbEntries) {
+//                    try {
+//                        sq.prepare(context, device);
+//                        sq.getWorld().translate(0, 0, -2);
+//                        sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
+//        
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
         this.setPrepared(true);
     }
 
@@ -117,9 +117,9 @@ public class Menu extends GameState {
 
     @Override
     public void draw(float deltaSeconds, Renderer renderer) {
-        //        for (Square sq : this.aabbMenu) {
-        //            renderer.draw(sq);
-        //        }
+//                for (Square sq : this.aabbEntries) {
+//                    renderer.draw(sq);
+//                }
         renderer.draw(this.mBackground);
         renderer.drawText(this.textTitle, this.matTitle);
         for (int i = 0; i < this.matEntries.length; i++) {
