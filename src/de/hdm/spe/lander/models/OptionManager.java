@@ -45,14 +45,15 @@ public class OptionManager {
     }
 
     public String[]                    options;
-    private boolean                    musicState = true;
+    private boolean                    musicState    = true;
     // true  = DE
     private Language                   mLanguage;
     private final Context              mContext;
 
     private final LocaleChangeListener mListener;
 
-    private Difficulty                 difficulty = Difficulty.EASY;
+    private Difficulty                 difficulty    = Difficulty.EASY;
+    private boolean                    allowsVibrate = false;
 
     private OptionManager(Context context, LocaleChangeListener listener) {
         this.mContext = context;
@@ -66,6 +67,7 @@ public class OptionManager {
         this.musicState = sharedPre.getBoolean(Static.sSettingsMusic, true);
         this.difficulty = Difficulty.valueOf(sharedPre.getString(Static.sSettingsDifficulty, Difficulty.EASY.toString()));
         this.mLanguage = Language.valueOf(sharedPre.getString(Static.sSettingsLanguage, Language.DE.toString()));
+        this.allowsVibrate = sharedPre.getBoolean(Static.sSettingsVibration, true);
         this.mListener.setLocale(this.mLanguage);
         this.prepareStrings();
     }
@@ -85,6 +87,10 @@ public class OptionManager {
         return this.musicState;
     }
 
+    public boolean isVibrationEnabled() {
+        return this.allowsVibrate;
+    }
+
     public void setDifficulty(Difficulty diff) {
         this.difficulty = diff;
     }
@@ -93,9 +99,14 @@ public class OptionManager {
         return this.difficulty;
     }
 
+    public Language getLanguage() {
+        return this.mLanguage;
+    }
+
     public void saveOptions() {
         Editor edit = this.mContext.getSharedPreferences(Static.sSettingsPrefsName, 0).edit();
         edit.putBoolean(Static.sSettingsMusic, this.musicState);
+        edit.putBoolean(Static.sSettingsVibration, this.allowsVibrate);
         edit.putString(Static.sSettingsDifficulty, this.difficulty.toString());
         edit.putString(Static.sSettingsLanguage, this.mLanguage.toString());
         edit.commit();

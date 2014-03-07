@@ -32,6 +32,7 @@ public class Static {
     public final static String sSettingsMusic      = "settings.music";
     public final static String sSettingsDifficulty = "settings.difficulty";
     public final static String sSettingsLanguage   = "settings.lang";
+    public final static String sSettingsVibration  = "settings.vibrate";
 
     public static NumberFormat numberFormat        = NumberFormat.getNumberInstance();
 

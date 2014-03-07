@@ -5,9 +5,9 @@ import de.hdm.spe.lander.math.Vector2;
 
 
 public enum Difficulty {
-    EASY(0, .4f, 10),
-    MEDIUM(0, .7f, 7),
-    HARD(.1f, .7f, 5);
+    EASY(0, .5f, 10),
+    MEDIUM(0, .6f, 7),
+    HARD(.05f, .7f, 5);
 
     float verticalSpeed;
     float horizontalSpeed;

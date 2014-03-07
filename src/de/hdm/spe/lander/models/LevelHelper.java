@@ -3,7 +3,6 @@ package de.hdm.spe.lander.models;
 
 import android.content.Context;
 
-import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.graphics.SpriteFont;
@@ -53,7 +52,6 @@ public class LevelHelper {
             return false;
         }
         this.elapsedTime += deltaTime;
-        Logger.log("Time", this.elapsedTime);
         if (this.elapsedTime < LevelHelper.sCOUNT_IN) {
 
             int time = Math.round(LevelHelper.sCOUNT_IN - this.elapsedTime);

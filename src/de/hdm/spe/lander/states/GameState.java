@@ -10,6 +10,8 @@ import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.models.InputEventManager.InputReceiver;
 import de.hdm.spe.lander.models.MediaManager;
+import de.hdm.spe.lander.models.OptionManager;
+import de.hdm.spe.lander.models.OptionManager.Language;
 
 import java.io.IOException;
 
@@ -32,9 +34,11 @@ public abstract class GameState implements InputReceiver {
     protected Camera     mCamera     = new Camera();
     private boolean      mIsPrepared = false;
     protected Background mBackground;
+    protected Language   mLanguage;
 
     public GameState(Game game) {
         this.mGame = game;
+        this.mLanguage = OptionManager.getInstance().getLanguage();
     }
 
     public Game getGame() {
@@ -62,6 +66,10 @@ public abstract class GameState implements InputReceiver {
         }
     }
 
+    public Language getLanguage() {
+        return this.mLanguage;
+    }
+
     public void setPrepared(boolean initialized) {
         this.mIsPrepared = initialized;
     }
@@ -79,7 +87,9 @@ public abstract class GameState implements InputReceiver {
 
     };
 
-    public abstract void onLoad();
+    public void onLoad() {
+        this.mLanguage = OptionManager.getInstance().getLanguage();
+    };
 
     public abstract StateType getStateType();
 

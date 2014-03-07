@@ -5,9 +5,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Toast;
 
+import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.models.HighscoreManager;
 import de.hdm.spe.lander.models.InputEventManager;
@@ -27,6 +29,7 @@ import de.hdm.spe.lander.states.LevelMenu;
 import de.hdm.spe.lander.states.Menu;
 import de.hdm.spe.lander.states.Options;
 import de.hdm.spe.lander.statics.Lang;
+import de.hdm.spe.lander.statics.Static;
 
 import java.io.IOException;
 
@@ -48,11 +51,12 @@ public abstract class Game implements Renderer, LocaleChangeListener {
     protected int                                 screenWidth  = 1;
     protected int                                 screenHeight = 1;
     private boolean                               isPaused     = false;
-    private final Menu                            mMenu;
+    private Menu                                  mMenu;
     private Options                               mOptions;
     private LevelMenu                             mLevelMenu;
     private DifficultyOptions                     mDiffOptions;
     protected GameState                           mCurrentState;
+    private final Vibrator                        mVibrator;
 
     public abstract void initialize();
 
@@ -61,7 +65,7 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         this.context = view.getContext();
         this.screenHeight = this.context.getResources().getDisplayMetrics().heightPixels;
         this.screenWidth = this.context.getResources().getDisplayMetrics().widthPixels;
-        this.mMenu = new Menu(this);
+        this.mVibrator = (Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE);
         this.mInputManager = new InputEventManager(this, view);
         HighscoreManager.initialize(this.context);
         MediaManager.initialize(this.context);
@@ -74,11 +78,10 @@ public abstract class Game implements Renderer, LocaleChangeListener {
     public void onDrawFrame(GL10 gl) {
         long currTime = System.currentTimeMillis();
         float deltaSeconds = (currTime - this.lastTime) / 1000.0f;
-
+        this.lastTime = currTime;
         this.update(deltaSeconds);
         this.draw(deltaSeconds);
 
-        this.lastTime = currTime;
     }
 
     @Override
@@ -127,6 +130,9 @@ public abstract class Game implements Renderer, LocaleChangeListener {
             case LEVEL4:
                 return new Level4(this);
             case MENU:
+                if (this.mMenu == null) {
+                    this.mMenu = new Menu(this);
+                }
                 return this.mMenu;
             case OPTIONS:
                 if (this.mOptions == null) {
@@ -157,17 +163,24 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         };
 
         this.setPaused(true);
-        this.mCurrentState = this.loadState(this.getStateInstance(type));
+        Logger.log("BEGIN STATECHANGE", "paused: " + (this.isPaused ? "true" : "false"));
+        GameState state = this.loadState(this.getStateInstance(type));
+        this.mCurrentState = state;
         this.mCurrentState.onLoad();
         this.setPaused(false);
+        Logger.log("END STATECHANGE", "paused: " + (this.isPaused ? "true" : "false"));
+        this.lastTime = System.currentTimeMillis();
     }
 
     protected GameState loadState(GameState newState) {
-
+        long time = System.currentTimeMillis();
         newState.prepareCamera(this.screenWidth, this.screenHeight);
-        if (!newState.isPrepared()) {
+        Logger.log("prepCam took", Static.numberFormat.format(System.currentTimeMillis() - time));
+        time = System.currentTimeMillis();
+        if (!newState.isPrepared() || newState.getLanguage() != OptionManager.getInstance().getLanguage()) {
             try {
                 newState.prepare(this.context, this.graphicsDevice);
+                Logger.log("prepare took", Static.numberFormat.format(System.currentTimeMillis() - time));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -189,7 +202,7 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         this.setLocale(locale);
 
         try {
-            this.mMenu.prepare(this.context, this.graphicsDevice);
+            this.mCurrentState.prepare(this.context, this.graphicsDevice);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -282,6 +295,12 @@ public abstract class Game implements Renderer, LocaleChangeListener {
                 Toast.makeText(Game.this.context, resId, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void vibrate(long milliSeconds) {
+        if (this.mVibrator != null && OptionManager.getInstance().isVibrationEnabled()) {
+            this.mVibrator.vibrate(milliSeconds);
+        }
     }
 
     public void finish() {
