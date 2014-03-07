@@ -38,6 +38,7 @@ public abstract class Level extends GameState {
     protected Obstacles       mObstacles;
     private final LevelHelper mHelper;
     protected GameStatusBar   mStatusBar;
+    protected boolean         movePlatform = false;
 
     public Level(Game game) {
         super(game);
@@ -98,6 +99,7 @@ public abstract class Level extends GameState {
         this.prepareBackground(context, device);
         this.mHelper.prepare(context, device);
         this.mStatusBar.prepare(context, device);
+
         this.mPlatform.prepare(context, device);
         this.mLander.prepare(context, device);
         if (this.prepareObstacles()) {
@@ -112,6 +114,9 @@ public abstract class Level extends GameState {
         if (this.mHelper.update(deltaSeconds)) {
             this.mLander.updatePosition(deltaSeconds);
             this.mStatusBar.update(deltaSeconds);
+            if (this.movePlatform) {
+                this.mPlatform.update(deltaSeconds);
+            }
             if (this.mObstacles != null) {
                 this.mObstacles.update(deltaSeconds);
             }
@@ -167,6 +172,10 @@ public abstract class Level extends GameState {
             return true;
         }
         return false;
+    }
+
+    public void setMovePlatform(boolean move) {
+        this.movePlatform = move;
     }
 
     @Override

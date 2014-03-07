@@ -10,6 +10,7 @@ public class Level4 extends Level {
 
     public Level4(Game game) {
         super(game);
+        this.setMovePlatform(true);
     }
 
     @Override

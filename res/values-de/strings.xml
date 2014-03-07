@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Lander</string>
     <string name="menu_name">Menü</string>
     <string name="menu_newgame">Neues Spiel</string>
     <string name="options_name">Optionen</string>

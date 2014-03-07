@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Lander</string>
+    <string name="app_name">Moon Landing</string>
     <string name="menu_name">Menu</string>
     <string name="menu_newgame">New Game</string>
     <string name="options_name">Options</string>
