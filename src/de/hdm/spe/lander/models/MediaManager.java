@@ -12,8 +12,22 @@ import de.hdm.spe.lander.R;
 import java.io.IOException;
 
 
+
+/**
+ * 
+ * This class manages media player and sound pool.
+ * Singleton.
+ * @author boris
+ * 
+ */
 public class MediaManager {
 
+    /**
+     * 
+     * manages different sounds
+     * @author boris
+     *
+     */
     public enum SoundEffect {
         MenuClick(R.raw.click),
         RocketBurst(R.raw.thruster_sound),
@@ -36,6 +50,11 @@ public class MediaManager {
         }
     }
 
+    /**
+     * manages music tracks
+     * @author boris
+     *
+     */
     public enum Track {
         Menu("space-menu.mp3"),
         Level("space-level.mp3");
@@ -60,6 +79,11 @@ public class MediaManager {
     private final Context       mContext;
     private Track               mCurrentTrack;
 
+    /**
+     * Constructor initializes the MediaPlayer and SoundPool.
+     * @param context
+     * 
+     */
     private MediaManager(Context context) {
         this.mContext = context;
         this.mediaPlayer = new MediaPlayer();
@@ -68,6 +92,9 @@ public class MediaManager {
 
     }
 
+    /**
+     * initializes sound effects 
+     */
     private void initialize() {
 
         for (SoundEffect s : SoundEffect.values()) {
@@ -76,6 +103,10 @@ public class MediaManager {
 
     }
 
+    /**
+     * Loads the track and stops other if playing
+     * @param track
+     */
     private void loadTrack(Track track) {
         if (this.mediaPlayer.isPlaying()) {
             this.mediaPlayer.stop();
@@ -92,6 +123,10 @@ public class MediaManager {
         }
     }
 
+    /**
+     * starts playing the track
+     * @param track
+     */
     public void startTrack(Track track) {
         if (!OptionManager.getInstance().isSoundEnabled() || this.mCurrentTrack == track && this.mediaPlayer.isPlaying()) {
             return;
@@ -101,31 +136,53 @@ public class MediaManager {
         this.mediaPlayer.setLooping(true);
     }
 
+    /**
+     * stops the music
+     */
     public void stopTrack() {
         if (this.mediaPlayer.isPlaying()) {
             this.mediaPlayer.stop();
         }
     }
 
+    /**
+     * plays the sound (sound effect)
+     * @param sound
+     */
     public void playSound(SoundEffect sound) {
         if (OptionManager.getInstance().isSoundEnabled()) {
             sound.setStreamID(this.soundPool.play(sound.soundId, 1, 1, 0, 0, 1));
         }
     }
 
+    /**
+     * stops the sound
+     * @param sound
+     */
     public void stopSound(SoundEffect sound) {
         this.soundPool.stop(sound.streamID);
     }
 
+    /**
+     * stops and resets media player
+     */
     public void reset() {
         this.mediaPlayer.stop();
         this.mediaPlayer.reset();
     }
 
+    /**
+     * @return
+     */
     public static MediaManager getInstance() {
         return MediaManager.sInstance;
     }
 
+    /**
+     * initializes the MediaManager object
+     * @param context
+     * @return initialized MedaiManager object
+     */
     public static MediaManager initialize(Context context) {
         MediaManager.sInstance = new MediaManager(context);
         return MediaManager.sInstance;

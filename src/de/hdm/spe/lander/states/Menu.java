@@ -23,6 +23,12 @@ import de.hdm.spe.lander.statics.Static;
 import java.io.IOException;
 
 
+/**
+ * 
+ * manages the menu
+ * @author boris
+ *
+ */
 public class Menu extends GameState {
 
     private static final float sBGscaleX = 86;
@@ -37,11 +43,17 @@ public class Menu extends GameState {
     protected Matrix4x4[]      matEntries;
     protected Square[]         aabbEntries;
 
+    /**
+     * @param game
+     */
     public Menu(Game game) {
         super(game);
         this.mBackground = new Background(Static.sMenuBgImage);
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.GameState#prepareCamera(float, float)
+     */
     @Override
     public void prepareCamera(float width, float height) {
         if (width == 0 || height == 0) {
@@ -53,11 +65,19 @@ public class Menu extends GameState {
         this.getCamera().setProjection(projection);
     }
 
+    /**
+     * @param context
+     * @param device
+     * @throws IOException
+     */
     protected void prepareBackground(Context context, GraphicsDevice device) throws IOException {
         this.mBackground.prepare(context, device);
         this.mBackground.scaleForMenu(this.getGame().getScreenWidth(), this.getGame().getScreenHeight(), Menu.sBGscaleX, Menu.sBGscaleY);
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.GameState#prepare(android.content.Context, de.hdm.spe.lander.graphics.GraphicsDevice)
+     */
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
         this.prepareBackground(context, device);
@@ -98,31 +118,23 @@ public class Menu extends GameState {
                 new Square(-60, -300, 290, 80)
         };
 
-//                for (Square sq : this.aabbEntries) {
-//                    try {
-//                        sq.prepare(context, device);
-//                        sq.getWorld().translate(0, 0, -2);
-//                        sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
-//        
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
 
         this.setPrepared(true);
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.GameState#update(float)
+     */
     @Override
     public void update(float deltaSeconds) {
 
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.GameState#draw(float, de.hdm.spe.lander.graphics.Renderer)
+     */
     @Override
     public void draw(float deltaSeconds, Renderer renderer) {
-//                for (Square sq : this.aabbEntries) {
-//                    renderer.draw(sq);
-//                }
-
         renderer.draw(this.mBackground);
         renderer.drawText(this.textTitle, this.matTitle);
         for (int i = 0; i < this.matEntries.length; i++) {
@@ -131,6 +143,10 @@ public class Menu extends GameState {
 
     }
 
+    /**
+     * change the game state to the clicked one
+     * @param i
+     */
     protected void onMenuItemClicked(int i) {
 
         switch (i) {
@@ -152,11 +168,17 @@ public class Menu extends GameState {
         }
     }
 
+    /**
+     * plays click sound and vibrate
+     */
     private void onClick() {
         MediaManager.getInstance().playSound(SoundEffect.MenuClick);
         this.getGame().vibrate(100);
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.models.InputEventManager.InputReceiver#onScreenTouched(de.hdm.spe.lander.collision.Point, de.hdm.spe.lander.input.InputEvent.InputAction)
+     */
     @Override
     public void onScreenTouched(Point point, InputAction action) {
 
@@ -171,21 +193,33 @@ public class Menu extends GameState {
         }
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.models.InputEventManager.InputReceiver#onKeyboardKeyPressed(int)
+     */
     @Override
     public void onKeyboardKeyPressed(int event) {
 
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.models.InputEventManager.InputReceiver#onAccelerometerEvent(float[])
+     */
     @Override
     public void onAccelerometerEvent(float[] values) {
 
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.GameState#getStateType()
+     */
     @Override
     public StateType getStateType() {
         return StateType.MENU;
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.GameState#onLoad()
+     */
     @Override
     public void onLoad() {
         super.onLoad();

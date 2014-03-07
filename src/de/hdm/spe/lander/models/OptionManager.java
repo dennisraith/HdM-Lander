@@ -13,8 +13,21 @@ import de.hdm.spe.lander.statics.Static;
 import java.util.Locale;
 
 
+/**
+ * 
+ * manages options in options menu
+ * Singleton.
+ * @author boris
+ *
+ */
 public class OptionManager {
 
+    /**
+     * 
+     * manages languages
+     * @author boris
+     *
+     */
     public enum Language {
         DE(Locale.GERMAN),
         EN(Locale.ENGLISH);
@@ -32,6 +45,13 @@ public class OptionManager {
 
     private static OptionManager sInstance = null;
 
+    /**
+     * 
+     * return and if needed initializes the option manager
+     * @param context
+     * @param listener
+     * @return OptionManager object
+     */
     public static OptionManager initialize(Context context, LocaleChangeListener listener) {
         if (OptionManager.sInstance == null) {
             OptionManager.sInstance = new OptionManager(context, listener);
@@ -40,6 +60,9 @@ public class OptionManager {
         return OptionManager.sInstance;
     }
 
+    /**
+     * @return OptionManager object
+     */
     public static OptionManager getInstance() {
         return OptionManager.sInstance;
     }
@@ -55,12 +78,19 @@ public class OptionManager {
     private Difficulty                 difficulty    = Difficulty.EASY;
     private boolean                    allowsVibrate = false;
 
+    /**
+     * @param context
+     * @param listener
+     */
     private OptionManager(Context context, LocaleChangeListener listener) {
         this.mContext = context;
         this.mListener = listener;
         this.loadOptions();
     }
 
+    /**
+     * loads the option states from shared preferences
+     */
     private void loadOptions() {
 
         SharedPreferences sharedPre = this.mContext.getSharedPreferences(Static.sSettingsPrefsName, 0);
@@ -72,6 +102,10 @@ public class OptionManager {
         this.prepareStrings();
     }
 
+    /**
+     * prepares option strings
+     * sets the option names
+     */
     private void prepareStrings() {
         this.options = new String[6];
         String musicState = this.musicState ? Lang.STATE_ON : Lang.STATE_OFF;
@@ -85,26 +119,44 @@ public class OptionManager {
         this.options[5] = Lang.BACK;
     }
 
+    /**
+     * @return if sound is enabled
+     */
     public boolean isSoundEnabled() {
         return this.musicState;
     }
 
+    /**
+     * @return if vibration is enabled
+     */
     public boolean isVibrationEnabled() {
         return this.allowsVibrate;
     }
 
+    /**
+     * @param diff
+     */
     public void setDifficulty(Difficulty diff) {
         this.difficulty = diff;
     }
 
+    /**
+     * @return the chosen difficulty
+     */
     public Difficulty getDifficulty() {
         return this.difficulty;
     }
 
+    /**
+     * @return current language
+     */
     public Language getLanguage() {
         return this.mLanguage;
     }
 
+    /**
+     * saves the options
+     */
     public void saveOptions() {
         Editor edit = this.mContext.getSharedPreferences(Static.sSettingsPrefsName, 0).edit();
         edit.putBoolean(Static.sSettingsMusic, this.musicState);
@@ -114,6 +166,10 @@ public class OptionManager {
         edit.commit();
     }
 
+    /**
+     * changes option if clicked
+     * @param i
+     */
     public void changeOptions(int i) {
 
         switch (i) {
@@ -148,16 +204,28 @@ public class OptionManager {
 
     }
 
+    /**
+     * changes the difficulty
+     * @return current difficulty
+     */
     public Difficulty toggleDifficulty() {
         int ordinal = this.difficulty.ordinal() + 1 > 2 ? 0 : this.difficulty.ordinal() + 1;
         this.difficulty = Difficulty.values()[ordinal];
         return this.difficulty;
     }
 
+    /**
+     * @param i
+     * @return
+     */
     public String getOption(int i) {
         return this.options[i];
     }
 
+    /**
+     * @author boris
+     *
+     */
     public interface LocaleChangeListener {
 
         void onLocaleChanged(Language locale);
