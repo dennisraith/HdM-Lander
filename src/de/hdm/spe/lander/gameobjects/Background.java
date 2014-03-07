@@ -13,6 +13,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
+/**
+ * Wrapper class for loading the background mesh and drawing it
+ * @author Dennis
+ *
+ */
 public class Background implements DrawableObject {
 
     protected Mesh           mObject;

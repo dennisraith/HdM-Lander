@@ -23,10 +23,23 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
+/**
+ * Class representing the ship which has to be landed in a level
+ * @author Dennis
+ *
+ */
 public class Lander extends AABB implements DrawableObject {
 
+    /**
+     * the maximum vertical speed the ship can reach
+     */
     private static float vehicleSpeedY = .7f;
 
+    /**
+     * Enum for controlling the state in which the ship is
+     * @author Dennis
+     *
+     */
     enum VehicleState {
         ACCELERATING(new Vector2(0, Lander.vehicleSpeedY)),
         GRAVITY(new Vector2());
@@ -57,6 +70,10 @@ public class Lander extends AABB implements DrawableObject {
     private final Fuel       mFuel;
     private final Difficulty difficulty;
 
+    /**
+     * Create a new ship with the given {@link Difficulty} (gravity, fuel)
+     * @param difficulty
+     */
     public Lander(Difficulty difficulty) {
         this.difficulty = difficulty;
         this.material = new Material();
@@ -68,6 +85,9 @@ public class Lander extends AABB implements DrawableObject {
 
     }
 
+    /**
+     * Called when the vehicle state has changed
+     */
     private void onAccelerationChanged() {
         if (this.isAccelerating) {
             this.state = VehicleState.ACCELERATING;
@@ -89,6 +109,10 @@ public class Lander extends AABB implements DrawableObject {
 
     }
 
+    /**
+     * Set whether the ship is accelerating or only exposed to gravity
+     * @param accelerating
+     */
     public void setAccelerating(boolean accelerating) {
         if (this.isAccelerating != accelerating && !this.mFuel.isEmpty()) {
             this.isAccelerating = accelerating;
@@ -96,10 +120,20 @@ public class Lander extends AABB implements DrawableObject {
         }
     }
 
+    /**
+     * Calculate the resulting velocity vector of the ship
+     * @param shipSpeed
+     * @param gravity
+     * @return resulting velocity
+     */
     private Vector2 calculateSpeed(Vector2 shipSpeed, Vector2 gravity) {
         return shipSpeed.subtract(gravity);
     }
 
+    /**
+     * update the current position of the ship and calculate its velocity
+     * @param deltaTime
+     */
     public void updatePosition(float deltaTime) {
         this.vehAccTime += deltaTime;
         this.gravAccTime += deltaTime;
@@ -122,12 +156,22 @@ public class Lander extends AABB implements DrawableObject {
         }
     }
 
+    /**
+     * move the ship by the velocity vector
+     * @param velocity
+     */
     private void moveShip(Vector2 velocity) {
         this.world.translate(velocity.getX(), velocity.getY(), 0);
         Vector4 v4 = this.world.multiply(new Vector4(velocity, 0, 1));
         this.setPosition(new Vector2(v4.getX(), v4.getY()));
     }
 
+    /**
+     * accelerate the given vector (ship/gravity) over time (tracked by vehAccTime and gravAccTime)
+     * @param speed
+     * @param time
+     * @return
+     */
     private Vector2 accelerate(Vector2 speed, float time) {
         if (time > 1) {
             time = 1;
@@ -135,6 +179,10 @@ public class Lander extends AABB implements DrawableObject {
         return new Vector2(speed.getX() * time, speed.getY() * time);
     }
 
+    /**
+     * draw the ship and its components
+     * @param renderer
+     */
     public void draw(Renderer renderer) {
         renderer.draw(this);
         if (this.isAccelerating) {
@@ -142,19 +190,34 @@ public class Lander extends AABB implements DrawableObject {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#getWorld()
+     */
     @Override
     public Matrix4x4 getWorld() {
         return this.world;
     }
 
-    public void onAccelerometerEvent(float[] values) {
+    /**
+     * react to the rotation of the device
+     * @param values
+     */
+    public void onDeviceRotationEvent(float[] values) {
         this.horizontalSpeed = values[0] * 1.6f;
     }
 
+    /**
+     * @return whether the Ship is currently accelerating
+     */
     public boolean isAccelerating() {
         return this.isAccelerating;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#prepare(android.content.Context, de.hdm.spe.lander.graphics.GraphicsDevice)
+     */
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
         InputStream stream;
@@ -169,30 +232,51 @@ public class Lander extends AABB implements DrawableObject {
         this.mFire.prepare(context, device);
     }
 
+    /**
+     * set the bounds of the mesh and update the ships position
+     * @param bounds
+     */
     private void setBounds(RectF bounds) {
         this.BOTTOM_LEFT = new Vector2(bounds.left, bounds.bottom);
         this.TOP_RIGHT = new Vector2(bounds.right, bounds.top);
         this.moveShip(new Vector2());
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#getMesh()
+     */
     @Override
     public Mesh getMesh() {
         return this.mesh;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#getMaterial()
+     */
     @Override
     public Material getMaterial() {
         return this.material;
     }
 
+    /**
+     * @return the current speed of the ship
+     */
     public Vector2 getCurrentSpeed() {
         return this.mCurrentSpeed;
     }
 
+    /**
+     * @return the used difficulty
+     */
     public Difficulty getDifficulty() {
         return this.difficulty;
     }
 
+    /**
+     * @return the {@link Fuel} instance of this ship
+     */
     public Fuel getFuel() {
         return this.mFuel;
     }

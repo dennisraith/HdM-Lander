@@ -269,7 +269,7 @@ public abstract class Level extends GameState {
      */
     @Override
     public void onDeviceRotationEvent(float[] values) {
-        this.mLander.onAccelerometerEvent(values);
+        this.mLander.onDeviceRotationEvent(values);
     }
 
     /**

@@ -12,11 +12,9 @@ import de.hdm.spe.lander.R;
 import java.io.IOException;
 
 
-
 /**
  * 
- * This class manages media player and sound pool.
- * Singleton.
+ * This class manages media player and sound pool. (Singleton)
  * @author boris
  * 
  */
