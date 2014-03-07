@@ -112,7 +112,7 @@ public class OptionManager {
         String vibrateState = this.allowsVibrate ? Lang.STATE_ON : Lang.STATE_OFF;
 
         this.options[0] = Lang.OPTIONS_MUSIC + " " + musicState;
-		this.options[1] = Lang.OPTIONS_VIBRO + " " + vibrateState;
+        this.options[1] = Lang.OPTIONS_VIBRO + " " + vibrateState;
         this.options[2] = Lang.OPTIONS_HIGHSCORE;
         this.options[3] = Lang.OPTIONS_DIFFICULTY;
         this.options[4] = Lang.OPTIONS_LANG + " " + this.mLanguage.toString();
@@ -192,7 +192,7 @@ public class OptionManager {
                     this.options[1] = Lang.OPTIONS_VIBRO + " " + Lang.STATE_ON;
                     this.allowsVibrate = true;
                 }
-            	break;
+                break;
             case 4:
 
                 Language locale = this.mLanguage.locale == Locale.ENGLISH ? Language.DE : Language.EN;

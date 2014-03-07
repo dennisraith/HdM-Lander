@@ -45,14 +45,38 @@ public abstract class GameState implements InputReceiver {
         return this.mGame;
     }
 
+    /**
+     * Function for preparing and loading ressources before state is drawn, only called once by game class if language does not change
+     * @param context
+     * @param device the {@link GraphicsDevice}
+     * @throws IOException if asset files not found
+     */
     public abstract void prepare(Context context, GraphicsDevice device) throws IOException;
 
+    /**
+     * convenience method for preparing the camera before the state is drawn
+     * @param width screen width
+     * @param height screen height
+     */
     public abstract void prepareCamera(float width, float height);
 
+    /**
+     * corresponding update method which is called by the game class
+     * @param deltaSeconds
+     */
     public abstract void update(float deltaSeconds);
 
+    /**corresponding draw method which is called by the game class
+     * @param deltaSeconds
+     * @param renderer
+     */
     public abstract void draw(float deltaSeconds, Renderer renderer);
 
+    /**
+     * called when states change from {@link Level} to {@link Menu}, vice versa or when app is closed.
+     * Calls the {@link GameState}'s onPause method
+     * @param type
+     */
     public final void shutdown(StateType type) {
         if (type == null) {
             this.onPause();
@@ -66,10 +90,18 @@ public abstract class GameState implements InputReceiver {
         }
     }
 
+    /**
+     * called when game determines if state has to be prepared again due to language changes
+     * @return the current Language of this state
+     */
     public Language getLanguage() {
         return this.mLanguage;
     }
 
+    /**
+     * sets the states prepared state so it doesn't get prepared again to avoid performance issues
+     * @param initialized
+     */
     public void setPrepared(boolean initialized) {
         this.mIsPrepared = initialized;
     }
@@ -87,20 +119,34 @@ public abstract class GameState implements InputReceiver {
 
     };
 
+    /**
+     * called when the game has prepared and set the current 
+     */
     public void onLoad() {
         this.mLanguage = OptionManager.getInstance().getLanguage();
     };
 
+    /**
+     * @return the {@link StateType} for this GameState class
+     */
     public abstract StateType getStateType();
 
     public Camera getCamera() {
         return this.mCamera;
     }
 
+    /**
+     * convenience method for calling the game to change the current state
+     * @param state
+     */
     public void setGameState(StateType state) {
         this.mGame.setGameState(state);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.InputEventManager.InputReceiver#onBackPressed()
+     */
     @Override
     public void onBackPressed() {
         if (this.getStateType() != StateType.MENU) {

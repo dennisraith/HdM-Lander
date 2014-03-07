@@ -4,7 +4,7 @@ package de.hdm.spe.lander.states;
 import android.content.Context;
 
 import de.hdm.spe.lander.game.Game;
-import de.hdm.spe.lander.gameobjects.Square;
+import de.hdm.spe.lander.gameobjects.Rectangle;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.graphics.TextBuffer;
@@ -63,13 +63,13 @@ public class LevelMenu extends Menu {
                 //back
                 Matrix4x4.createTranslation(-150, -300, 0)
         };
-        this.aabbEntries = new Square[] {
-                new Square(-10, 300, 300, 140),
-                new Square(-40, 140, 250, 80),
-                new Square(-40, 30, 250, 80),
-                new Square(-40, -80, 250, 80),
-                new Square(-40, -180, 250, 80),
-                new Square(-40, -280, 250, 80)
+        this.aabbEntries = new Rectangle[] {
+                new Rectangle(-10, 300, 300, 140),
+                new Rectangle(-40, 140, 250, 80),
+                new Rectangle(-40, 30, 250, 80),
+                new Rectangle(-40, -80, 250, 80),
+                new Rectangle(-40, -180, 250, 80),
+                new Rectangle(-40, -280, 250, 80)
         };
         this.setPrepared(true);
 //                for (Square sq : this.aabbEntries) {

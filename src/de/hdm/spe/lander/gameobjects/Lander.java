@@ -64,6 +64,7 @@ public class Lander extends AABB implements DrawableObject {
         this.world.translate(0, 40, 0);
         this.mFire = new Fire();
         this.mFuel = new Fuel(difficulty);
+        this.mFire.setWorld(this.world);
 
     }
 
@@ -147,7 +148,7 @@ public class Lander extends AABB implements DrawableObject {
     }
 
     public void onAccelerometerEvent(float[] values) {
-        this.horizontalSpeed = values[0];
+        this.horizontalSpeed = values[0] * 1.6f;
     }
 
     public boolean isAccelerating() {

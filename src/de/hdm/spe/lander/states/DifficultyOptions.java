@@ -5,7 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import de.hdm.spe.lander.game.Game;
-import de.hdm.spe.lander.gameobjects.Square;
+import de.hdm.spe.lander.gameobjects.Rectangle;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.TextBuffer;
 import de.hdm.spe.lander.math.Matrix4x4;
@@ -51,11 +51,11 @@ public class DifficultyOptions extends Menu {
                 Matrix4x4.createTranslation(-150, -80, 0),
                 Matrix4x4.createTranslation(-150, -200, 0)
         };
-        this.aabbEntries = new Square[] {
-                new Square(-40, 180, 250, 80),
-                new Square(-40, 60, 250, 80),
-                new Square(-40, -60, 250, 80),
-                new Square(-40, -180, 250, 80)
+        this.aabbEntries = new Rectangle[] {
+                new Rectangle(-40, 180, 250, 80),
+                new Rectangle(-40, 60, 250, 80),
+                new Rectangle(-40, -60, 250, 80),
+                new Rectangle(-40, -180, 250, 80)
         };
         this.setPrepared(true);
 

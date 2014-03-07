@@ -6,7 +6,7 @@ import android.util.Log;
 
 import de.hdm.spe.lander.R;
 import de.hdm.spe.lander.game.Game;
-import de.hdm.spe.lander.gameobjects.Square;
+import de.hdm.spe.lander.gameobjects.Rectangle;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.graphics.TextBuffer;
@@ -59,13 +59,13 @@ public class Options extends Menu {
                 Matrix4x4.createTranslation(-300, -440, 0)
         };
 
-        this.aabbEntries = new Square[] {
-                new Square(-140, 180, 340, 80),
-                new Square(-90, 60, 460, 80),
-                new Square(10, -60, 650, 80),
-                new Square(-90, -180, 450, 80),
-                new Square(-90, -300, 430, 80),
-                new Square(-190, -420, 250, 80)
+        this.aabbEntries = new Rectangle[] {
+                new Rectangle(-140, 180, 340, 80),
+                new Rectangle(-90, 60, 460, 80),
+                new Rectangle(10, -60, 650, 80),
+                new Rectangle(-90, -180, 450, 80),
+                new Rectangle(-90, -300, 430, 80),
+                new Rectangle(-190, -420, 250, 80)
         };
 //	  for (Square sq : this.aabbEntries) {
 //	      try {

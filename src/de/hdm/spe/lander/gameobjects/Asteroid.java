@@ -18,6 +18,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
+/**
+ * @author Dennis
+ *
+ */
 public class Asteroid extends Circle implements DrawableObject {
 
     private Mesh            mesh;
@@ -49,18 +53,7 @@ public class Asteroid extends Circle implements DrawableObject {
         Logger.log("Asteroid pos", this.getPosition());
     }
 
-    private void updatePosition() {
-        Vector4 pos = this.world.multiply(new Vector4(0, 0, 0, 1));
-        this.setPosition(new Vector2(pos.getX(), pos.getY()));
-    }
-
-    public void translate(float x, float y) {
-        this.world.translate(x, y, 0);
-        this.updatePosition();
-    }
-
     public void update(float deltaSeconds) {
-        //        world.translate(-deltaSeconds, 0, 0);
         this.world.rotateY(deltaSeconds * 5);
     }
 

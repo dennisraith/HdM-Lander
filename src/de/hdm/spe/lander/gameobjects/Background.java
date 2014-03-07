@@ -26,11 +26,19 @@ public class Background implements DrawableObject {
         this.mWorld = new Matrix4x4();
     }
 
+    /**
+     * Constructor for specifiying a custom image from the assets
+     * @param imgName file name of the file in the asset directory
+     */
     public Background(String imgName) {
         this();
         this.fileName = imgName;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#prepare(android.content.Context, de.hdm.spe.lander.graphics.GraphicsDevice)
+     */
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
         InputStream in;
@@ -41,6 +49,14 @@ public class Background implements DrawableObject {
 
     }
 
+    /**
+     * method for auto-scaling the background of the menus to the screen size
+     * @param dpWidth
+     * @param dpHeight
+     * @param customScaleX
+     * @param customScaleY
+     * @return
+     */
     public Matrix4x4 scaleForMenu(float dpWidth, float dpHeight, float customScaleX, float customScaleY) {
 
         float bgheight = this.mObject.getBounds().height();
@@ -58,35 +74,28 @@ public class Background implements DrawableObject {
         return this.mWorld;
     }
 
-    public Matrix4x4 scaleForLevel(float dpWidth, float dpHeight) {
-        float bgheight = 1920;
-        float bgwidth = 1080;
-
-        float scaleX = 14f;
-        float scaleY = -13f;
-
-        float scaleWidth = dpWidth / bgwidth;
-        float scaleHeight = dpHeight / bgheight;
-        float zoom = (bgwidth / dpWidth) * 15;
-
-        this.mWorld = new Matrix4x4().scale(scaleWidth * zoom, -scaleHeight - 2 * zoom, 1).translate(0, 0, -20);
-        return this.mWorld;
-    }
-
-    public void setBackground(String name) {
-        this.fileName = name;
-    }
-
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#getMesh()
+     */
     @Override
     public Mesh getMesh() {
         return this.mObject;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#getMaterial()
+     */
     @Override
     public Material getMaterial() {
         return this.material;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#getWorld()
+     */
     @Override
     public Matrix4x4 getWorld() {
         return this.mWorld;
