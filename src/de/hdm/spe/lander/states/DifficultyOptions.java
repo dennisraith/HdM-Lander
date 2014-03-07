@@ -29,7 +29,7 @@ public class DifficultyOptions extends Menu {
 
         this.fontTitle = device.createSpriteFont(null, 96);
         this.textTitle = device.createTextBuffer(this.fontTitle, 16);
-        this.textTitle.setText("Difficulty");
+        this.textTitle.setText(Lang.OPTIONS_DIFFICULTY);
 
         this.fontEntries = device.createSpriteFont(null, 70);
         this.textEntries = new TextBuffer[] {

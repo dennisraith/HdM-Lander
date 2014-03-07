@@ -3,6 +3,7 @@ package de.hdm.spe.lander.states;
 
 import android.content.Context;
 
+import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.game.LanderGame;
@@ -66,7 +67,6 @@ public abstract class Level extends GameState {
 
     @Override
     public void draw(float deltaSeconds, Renderer renderer) {
-        this.mHelper.onLoad();
         renderer.draw(this.mBackground);
         renderer.draw(this.mPlatform);
         this.mLander.draw(renderer);
@@ -108,6 +108,7 @@ public abstract class Level extends GameState {
 
     @Override
     public void update(float deltaSeconds) {
+        Logger.log("DeltaTime", Static.numberFormat.format(deltaSeconds));
         if (this.mHelper.update(deltaSeconds)) {
             this.mLander.updatePosition(deltaSeconds);
             this.mStatusBar.update(deltaSeconds);
@@ -144,6 +145,7 @@ public abstract class Level extends GameState {
         String reason = crash ? Lang.GAME_CRASH : Lang.GAME_OOBOUNDS;
         this.getGame().postToast(reason);
         MediaManager.getInstance().playSound(SoundEffect.Explosion);
+        this.getGame().vibrate(300);
         this.setGameState(StateType.MENU);
     };
 
@@ -153,6 +155,7 @@ public abstract class Level extends GameState {
         if (HighscoreManager.getInstance().checkHighscore(score)) {
             ((LanderGame) this.getGame()).onHighscoreDialogRequested(score);
         }
+        this.getGame().vibrate(100);
     };
 
     private boolean checkOutOfBounds() {
@@ -168,7 +171,10 @@ public abstract class Level extends GameState {
 
     @Override
     public void onLoad() {
+        super.onLoad();
         MediaManager.getInstance().startTrack(Track.Level);
+        this.mHelper.onLoad();
+        this.mStatusBar.onResume();
 
     }
 

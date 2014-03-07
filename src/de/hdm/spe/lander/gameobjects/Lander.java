@@ -25,7 +25,7 @@ import java.io.InputStream;
 
 public class Lander extends AABB implements DrawableObject {
 
-    private static float vehicleSpeedY = .6f;
+    private static float vehicleSpeedY = .7f;
 
     enum VehicleState {
         ACCELERATING(new Vector2(0, Lander.vehicleSpeedY)),
@@ -72,12 +72,17 @@ public class Lander extends AABB implements DrawableObject {
             this.state = VehicleState.ACCELERATING;
             this.vehAccTime = 0;
             MediaManager.getInstance().playSound(SoundEffect.RocketBurst);
-            
+
         }
         else {
             this.state = VehicleState.GRAVITY;
             this.gravAccTime = 0;
-            this.state.velocity = this.getCurrentSpeed();
+            if (this.mFuel.isEmpty()) {
+                this.state.velocity = new Vector2(0, this.getCurrentSpeed().getY());
+            }
+            else {
+                this.state.velocity = new Vector2();
+            }
             MediaManager.getInstance().stopSound(SoundEffect.RocketBurst);
         }
 
@@ -107,7 +112,6 @@ public class Lander extends AABB implements DrawableObject {
 
         this.moveShip(velocity);
         this.mCurrentSpeed = velocity;
-        VehicleState.GRAVITY.velocity = new Vector2();
         this.horizontalSpeed = 0;
         this.mFire.setWorld(this.world);
 

@@ -97,6 +97,7 @@ public class Menu extends GameState {
                 new Square(-85, -180, 240, 80),
                 new Square(-60, -300, 290, 80)
         };
+
 //                for (Square sq : this.aabbEntries) {
 //                    try {
 //                        sq.prepare(context, device);
@@ -107,6 +108,7 @@ public class Menu extends GameState {
 //                        e.printStackTrace();
 //                    }
 //                }
+
         this.setPrepared(true);
     }
 
@@ -120,6 +122,7 @@ public class Menu extends GameState {
 //                for (Square sq : this.aabbEntries) {
 //                    renderer.draw(sq);
 //                }
+
         renderer.draw(this.mBackground);
         renderer.drawText(this.textTitle, this.matTitle);
         for (int i = 0; i < this.matEntries.length; i++) {
@@ -149,13 +152,19 @@ public class Menu extends GameState {
         }
     }
 
+    private void onClick() {
+        MediaManager.getInstance().playSound(SoundEffect.MenuClick);
+        this.getGame().vibrate(100);
+    }
+
     @Override
     public void onScreenTouched(Point point, InputAction action) {
 
         for (int i = 0; i < this.aabbEntries.length; ++i) {
             if (point.intersects(this.aabbEntries[i])) {
                 if (action == InputAction.DOWN) {
-                    MediaManager.getInstance().playSound(SoundEffect.MenuClick);
+
+                    this.onClick();
                     this.onMenuItemClicked(i);
                 }
             }
@@ -179,6 +188,7 @@ public class Menu extends GameState {
 
     @Override
     public void onLoad() {
+        super.onLoad();
         MediaManager.getInstance().startTrack(Track.Menu);
     }
 
