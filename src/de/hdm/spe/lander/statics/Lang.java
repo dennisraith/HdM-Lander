@@ -16,6 +16,7 @@ public class Lang {
 
     public static String OPTIONS_NAME;
     public static String OPTIONS_MUSIC;
+    public static String OPTIONS_VIBRO;
     public static String OPTIONS_HIGHSCORE;
     public static String OPTIONS_DIFFICULTY;
     public static String OPTIONS_LANG;
@@ -44,6 +45,7 @@ public class Lang {
         Lang.MENU_QUIT = context.getString(R.string.quit);
         Lang.OPTIONS_NAME = context.getString(R.string.options_name);
         Lang.OPTIONS_MUSIC = context.getString(R.string.options_music);
+        Lang.OPTIONS_VIBRO = context.getString(R.string.options_vibro);
         Lang.OPTIONS_HIGHSCORE = context.getString(R.string.options_highscore);
         Lang.OPTIONS_DIFFICULTY = context.getString(R.string.options_difficulty);
         Lang.OPTIONS_LANG = context.getString(R.string.options_language);

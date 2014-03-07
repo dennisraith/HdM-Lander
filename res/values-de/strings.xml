@@ -6,6 +6,7 @@
     <string name="menu_newgame">Neues Spiel</string>
     <string name="options_name">Optionen</string>
     <string name="options_music">Musik</string>
+    <string name="options_vibro">Vibration</string>
     <string name="options_highscore">Highscores löschen</string>
     <string name="options_difficulty">Schwierigkeit</string>
     <string name="options_language">Sprache</string>
