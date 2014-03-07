@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="app_name">Moon Landing</string>
     <string name="menu_name">Menü</string>
     <string name="menu_newgame">Neues Spiel</string>
     <string name="options_name">Optionen</string>
@@ -28,5 +29,7 @@
     <string name="diff_hard">Schwer</string>
     <string name="diff_set">Schwierigkeitsgrad ist jetzt</string>
     <string name="diff_curr">Schwierigkeit:</string>
-	
+    <string name="hs_dialog">Gratulation, du hast einen neuen Top Score erzielt!</string>
+    <string name="enter_name">Gib hier deinen Namen ein:</string>
+
 </resources>
