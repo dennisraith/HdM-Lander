@@ -15,12 +15,23 @@ import de.hdm.spe.lander.statics.Lang;
 import java.io.IOException;
 
 
+/**
+ * controls and displays the level selection
+ * @author boris
+ *
+ */
 public class LevelMenu extends Menu {
 
+    /**
+     * @param game
+     */
     public LevelMenu(Game game) {
         super(game);
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.Menu#prepare(android.content.Context, de.hdm.spe.lander.graphics.GraphicsDevice)
+     */
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
 
@@ -72,31 +83,20 @@ public class LevelMenu extends Menu {
                 new Rectangle(-40, -280, 250, 80)
         };
         this.setPrepared(true);
-//                for (Square sq : this.aabbEntries) {
-//                    try {
-//                        sq.prepare(context, device);
-//                        sq.getWorld().translate(0, 0, -2);
-//                        sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
-//        
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
     }
 
-//        @Override
-//        public void draw(float deltaSeconds, Renderer renderer) {
-//            super.draw(deltaSeconds, renderer);
-//            for (Square sq : this.aabbEntries) {
-//                renderer.draw(sq);
-//            }
-//        }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.Menu#update(float)
+     */
     @Override
     public void update(float deltaSeconds) {
         this.textEntries[1].setText(OptionManager.getInstance().getDifficulty().getLocaleString());
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.Menu#onMenuItemClicked(int)
+     */
     @Override
     protected void onMenuItemClicked(int i) {
         switch (i) {
@@ -121,6 +121,9 @@ public class LevelMenu extends Menu {
         }
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.Menu#getStateType()
+     */
     @Override
     public StateType getStateType() {
         return StateType.LEVELMENU;
