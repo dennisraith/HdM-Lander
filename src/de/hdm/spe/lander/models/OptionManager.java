@@ -137,7 +137,7 @@ public class OptionManager {
                     this.allowsVibrate = true;
                 }
             	break;
-            case 3:
+            case 4:
 
                 Language locale = this.mLanguage.locale == Locale.ENGLISH ? Language.DE : Language.EN;
                 this.mLanguage = locale;

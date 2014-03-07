@@ -61,22 +61,22 @@ public class Options extends Menu {
 
         this.aabbEntries = new Square[] {
                 new Square(-140, 180, 340, 80),
-                new Square(-130, 60, 380, 80),
+                new Square(-90, 60, 460, 80),
                 new Square(10, -60, 650, 80),
                 new Square(-90, -180, 450, 80),
                 new Square(-90, -300, 430, 80),
                 new Square(-190, -420, 250, 80)
         };
-	  for (Square sq : this.aabbEntries) {
-	      try {
-	          sq.prepare(context, device);
-	          sq.getWorld().translate(0, 0, 0);
-	          sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
-	
-	      } catch (IOException e) {
-	          e.printStackTrace();
-	      }
-	  }
+//	  for (Square sq : this.aabbEntries) {
+//	      try {
+//	          sq.prepare(context, device);
+//	          sq.getWorld().translate(0, 0, 0);
+//	          sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
+//	
+//	      } catch (IOException e) {
+//	          e.printStackTrace();
+//	      }
+//	  }
         this.setPrepared(true);
     }
 
@@ -90,13 +90,13 @@ public class Options extends Menu {
         this.textEntries[5].setText(this.optionManager.getOption(5));
     }
 
-    @Override
-    public void draw(float deltaSeconds, Renderer renderer) {
-    	super.draw(deltaSeconds, renderer);
-      for (Square sq : this.aabbEntries) {
-          renderer.draw(sq);
-      }
-    }
+//    @Override
+//    public void draw(float deltaSeconds, Renderer renderer) {
+//    	super.draw(deltaSeconds, renderer);
+//      for (Square sq : this.aabbEntries) {
+//          renderer.draw(sq);
+//      }
+//    }
     @Override
     protected void onMenuItemClicked(int i) {
         this.optionManager.changeOptions(i);
@@ -116,7 +116,7 @@ public class Options extends Menu {
                 this.setGameState(StateType.DIFFICULTYOPTIONS);
                 break;
             case 4:
-                this.textEntries[3].setText(this.clickedOption);
+                this.textEntries[4].setText(this.clickedOption);
                 break;
             case 5:
                 this.optionManager.saveOptions();
