@@ -6,6 +6,13 @@ import android.content.Context;
 import de.hdm.spe.lander.R;
 
 
+/**
+ * @author Dennis Helper class for managing the localisation
+ */
+/**
+ * @author Dennis
+ *
+ */
 public class Lang {
 
     public static String GAME_NAME = "Moon Landing";
@@ -39,6 +46,10 @@ public class Lang {
     public static String DIFF_SET;
     public static String CURR_DIFF;
 
+    /**Method for assigning the strings to the static members so other classes can access them without a context. \n
+     * Called upon initialization or preferences change
+     * @param context
+     */
     public static void prepare(Context context) {
         Lang.MENU = context.getString(R.string.menu_name);
         Lang.MENU_NEWGAME = context.getString(R.string.menu_newgame);

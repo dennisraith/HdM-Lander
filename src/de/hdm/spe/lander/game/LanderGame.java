@@ -7,7 +7,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.view.View;
 import android.widget.EditText;
 
-import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.R;
 import de.hdm.spe.lander.models.Highscore;
 import de.hdm.spe.lander.models.HighscoreManager;
@@ -59,7 +58,6 @@ public class LanderGame extends Game {
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 String name = ((EditText) LanderGame.this.mScoreDialog.findViewById(R.id.nameInput)).getText().toString();
-                                Logger.log("Highscore name", name);
                                 Highscore hs = new Highscore(name, score);
                                 HighscoreManager.getInstance().addHighscore(hs);
                                 HighscoreManager.getInstance().saveScores();

@@ -25,7 +25,13 @@ import java.util.Vector;
 import javax.microedition.khronos.opengles.GL10;
 
 
-public class Square extends AABB implements DrawableObject, Shape2D {
+/**
+ * Helper class providing an extension of {@link AABB} to create custom rectangles without a premodeled {@link Mesh}
+ * 
+ * @author Dennis
+ *
+ */
+public class Rectangle extends AABB implements DrawableObject, Shape2D {
 
     private int                   vertexSize   = 0;
     private final int[]           drawOrder    = {0, 1, 2, 0, 2, 3};
@@ -44,14 +50,17 @@ public class Square extends AABB implements DrawableObject, Shape2D {
     private Vector2               mPosition;
     private RectF                 mBounds;
 
-    public Square() {
+    public Rectangle() {
         this.mBounds = new RectF();
     };
 
-    public Square(float x, float y, float width, float height) {
+    public Rectangle(float x, float y, float width, float height) {
         this.setBounds(new RectF(x - width / 2, y + height / 2, x + width / 2, y - height / 2));
     }
 
+    /**
+     * create a custom mesh out of the specified dimensions
+     */
     protected void generateMesh() {
         this.coords.add(this.BOTTOM_LEFT); //BL
         this.coords.add(this.BOTTOM_RIGHT); //BR
@@ -82,6 +91,10 @@ public class Square extends AABB implements DrawableObject, Shape2D {
         this.squareMesh = new Mesh(vBuffer, GL10.GL_TRIANGLES);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#prepare(android.content.Context, de.hdm.spe.lander.graphics.GraphicsDevice)
+     */
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
         this.generateMesh();
@@ -90,10 +103,16 @@ public class Square extends AABB implements DrawableObject, Shape2D {
 
     }
 
+    /**
+     * @return the bounds of this mesh
+     */
     public RectF getBounds() {
         return this.mBounds;
     }
 
+    /**
+     * updates the current bounds and vectors
+     */
     private void onPositionChanged() {
         float width = this.mBounds.width();
         float height = this.mBounds.height();
@@ -103,6 +122,10 @@ public class Square extends AABB implements DrawableObject, Shape2D {
         this.setBounds(this.mBounds);
     }
 
+    /**
+     * assigns new bounds to this Rectangle
+     * @param bounds the new bounds
+     */
     public void setBounds(RectF bounds) {
         this.mBounds = bounds;
         this.BOTTOM_LEFT = new Vector2(this.mBounds.left, this.mBounds.bottom);
@@ -112,26 +135,46 @@ public class Square extends AABB implements DrawableObject, Shape2D {
         this.mPosition = new Vector2(this.mBounds.centerX(), this.mBounds.centerY());
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#getMesh()
+     */
     @Override
     public Mesh getMesh() {
         return this.squareMesh;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#getMaterial()
+     */
     @Override
     public Material getMaterial() {
         return this.material;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#getWorld()
+     */
     @Override
     public Matrix4x4 getWorld() {
         return this.mWorld;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.collision.AABB#getPosition()
+     */
     @Override
     public Vector2 getPosition() {
         return this.mPosition;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.collision.AABB#setPosition(de.hdm.spe.lander.math.Vector2)
+     */
     @Override
     public void setPosition(Vector2 position) {
         this.mPosition = position;

@@ -17,6 +17,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
+/**
+ * Class representing the landing area need for winning condition
+ * @author Dennis
+ *
+ */
 public class Platform extends AABB implements DrawableObject {
 
     private static String  fileName   = "platform.obj";
@@ -28,6 +33,10 @@ public class Platform extends AABB implements DrawableObject {
 
     private boolean        flowsRight = true;
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#prepare(android.content.Context, de.hdm.spe.lander.graphics.GraphicsDevice)
+     */
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
         InputStream in;
@@ -39,6 +48,10 @@ public class Platform extends AABB implements DrawableObject {
         this.setBounds(this.mesh.getBounds());
     }
 
+    /**
+     * update the bounds and position of the platform
+     * @param bounds
+     */
     private void setBounds(RectF bounds) {
         Vector4 BL = this.world.multiply(new Vector4(bounds.left, bounds.bottom, 0, 1));
         Vector4 TR = this.world.multiply(new Vector4(bounds.right, bounds.top, 0, 1));
@@ -47,6 +60,9 @@ public class Platform extends AABB implements DrawableObject {
         this.TOP_RIGHT = new Vector2(TR.getX(), TR.getY());
     }
 
+    /** Convenience method for updating the position of the Platform, only used if the platform should move
+     * @param deltaSeconds
+     */
     public void update(float deltaSeconds) {
 
         if (this.position > .2 || this.position < -.2) {
@@ -64,16 +80,28 @@ public class Platform extends AABB implements DrawableObject {
 
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#getMesh()
+     */
     @Override
     public Mesh getMesh() {
         return this.mesh;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#getMaterial()
+     */
     @Override
     public Material getMaterial() {
         return this.material;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.DrawableObject#getWorld()
+     */
     @Override
     public Matrix4x4 getWorld() {
         return this.world;

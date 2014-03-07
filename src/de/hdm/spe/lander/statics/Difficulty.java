@@ -1,9 +1,15 @@
 
 package de.hdm.spe.lander.statics;
 
+import de.hdm.spe.lander.gameobjects.Lander;
 import de.hdm.spe.lander.math.Vector2;
 
 
+/**
+ * @author Dennis
+ * enumeration for wrapping several parameters of difficulty
+ * (horizontal, vertical gravity and the seconds of fuel for accelerating)
+ */
 public enum Difficulty {
     EASY(0, .5f, 10),
     MEDIUM(0, .6f, 7),
@@ -19,14 +25,23 @@ public enum Difficulty {
         this.fuelSeconds = fuelSeconds;
     }
 
+    /**
+     * @return the vertical gravity velocity of this Difficulty
+     */
     public float getSpeedY() {
         return this.verticalSpeed;
     }
 
+    /**
+     * @return the number of seconds the {@link Lander} can accelerate
+     */
     public float getFuelCapacity() {
         return this.fuelSeconds;
     }
 
+    /**
+     * @return the horizontal gravity velocity of this Difficulty
+     */
     public float getSpeedX() {
         return this.horizontalSpeed;
     }

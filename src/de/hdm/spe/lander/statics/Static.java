@@ -37,10 +37,13 @@ public class Static {
     public static NumberFormat numberFormat        = NumberFormat.getNumberInstance();
 
     public static AlertDialog createScoreDialog(Context context, float score, OnClickListener listener) {
+        NumberFormat format = NumberFormat.getIntegerInstance();
+        format.setMaximumFractionDigits(0);
+        format.setMinimumFractionDigits(0);
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.score_input, null);
         TextView tv = (TextView) view.findViewById(R.id.score);
-        tv.setText("" + score);
+        tv.setText(format.format(score));
         dialog.setView(view);
         dialog.setPositiveButton(android.R.string.ok, listener);
         dialog.setNegativeButton(android.R.string.cancel, listener);

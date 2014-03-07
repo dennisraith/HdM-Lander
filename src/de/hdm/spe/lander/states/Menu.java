@@ -7,7 +7,7 @@ import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.game.LanderGame;
 import de.hdm.spe.lander.gameobjects.Background;
-import de.hdm.spe.lander.gameobjects.Square;
+import de.hdm.spe.lander.gameobjects.Rectangle;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.graphics.SpriteFont;
@@ -35,7 +35,7 @@ public class Menu extends GameState {
     protected SpriteFont       fontEntries;
     protected TextBuffer[]     textEntries;
     protected Matrix4x4[]      matEntries;
-    protected Square[]         aabbEntries;
+    protected Rectangle[]         aabbEntries;
 
     public Menu(Game game) {
         super(game);
@@ -90,12 +90,12 @@ public class Menu extends GameState {
 
         };
 
-        this.aabbEntries = new Square[] {
-                new Square(-15, 180, 380, 80),
-                new Square(-20, 60, 380, 80),
-                new Square(-80, -60, 270, 80),
-                new Square(-85, -180, 240, 80),
-                new Square(-60, -300, 290, 80)
+        this.aabbEntries = new Rectangle[] {
+                new Rectangle(-15, 180, 380, 80),
+                new Rectangle(-20, 60, 380, 80),
+                new Rectangle(-80, -60, 270, 80),
+                new Rectangle(-85, -180, 240, 80),
+                new Rectangle(-60, -300, 290, 80)
         };
 
 //                for (Square sq : this.aabbEntries) {

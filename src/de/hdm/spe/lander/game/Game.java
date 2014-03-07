@@ -37,6 +37,10 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 
+/**
+ * Basic class for handling all aspects of the game and its states
+ */
+
 public abstract class Game implements Renderer, LocaleChangeListener {
 
     private boolean                               initialized;
@@ -74,6 +78,10 @@ public abstract class Game implements Renderer, LocaleChangeListener {
 
     }
 
+    /*
+     * (non-Javadoc)
+     * @see android.opengl.GLSurfaceView.Renderer#onDrawFrame(javax.microedition.khronos.opengles.GL10)
+     */
     @Override
     public void onDrawFrame(GL10 gl) {
         long currTime = System.currentTimeMillis();
@@ -84,6 +92,10 @@ public abstract class Game implements Renderer, LocaleChangeListener {
 
     }
 
+    /*
+     * (non-Javadoc)
+     * @see android.opengl.GLSurfaceView.Renderer#onSurfaceChanged(javax.microedition.khronos.opengles.GL10, int, int)
+     */
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         this.graphicsDevice.resize(width, height);
@@ -94,6 +106,10 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         this.resize(width, height);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see android.opengl.GLSurfaceView.Renderer#onSurfaceCreated(javax.microedition.khronos.opengles.GL10, javax.microedition.khronos.egl.EGLConfig)
+     */
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         this.lastTime = System.currentTimeMillis();
@@ -119,6 +135,15 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         }
     }
 
+    /**
+     * Function which returns an instance of the specified StateType
+     * @param type the preferred {@link GameState}
+     * @return the corresponding {@link GameState}
+     */
+    /**
+     * @param type
+     * @return
+     */
     private GameState getStateInstance(StateType type) {
         switch (type) {
             case LEVEL1:
@@ -157,6 +182,10 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         }
     }
 
+    /**
+     * Changes the current gamestate to the specified type
+     * @param  type {@link GameState}
+     */
     public void setGameState(GameState.StateType type) {
         if (this.mCurrentState != null) {
             this.mCurrentState.shutdown(type);
@@ -172,6 +201,11 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         this.lastTime = System.currentTimeMillis();
     }
 
+    /**
+     * Prepares the specified state for being drawn
+     * @param newState
+     * @return {@link GameState}
+     */
     protected GameState loadState(GameState newState) {
         long time = System.currentTimeMillis();
         newState.prepareCamera(this.screenWidth, this.screenHeight);
@@ -189,6 +223,10 @@ public abstract class Game implements Renderer, LocaleChangeListener {
 
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.OptionManager.LocaleChangeListener#setLocale(de.hdm.spe.lander.models.OptionManager.Language)
+     */
     @Override
     public void setLocale(Language locale) {
         Configuration conf = new Configuration(this.context.getResources().getConfiguration());
@@ -197,6 +235,10 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         Lang.prepare(this.context);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.hdm.spe.lander.models.OptionManager.LocaleChangeListener#onLocaleChanged(de.hdm.spe.lander.models.OptionManager.Language)
+     */
     @Override
     public void onLocaleChanged(Language locale) {
         this.setLocale(locale);
@@ -208,6 +250,10 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         }
     }
 
+    /**
+     * update function, {@link GameState}'s update method is not called when game is paused
+     * @param deltaSeconds time since last update
+     */
     public void update(float deltaSeconds) {
         this.mInputManager.check();
         if (!this.isPaused) {
@@ -215,6 +261,10 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         }
     }
 
+    /**
+     * draw method using the current states camera and calling the state's draw method
+     * @param deltaSeconds
+     */
     public void draw(float deltaSeconds) {
         this.graphicsDevice.clear(0.0f, 0.5f, 1.0f, 1.0f, 1.0f);
         this.graphicsDevice.setCamera(this.mCurrentState.getCamera());
@@ -245,6 +295,9 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         return this.initialized;
     }
 
+    /**
+     * @return the aspect ratio of the current display
+     */
     public float getAspect() {
         return (float) this.screenWidth / (float) this.screenHeight;
     }
@@ -253,18 +306,30 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         return this.context;
     }
 
+    /**
+     * @return the game's instance of the {@link GraphicsDevice}
+     */
     public GraphicsDevice getGraphicsDevice() {
         return this.graphicsDevice;
     }
 
+    /**
+     * @return the game's {@link InputEventManager}
+     */
     public InputEventManager getInputSystem() {
         return this.mInputManager;
     }
 
+    /**
+     * @return screen height
+     */
     public int getScreenHeight() {
         return this.screenHeight;
     }
 
+    /**
+     * @return screen width
+     */
     public int getScreenWidth() {
         return this.screenWidth;
     }
@@ -273,6 +338,9 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         return this.renderer;
     }
 
+    /**
+     * @return the current active {@link GameState}
+     */
     public GameState getCurrentGameState() {
         return this.mCurrentState;
     }
@@ -297,6 +365,9 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         });
     }
 
+    /** Method for vibrating the device
+     * @param milliSeconds
+     */
     public void vibrate(long milliSeconds) {
         if (this.mVibrator != null && OptionManager.getInstance().isVibrationEnabled()) {
             this.mVibrator.vibrate(milliSeconds);
