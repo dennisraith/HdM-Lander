@@ -205,7 +205,7 @@ public class Menu extends GameState {
      * @see de.hdm.spe.lander.models.InputEventManager.InputReceiver#onAccelerometerEvent(float[])
      */
     @Override
-    public void onAccelerometerEvent(float[] values) {
+    public void onDeviceRotationEvent(float[] values) {
 
     }
 

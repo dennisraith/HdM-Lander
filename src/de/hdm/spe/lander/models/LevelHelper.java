@@ -13,6 +13,12 @@ import de.hdm.spe.lander.states.Level;
 import java.io.IOException;
 
 
+/**
+ * Helper class for showing a count in before the actual level starts
+ * 
+ * @author Dennis
+ *
+ */
 public class LevelHelper {
 
     private static int   sCOUNT_IN   = 4;

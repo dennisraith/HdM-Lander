@@ -16,6 +16,11 @@ import de.hdm.spe.lander.statics.Static;
 import java.io.IOException;
 
 
+/**
+ * Status bar within a Level, showing Fuel, Time and Speed
+ * @author Dennis
+ *
+ */
 public class GameStatusBar {
 
     protected final Matrix4x4 mTextWorld;
@@ -34,19 +39,36 @@ public class GameStatusBar {
         this.mLander = this.mLevel.getLander();
     }
 
+    /**
+     * @param context
+     * @param device
+     * @throws IOException
+     */
     public void prepare(Context context, GraphicsDevice device) throws IOException {
         SpriteFont font = device.createSpriteFont(null, 64);
         this.mText = device.createTextBuffer(font, 48);
     }
 
+    /**
+     * @param deltaTime
+     * @param renderer
+     */
     public void draw(float deltaTime, Renderer renderer) {
         renderer.drawText(this.mText, this.mTextWorld);
     }
 
+    /**
+     * @param speed
+     * @param time
+     * @param fuel
+     */
     public void updateText(String speed, String time, String fuel) {
         this.mText.setText(Lang.GAME_SPEED + "" + speed + "m/s " + Lang.GAME_TIME + " " + time + "s " + Lang.GAME_FUEL + "" + fuel + " %");
     }
 
+    /**
+     * @param deltaTime
+     */
     public void update(float deltaTime) {
         this.mTimer.update(deltaTime);
 
@@ -56,14 +78,23 @@ public class GameStatusBar {
         this.updateText(speed, time, fuel);
     }
 
+    /**
+     * 
+     */
     public void onPause() {
         this.mTimer.pause();
     }
 
+    /**
+     * 
+     */
     public void onResume() {
         this.mTimer.resume();
     }
 
+    /**
+     * @return
+     */
     public float getElapsedTime() {
         return this.mTimer.getTime();
     }

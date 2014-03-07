@@ -21,6 +21,7 @@
     <string name="game_fuel">Fuel:</string>
     <string name="game_crash">Crashed!</string>
     <string name="game_landing">Landed!</string>
+    <string name="game_landing_no_score">Sorry, no highscore this time\nTry again!</string>
     <string name="game_oobounds">Where did you wanted to go?\nTry again!</string>
     <string name="highscore_reset">Highscores removed!</string>
 

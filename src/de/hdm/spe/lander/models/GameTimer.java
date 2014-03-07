@@ -1,6 +1,11 @@
 
 package de.hdm.spe.lander.models;
 
+/**
+ * Convenience class for managing game time
+ * @author Dennis
+ *
+ */
 public class GameTimer {
 
     private float   time = 0;

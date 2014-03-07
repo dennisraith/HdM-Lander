@@ -10,8 +10,14 @@ import de.hdm.spe.lander.input.InputEvent;
 import de.hdm.spe.lander.input.InputEvent.InputAction;
 import de.hdm.spe.lander.input.InputSystem;
 import de.hdm.spe.lander.math.Vector3;
+import de.hdm.spe.lander.states.GameState;
 
 
+/**
+ * Manager responsible for parsing and controlling input events and if necessary dispatch actions to the current {@link GameState}
+ * @author Dennis
+ *
+ */
 public class InputEventManager {
 
     InputSystem        mSystem;
@@ -23,6 +29,9 @@ public class InputEventManager {
 
     }
 
+    /**
+     * Loop method invoked by the Game class
+     */
     public void check() {
         InputEvent inputEvent = this.mSystem.peekEvent();
         while (inputEvent != null) {
@@ -63,7 +72,7 @@ public class InputEventManager {
                     break;
 
                 case ROTATION:
-                    this.mGame.getCurrentGameState().onAccelerometerEvent(inputEvent.getValues());
+                    this.mGame.getCurrentGameState().onDeviceRotationEvent(inputEvent.getValues());
                     break;
             }
 
@@ -72,14 +81,35 @@ public class InputEventManager {
         }
     }
 
+    /**
+     * Interface to wrap input events into certain important methods
+     * @author Dennis
+     *
+     */
     public interface InputReceiver {
 
+        /**
+         * called when screen has been touched
+         * @param point the unprojected point of touch
+         * @param action the touch action, see {@link InputAction}
+         */
         public void onScreenTouched(Point point, InputAction action);
 
+        /**
+         * Called when a Keyboard key has been pressed
+         * @param keyEvent the corresponding {@link KeyEvent} value 
+         */
         public void onKeyboardKeyPressed(int keyEvent);
 
-        public void onAccelerometerEvent(float[] values);
+        /**
+         * Called upon rotation events 
+         * @param values array containing the x,y,z values of the event
+         */
+        public void onDeviceRotationEvent(float[] values);
 
+        /**
+         * Called when the KeyEvent {@link KeyEvent.BACK} occured
+         */
         public void onBackPressed();
 
     }

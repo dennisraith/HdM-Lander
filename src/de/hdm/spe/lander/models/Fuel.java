@@ -2,6 +2,7 @@
 package de.hdm.spe.lander.models;
 
 import de.hdm.spe.lander.gameobjects.Lander;
+import de.hdm.spe.lander.states.CreditsLevel;
 import de.hdm.spe.lander.statics.Difficulty;
 
 
@@ -51,7 +52,7 @@ public class Fuel {
         return this.mFuel <= 0;
     }
 
-    /**
+    /** Sets this fuel inifite (used in {@link CreditsLevel}
      * @param infinite
      */
     public void setInfinite(boolean infinite) {
@@ -59,17 +60,10 @@ public class Fuel {
     }
 
     /**
-     * @return
+     * @return the percentage of fuel remaining
      */
     public float getPercentage() {
-        return (this.getCurrentAmount() / this.mDiff.getFuelCapacity()) * 100;
-    }
-
-    /**
-     * @return
-     */
-    public float getCurrentAmount() {
-        return this.mFuel;
+        return (this.mFuel / this.mDiff.getFuelCapacity()) * 100;
     }
 
 }

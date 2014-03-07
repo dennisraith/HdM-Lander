@@ -7,6 +7,11 @@ import de.hdm.spe.lander.math.Vector2;
 import de.hdm.spe.lander.math.Vector4;
 
 
+/**
+ * Wrapper class for Logging functions
+ * @author Dennis
+ *
+ */
 public class Logger {
 
     public static void log(String name, Vector2 vect) {

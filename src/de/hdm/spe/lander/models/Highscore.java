@@ -6,6 +6,11 @@ import de.hdm.spe.lander.math.Vector2;
 import de.hdm.spe.lander.statics.Difficulty;
 
 
+/**
+ * Class holding and calculating scores
+ * @author Dennis
+ *
+ */
 public class Highscore {
 
     private final String name;

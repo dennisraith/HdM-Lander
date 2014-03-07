@@ -3,6 +3,7 @@ package de.hdm.spe.lander.states;
 
 import android.content.Context;
 
+import de.hdm.spe.lander.R;
 import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.game.LanderGame;
@@ -195,6 +196,10 @@ public abstract class Level extends GameState {
         if (HighscoreManager.getInstance().checkHighscore(score)) {
             ((LanderGame) this.getGame()).onHighscoreDialogRequested(score);
         }
+        else {
+            this.getGame().postToast(R.string.game_landing_no_score);
+            this.setGameState(StateType.MENU);
+        }
         this.getGame().vibrate(100);
     };
 
@@ -263,7 +268,7 @@ public abstract class Level extends GameState {
      * @see de.hdm.spe.lander.models.InputEventManager.InputReceiver#onAccelerometerEvent(float[])
      */
     @Override
-    public void onAccelerometerEvent(float[] values) {
+    public void onDeviceRotationEvent(float[] values) {
         this.mLander.onAccelerometerEvent(values);
     }
 

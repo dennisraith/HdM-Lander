@@ -89,7 +89,7 @@ public class CreditsLevel extends Level {
     }
 
     @Override
-    public void onAccelerometerEvent(float[] values) {
+    public void onDeviceRotationEvent(float[] values) {
     }
 
     @Override

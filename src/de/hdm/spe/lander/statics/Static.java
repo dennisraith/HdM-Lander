@@ -15,6 +15,11 @@ import de.hdm.spe.lander.models.HighscoreAdapter;
 import java.text.NumberFormat;
 
 
+/**
+ * Utility class holding all necessary constants and values, also capable of creating dialogs for Highscores
+ * @author Dennis
+ *
+ */
 public class Static {
 
     public static int          CAM_DIMEN           = 100;

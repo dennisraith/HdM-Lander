@@ -14,6 +14,11 @@ import java.util.Comparator;
 import java.util.Map;
 
 
+/**
+ * Manager responsible for saving, loading and managing old and new Highscores
+ * @author Dennis
+ *
+ */
 public class HighscoreManager {
 
     private static HighscoreManager     sInstance  = null;
@@ -84,6 +89,11 @@ public class HighscoreManager {
         return this.checkHighscore(score);
     }
 
+    /**
+     * Check if the given score is good enough to become a Highscore
+     * @param score
+     * @return whether this is a Highscore
+     */
     public boolean checkHighscore(float score) {
         if (this.mScores.size() < 10) {
             return true;

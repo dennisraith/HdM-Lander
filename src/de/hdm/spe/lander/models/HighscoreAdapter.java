@@ -15,6 +15,11 @@ import java.util.List;
 import java.util.Locale;
 
 
+/**
+ * {@link ArrayAdapter} for displaying the {@link Highscore}s in the ListDialog
+ * @author Dennis
+ *
+ */
 public class HighscoreAdapter extends ArrayAdapter<Highscore> {
 
     private final NumberFormat format;
