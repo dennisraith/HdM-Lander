@@ -14,6 +14,11 @@ import de.hdm.spe.lander.math.Matrix4x4;
 import java.io.IOException;
 
 
+/**
+ * displays and controls names and the space ship 
+ * @author boris
+ *
+ */
 public class CreditsLevel extends Level {
 
     protected SpriteFont   fontSprite;
@@ -22,12 +27,18 @@ public class CreditsLevel extends Level {
 
     private double         i = 0.0;
 
+    /**
+     * @param game
+     */
     public CreditsLevel(Game game) {
         super(game);
         this.mLander.getWorld().translate(0, -90, 0);
         this.mLander.getFuel().setInfinite(true);
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.Level#prepare(android.content.Context, de.hdm.spe.lander.graphics.GraphicsDevice)
+     */
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
         super.prepare(context, device);
@@ -50,6 +61,9 @@ public class CreditsLevel extends Level {
 
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.Level#update(float)
+     */
     @Override
     public void update(float deltaSeconds) {
 
@@ -79,6 +93,9 @@ public class CreditsLevel extends Level {
 
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.Level#draw(float, de.hdm.spe.lander.graphics.Renderer)
+     */
     @Override
     public void draw(float deltaSeconds, Renderer renderer) {
         super.draw(deltaSeconds, renderer);
@@ -88,15 +105,24 @@ public class CreditsLevel extends Level {
         }
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.Level#onAccelerometerEvent(float[])
+     */
     @Override
     public void onAccelerometerEvent(float[] values) {
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.GameState#getStateType()
+     */
     @Override
     public StateType getStateType() {
         return StateType.CREDITSLEVEL;
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.Level#prepareObstacles()
+     */
     @Override
     protected boolean prepareObstacles() {
         return false;

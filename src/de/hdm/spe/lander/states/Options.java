@@ -18,17 +18,30 @@ import de.hdm.spe.lander.statics.Lang;
 import java.io.IOException;
 
 
+/**
+ * displays and controls the options
+ * @author boris
+ *
+ */
 public class Options extends Menu {
-
     private final OptionManager optionManager;
 
+    /**
+     * @param game
+     */
     public Options(Game game) {
         super(game);
         this.optionManager = OptionManager.getInstance();
     }
 
+    /**
+     * 
+     */
     private String clickedOption;
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.Menu#prepare(android.content.Context, de.hdm.spe.lander.graphics.GraphicsDevice)
+     */
     @Override
     public void prepare(Context context, GraphicsDevice device) throws IOException {
 
@@ -67,19 +80,12 @@ public class Options extends Menu {
                 new Rectangle(-90, -300, 430, 80),
                 new Rectangle(-190, -420, 250, 80)
         };
-//	  for (Square sq : this.aabbEntries) {
-//	      try {
-//	          sq.prepare(context, device);
-//	          sq.getWorld().translate(0, 0, 0);
-//	          sq.getMaterial().setTexture(device.createTexture(context.getAssets().open("space.png")));
-//	
-//	      } catch (IOException e) {
-//	          e.printStackTrace();
-//	      }
-//	  }
         this.setPrepared(true);
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.Menu#update(float)
+     */
     @Override
     public void update(float deltaSeconds) {
         this.textEntries[0].setText(this.optionManager.getOption(0));
@@ -90,13 +96,9 @@ public class Options extends Menu {
         this.textEntries[5].setText(this.optionManager.getOption(5));
     }
 
-//    @Override
-//    public void draw(float deltaSeconds, Renderer renderer) {
-//    	super.draw(deltaSeconds, renderer);
-//      for (Square sq : this.aabbEntries) {
-//          renderer.draw(sq);
-//      }
-//    }
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.Menu#onMenuItemClicked(int)
+     */
     @Override
     protected void onMenuItemClicked(int i) {
         this.optionManager.changeOptions(i);
@@ -125,6 +127,9 @@ public class Options extends Menu {
         }
     }
 
+    /* (non-Javadoc)
+     * @see de.hdm.spe.lander.states.Menu#getStateType()
+     */
     @Override
     public StateType getStateType() {
         return StateType.OPTIONS;
