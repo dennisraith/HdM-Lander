@@ -41,12 +41,7 @@ public class Background implements DrawableObject {
 
     }
 
-    public Matrix4x4 autoScale(float dpWidth, float dpHeight) {
-
-        return this.autoScale(dpWidth, dpHeight, 0, 0);
-    }
-
-    public Matrix4x4 autoScale(float dpWidth, float dpHeight, float customScaleX, float customScaleY) {
+    public Matrix4x4 scaleForMenu(float dpWidth, float dpHeight, float customScaleX, float customScaleY) {
 
         float bgheight = this.mObject.getBounds().height();
         float bgwidth = this.mObject.getBounds().width();
@@ -60,6 +55,21 @@ public class Background implements DrawableObject {
             scaleHeight = scaleHeight + (scaleHeight / customScaleY);
         }
         this.mWorld = new Matrix4x4().scale(scaleWidth, scaleHeight - 2, 1).translate(0, 0, -2);
+        return this.mWorld;
+    }
+
+    public Matrix4x4 scaleForLevel(float dpWidth, float dpHeight) {
+        float bgheight = 1920;
+        float bgwidth = 1080;
+
+        float scaleX = 14f;
+        float scaleY = -13f;
+
+        float scaleWidth = dpWidth / bgwidth;
+        float scaleHeight = dpHeight / bgheight;
+        float zoom = (bgwidth / dpWidth) * 15;
+
+        this.mWorld = new Matrix4x4().scale(scaleWidth * zoom, -scaleHeight - 2 * zoom, 1).translate(0, 0, -20);
         return this.mWorld;
     }
 

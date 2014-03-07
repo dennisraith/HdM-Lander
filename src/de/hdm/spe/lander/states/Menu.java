@@ -55,7 +55,7 @@ public class Menu extends GameState {
 
     protected void prepareBackground(Context context, GraphicsDevice device) throws IOException {
         this.mBackground.prepare(context, device);
-        this.mBackground.autoScale(this.getGame().getScreenWidth(), this.getGame().getScreenHeight(), Menu.sBGscaleX, Menu.sBGscaleY);
+        this.mBackground.scaleForMenu(this.getGame().getScreenWidth(), this.getGame().getScreenHeight(), Menu.sBGscaleX, Menu.sBGscaleY);
     }
 
     @Override
@@ -178,7 +178,7 @@ public class Menu extends GameState {
     }
 
     @Override
-    public void onResume() {
+    public void onLoad() {
         MediaManager.getInstance().startTrack(Track.Menu);
     }
 

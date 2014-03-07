@@ -87,7 +87,7 @@ public class MGDExerciseGame extends Game {
     }
 
     @Override
-    public void loadContent(GameState state) {
+    public GameState loadState(GameState state) {
         try {
             InputStream stream;
 
@@ -148,6 +148,8 @@ public class MGDExerciseGame extends Game {
 
         //        this.soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
         //        this.clickSound = this.soundPool.load(this.context, R.raw.click, 1);
+
+        return state;
     }
 
     @Override
@@ -240,13 +242,13 @@ public class MGDExerciseGame extends Game {
     }
 
     @Override
-    public void pause() {
+    public void onPause() {
         //if (mediaPlayer != null)
         //	mediaPlayer.pause();		
     }
 
     @Override
-    public void resume() {
+    public void onResume() {
         // TODO Auto-generated method stub		
     }
 

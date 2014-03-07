@@ -21,13 +21,13 @@ public class LanderView extends GLSurfaceView {
 
     @Override
     public void onPause() {
+        this.game.onPause();
         super.onPause();
-        this.game.pause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        this.game.resume();
+        this.game.onResume();
     }
 }

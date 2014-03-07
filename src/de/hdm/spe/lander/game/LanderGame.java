@@ -26,12 +26,10 @@ public class LanderGame extends Game {
 
     @Override
     public void initialize() {
-
         this.setGameState(StateType.MENU);
     }
 
     public void onHighscoreListRequested() {
-        this.pause();
         this.view.post(new Runnable() {
 
             @Override
@@ -41,7 +39,6 @@ public class LanderGame extends Game {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        LanderGame.this.resume();
                     }
                 }).show();
 
@@ -50,7 +47,7 @@ public class LanderGame extends Game {
     }
 
     public void onHighscoreDialogRequested(final float score) {
-        this.pause();
+        this.setPaused(true);
         this.view.post(new Runnable() {
 
             @Override

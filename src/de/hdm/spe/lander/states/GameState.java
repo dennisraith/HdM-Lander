@@ -75,7 +75,11 @@ public abstract class GameState implements InputReceiver {
 
     };
 
-    public abstract void onResume();
+    public void onResume() {
+
+    };
+
+    public abstract void onLoad();
 
     public abstract StateType getStateType();
 

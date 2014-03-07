@@ -3,7 +3,6 @@ package de.hdm.spe.lander.states;
 
 import android.content.Context;
 
-import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.collision.Point;
 import de.hdm.spe.lander.game.Game;
 import de.hdm.spe.lander.game.LanderGame;
@@ -43,31 +42,39 @@ public abstract class Level extends GameState {
         super(game);
         this.mPlatform = new Platform();
         this.mBackground = new Background();
-        this.mBackground.getWorld().translate(0, 0, -20).scale(13.5f, -13f, 0);
 
         this.mLander = new Lander(OptionManager.getInstance().getDifficulty());
         this.mHelper = new LevelHelper(this);
 
         this.mStatusBar = new GameStatusBar(this);
+        this.mStatusBar.onPause();
 
     }
 
     protected void prepareBackground(Context context, GraphicsDevice device) throws IOException {
         this.mBackground.prepare(context, device);
-        //        this.mBackground.autoScale(this.getGame().getScreenWidth(), this.getGame().getScreenHeight(), 13, -13).translate(0, 0, -18);
-        //        this.mBackground.getWorld().scale(13.5f, -13f, 0);
+        float width = this.getGame().getScreenWidth();
+
+        float scaleX = 13.5f;
+
+        float x = (width / 1080) + .5f;
+        scaleX = scaleX + x;
+
+        this.mBackground.getWorld().translate(0, 0, -20).scale(scaleX, -13f, 0);
+
     }
 
     @Override
     public void draw(float deltaSeconds, Renderer renderer) {
+        this.mHelper.onLoad();
         renderer.draw(this.mBackground);
-        this.mHelper.draw(deltaSeconds, renderer);
         renderer.draw(this.mPlatform);
-        this.mStatusBar.draw(deltaSeconds, renderer);
         this.mLander.draw(renderer);
         if (this.mObstacles != null) {
             this.mObstacles.draw(deltaSeconds, renderer);
         }
+        this.mStatusBar.draw(deltaSeconds, renderer);
+        this.mHelper.draw(deltaSeconds, renderer);
     }
 
     @Override
@@ -96,11 +103,9 @@ public abstract class Level extends GameState {
         if (this.prepareObstacles()) {
             this.mObstacles.prepare(context, device);
         }
-
         this.setPrepared(true);
     }
 
-    //        Vector3 v3 = this.getCamera().project(new Vector3(this.mLander.getPosition(), 0), 1);
     @Override
     public void update(float deltaSeconds) {
         if (this.mHelper.update(deltaSeconds)) {
@@ -123,7 +128,6 @@ public abstract class Level extends GameState {
         }
 
         if (this.mLander.intersects(this.mPlatform)) {
-            Logger.log("landerspeed", this.mLander.getCurrentSpeed().getY());
             if (this.mLander.getCurrentSpeed().getLength() > 0.3f) {
                 this.onLoose(true);
             }
@@ -163,13 +167,9 @@ public abstract class Level extends GameState {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
+    public void onLoad() {
         MediaManager.getInstance().startTrack(Track.Level);
+
     }
 
     @Override

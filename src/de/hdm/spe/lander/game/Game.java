@@ -94,9 +94,7 @@ public abstract class Game implements Renderer, LocaleChangeListener {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         this.lastTime = System.currentTimeMillis();
-        if (this.mCurrentState != null) {
-            this.mCurrentState.setPrepared(false);
-        }
+
         if (!this.initialized) {
             this.graphicsDevice = new GraphicsDevice();
             this.graphicsDevice.onSurfaceCreated(gl);
@@ -106,10 +104,15 @@ public abstract class Game implements Renderer, LocaleChangeListener {
             this.initialize();
             this.initialized = true;
 
-            this.loadContent(this.mCurrentState);
         } else {
             this.graphicsDevice.onSurfaceCreated(gl);
-            this.loadContent(this.mCurrentState);
+            if (this.mCurrentState != null) {
+                try {
+                    this.mCurrentState.prepare(this.context, this.graphicsDevice);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -151,31 +154,26 @@ public abstract class Game implements Renderer, LocaleChangeListener {
     public void setGameState(GameState.StateType type) {
         if (this.mCurrentState != null) {
             this.mCurrentState.shutdown(type);
-
         };
-        this.onGameStateChanged(this.getStateInstance(type));
+
+        this.setPaused(true);
+        this.mCurrentState = this.loadState(this.getStateInstance(type));
+        this.mCurrentState.onLoad();
+        this.setPaused(false);
     }
 
-    protected void onGameStateChanged(GameState newState) {
+    protected GameState loadState(GameState newState) {
+
         newState.prepareCamera(this.screenWidth, this.screenHeight);
-        this.loadContent(newState);
-
-        this.mCurrentState = newState;
-        if (this.isPaused) {
-            this.resume();
-        }
-        this.mCurrentState.onResume();
-
-    }
-
-    public void loadContent(GameState state) {
-        if (!state.isPrepared()) {
+        if (!newState.isPrepared()) {
             try {
-                state.prepare(this.context, this.graphicsDevice);
+                newState.prepare(this.context, this.graphicsDevice);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        return newState;
+
     }
 
     @Override
@@ -214,12 +212,20 @@ public abstract class Game implements Renderer, LocaleChangeListener {
         this.mCurrentState.prepareCamera(width, height);
     };
 
-    public void pause() {
-        this.isPaused = true;
+    public void setPaused(boolean paused) {
+        this.isPaused = paused;
+    }
+
+    public void onPause() {
+        this.setPaused(true);
+        MediaManager.getInstance().stopTrack();
     };
 
-    public void resume() {
-        this.isPaused = false;
+    public void onResume() {
+        this.setPaused(false);
+        if (this.mCurrentState != null) {
+            this.mCurrentState.onResume();
+        }
     }
 
     public boolean isInitialized() {

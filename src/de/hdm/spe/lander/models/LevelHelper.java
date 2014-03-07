@@ -3,6 +3,7 @@ package de.hdm.spe.lander.models;
 
 import android.content.Context;
 
+import de.hdm.spe.lander.Logger;
 import de.hdm.spe.lander.graphics.GraphicsDevice;
 import de.hdm.spe.lander.graphics.Renderer;
 import de.hdm.spe.lander.graphics.SpriteFont;
@@ -21,7 +22,7 @@ public class LevelHelper {
     protected TextBuffer mText;
     protected Matrix4x4  mWorld;
     protected Level      mLevel;
-
+    private boolean      ready       = false;
     private float        elapsedTime = 0;
 
     public LevelHelper(Level level) {
@@ -42,10 +43,19 @@ public class LevelHelper {
         }
     }
 
-    public boolean update(float deltaTime) {
-        this.elapsedTime += deltaTime;
+    public void onLoad() {
+        this.ready = true;
+    }
 
+    public boolean update(float deltaTime) {
+
+        if (!this.ready) {
+            return false;
+        }
+        this.elapsedTime += deltaTime;
+        Logger.log("Time", this.elapsedTime);
         if (this.elapsedTime < LevelHelper.sCOUNT_IN) {
+
             int time = Math.round(LevelHelper.sCOUNT_IN - this.elapsedTime);
             if (time > 0) {
                 this.mText.setText(" " + time);
@@ -55,7 +65,9 @@ public class LevelHelper {
             }
             return false;
         }
-        return true;
+        else {
+            return true;
+        }
     }
 
 }

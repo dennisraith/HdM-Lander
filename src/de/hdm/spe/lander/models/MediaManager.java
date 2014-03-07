@@ -74,14 +74,6 @@ public class MediaManager {
             s.setSoundID(this.soundPool.load(this.mContext, s.resId, 1));
         }
 
-        for (Track t : Track.values()) {
-            try {
-                t.setDescriptor(this.mContext.getAssets().openFd(t.fileName));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
     }
 
     private void loadTrack(Track track) {
@@ -90,10 +82,11 @@ public class MediaManager {
             this.mediaPlayer.reset();
         }
         try {
-            AssetFileDescriptor afd = track.descriptor;
+            AssetFileDescriptor afd = this.mContext.getAssets().openFd(track.fileName);
             this.mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             this.mediaPlayer.prepare();
             this.mCurrentTrack = track;
+            afd.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -106,6 +99,12 @@ public class MediaManager {
         this.loadTrack(track);
         this.mediaPlayer.start();
         this.mediaPlayer.setLooping(true);
+    }
+
+    public void stopTrack() {
+        if (this.mediaPlayer.isPlaying()) {
+            this.mediaPlayer.stop();
+        }
     }
 
     public void playSound(SoundEffect sound) {
