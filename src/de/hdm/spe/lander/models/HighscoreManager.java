@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import de.hdm.spe.lander.math.Vector2;
 import de.hdm.spe.lander.statics.Static;
 
 import java.util.ArrayList;
@@ -82,11 +81,6 @@ public class HighscoreManager {
             edit.putFloat(score.getName(), score.getScore());
         }
         edit.apply();
-    }
-
-    public boolean checkHighscore(float time, Vector2 speed) {
-        float score = time * speed.getLength();
-        return this.checkHighscore(score);
     }
 
     /**
